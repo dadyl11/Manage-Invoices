@@ -15,7 +15,9 @@ public class InvoiceBook {
   }
 
   public void save(Invoice invoice) {
-    dataBase.save(invoice);
+    if (invoice != null) {
+      dataBase.save(invoice);
+    }
   }
 
   public Collection<Invoice> getInvoices() {
