@@ -12,7 +12,6 @@ public class Invoice {
   private LocalDate issueDate;
   private LocalDate saleDate;
   private String salesPlace;
-
   private Company buyer;
   private Company seller;
 
@@ -63,7 +62,7 @@ public class Invoice {
         '}';
   }
 
-  public Integer getId() {
+  public int getId() {
     return id;
   }
 }

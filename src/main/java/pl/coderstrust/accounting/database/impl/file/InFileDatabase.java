@@ -39,4 +39,5 @@ public class InFileDatabase implements DataBase {
   @Override
   public void removeInvoiceById(int id) {
   }
+
 }

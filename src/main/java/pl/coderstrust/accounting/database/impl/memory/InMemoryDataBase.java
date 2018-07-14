@@ -30,4 +30,11 @@ public class InMemoryDataBase implements DataBase {
   public void removeInvoiceById(int id) {
     invoices.remove(id);
   }
+
+  public static void main(String[] args) {
+    DataBase dataBase = new InMemoryDataBase();
+    System.out.println(dataBase.getInvoices().getClass().getCanonicalName());
+
+
+  }
 }
