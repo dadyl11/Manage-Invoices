@@ -6,13 +6,13 @@ import pl.coderstrust.accounting.model.Invoice;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collection;
 
 public class InFileDatabase implements DataBase {
 
   @Override
   public void save(Invoice invoice) {
-
     try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("test.txt"))) {
       String invoiceAsString = invoice.toString();
       bufferedWriter.write(invoiceAsString);
@@ -39,5 +39,4 @@ public class InFileDatabase implements DataBase {
   @Override
   public void removeInvoiceById(int id) {
   }
-
 }

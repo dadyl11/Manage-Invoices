@@ -26,7 +26,7 @@ public class Invoice {
     return netValue;
   }
 
-  public BigDecimal getDisountValue() {
+  public BigDecimal getDiscountValue() {
     BigDecimal discountValue = BigDecimal.ZERO;
     for (InvoiceEntry entry : entries) {
       discountValue = discountValue.add(entry.getNetPrice().multiply(entry.getQuantity())

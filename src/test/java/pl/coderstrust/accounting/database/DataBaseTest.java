@@ -67,7 +67,7 @@ public abstract class DataBaseTest {
 
     //When
     dataBase.save(invoice);
-    dataBase.save(invoice2);
+    dataBase.update(invoice2);
     dataBase.removeInvoiceById(0);
 
     //Then

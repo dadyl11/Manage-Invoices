@@ -21,7 +21,7 @@ public class InvoiceBook {
   }
 
   public Collection<Invoice> getInvoices() {
-    return Arrays.asList();
+    return dataBase.getInvoices();
   }
 
   public void update(Invoice invoice) {
