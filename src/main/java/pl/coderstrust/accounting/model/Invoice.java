@@ -38,7 +38,8 @@ public class Invoice {
   public BigDecimal getVatValue() {
     BigDecimal vatValue = BigDecimal.ZERO;
     for (InvoiceEntry entry : entries) {
-      vatValue = vatValue.add(new Invoice().getNetValue().multiply(entry.getVatRate()));
+      vatValue = vatValue.add(new Invoice().getNetValue()
+          .multiply(BigDecimal.valueOf(entry.getVatRate().getVatRateDouble())));
     }
     return vatValue;
   }

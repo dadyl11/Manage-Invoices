@@ -6,8 +6,16 @@ public class InvoiceEntry {
 
   private String description;
   private BigDecimal netPrice;
-  private BigDecimal vatRate;
+  private VatRate vatRate;
   private BigDecimal quantity;
+
+  public InvoiceEntry(String description, BigDecimal netPrice,
+      VatRate vatrate, BigDecimal quantity) {
+    this.description = description;
+    this.netPrice = netPrice;
+    this.vatRate = vatrate;
+    this.quantity = quantity;
+  }
 
   public BigDecimal getQuantity() {
     return quantity;
@@ -17,7 +25,7 @@ public class InvoiceEntry {
     return description;
   }
 
-  public BigDecimal getVatRate() {
+  public VatRate getVatRate() {
     return vatRate;
   }
 
