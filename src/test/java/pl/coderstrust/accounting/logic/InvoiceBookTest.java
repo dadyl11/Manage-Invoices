@@ -48,7 +48,7 @@ public abstract class InvoiceBookTest {
   }
 
   @Test
-  public void shouldRemoveInvoiceByID() {
+  public void shouldRemoveInvoiceById() {
     //Given
     int id = 0;
 

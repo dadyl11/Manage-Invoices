@@ -11,14 +11,10 @@ import java.util.Collection;
 
 public class InFileDatabase implements DataBase {
 
+
   @Override
   public void save(Invoice invoice) {
-    try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("test.txt"))) {
-      String invoiceAsString = invoice.toString();
-      bufferedWriter.write(invoiceAsString);
-    } catch (IOException exception) {
-      exception.printStackTrace();
-    }
+
   }
 
   @Override
@@ -28,15 +24,11 @@ public class InFileDatabase implements DataBase {
 
   @Override
   public void update(Invoice invoice) {
-    try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("test.txt"))) {
-      String invoiceAsString = invoice.toString();
-      bufferedWriter.write(invoiceAsString);
-    } catch (IOException exception) {
-      exception.printStackTrace();
-    }
+
   }
 
   @Override
   public void removeInvoiceById(int id) {
+
   }
 }

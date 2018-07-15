@@ -49,17 +49,28 @@ public class Invoice {
 
   @Override
   public String toString() {
-    return "Invoice{" +
-        "id=" + id +
-        ", identifier='" + identifier + '\'' +
-        ", type='" + type + '\'' +
-        ", issueDate=" + issueDate +
-        ", saleDate=" + saleDate +
-        ", salesPlace='" + salesPlace + '\'' +
-        ", buyer=" + buyer +
-        ", seller=" + seller +
-        ", entries=" + entries +
-        '}';
+    return "Invoice{"
+        + "id="
+        + id
+        + ", identifier='"
+        + identifier
+        + '\''
+        + ", type='"
+        + type
+        + '\''
+        + ", issueDate="
+        + issueDate
+        + ", saleDate="
+        + saleDate
+        + ", salesPlace='"
+        + salesPlace
+        + '\''
+        + ", buyer="
+        + buyer
+        + ", seller="
+        + seller
+        + ", entries="
+        + entries + '}';
   }
 
   public int getId() {
