@@ -9,9 +9,9 @@ public class Company {
   private String street;
   private String postalCode;
   private String city;
-  private BigDecimal discount;
+  private double discount;
 
-  public BigDecimal getDiscount() {
+  public double getDiscount() {
     return discount;
   }
 }
