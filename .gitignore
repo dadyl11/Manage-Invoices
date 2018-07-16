@@ -3,6 +3,8 @@
 
 *.iml
 .idea
+target
+
 ### Java ###
 # Compiled class file
 *.class
