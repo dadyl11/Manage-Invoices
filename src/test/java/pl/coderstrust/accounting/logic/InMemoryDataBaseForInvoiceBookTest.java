@@ -1,12 +1,12 @@
 package pl.coderstrust.accounting.logic;
 
-import pl.coderstrust.accounting.database.DataBase;
-import pl.coderstrust.accounting.database.impl.memory.InMemoryDataBase;
+import pl.coderstrust.accounting.database.Database;
+import pl.coderstrust.accounting.database.impl.memory.InMemoryDatabase;
 
 public class InMemoryDataBaseForInvoiceBookTest extends InvoiceBookTest {
 
   @Override
-  public DataBase getDatabase() {
-    return new InMemoryDataBase();
+  public Database getDatabase() {
+    return new InMemoryDatabase();
   }
 }

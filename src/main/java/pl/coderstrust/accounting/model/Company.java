@@ -1,7 +1,5 @@
 package pl.coderstrust.accounting.model;
 
-import java.math.BigDecimal;
-
 public class Company {
 
   private String name;
@@ -14,4 +12,5 @@ public class Company {
   public double getDiscount() {
     return discount;
   }
+//TODO - add missing gettters and setters when you want to implement it.
 }

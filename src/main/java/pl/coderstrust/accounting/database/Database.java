@@ -4,13 +4,13 @@ import pl.coderstrust.accounting.model.Invoice;
 
 import java.util.Collection;
 
-public interface DataBase {
+public interface Database {
 
-  void save(Invoice invoice);
+  int save(Invoice invoice);
 
   Collection<Invoice> getInvoices();
 
-  void update(Invoice invoice);
+  void updateInvoice(Invoice invoice);
 
   void removeInvoiceById(int id);
 

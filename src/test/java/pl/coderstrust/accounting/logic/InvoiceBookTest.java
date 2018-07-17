@@ -6,19 +6,19 @@ import static org.mockito.Mockito.verify;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import pl.coderstrust.accounting.database.DataBase;
+import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class InvoiceBookTest {
 
-  public abstract DataBase getDatabase();
+  public abstract Database getDatabase();
 
-  DataBase dataBase = getDatabase();
+  Database database = getDatabase();
 
-  DataBase dataBaseMock = mock(dataBase.getClass());
+  Database databaseMock = mock(Database.class);
   Invoice invoice = mock(Invoice.class);
-  InvoiceBook invoiceBook = new InvoiceBook(dataBaseMock);
+  InvoiceBook invoiceBook = new InvoiceBook(databaseMock);
 
   @Test
   public void shouldSaveInvoice() {
@@ -26,7 +26,7 @@ public abstract class InvoiceBookTest {
     invoiceBook.save(invoice);
 
     //Then
-    verify(dataBaseMock).save(invoice);
+    verify(databaseMock).save(invoice);
   }
 
   @Test
@@ -35,7 +35,7 @@ public abstract class InvoiceBookTest {
     invoiceBook.getInvoices();
 
     //Then
-    verify(dataBaseMock).getInvoices();
+    verify(databaseMock).getInvoices();
   }
 
   @Test
@@ -44,7 +44,7 @@ public abstract class InvoiceBookTest {
     invoiceBook.update(invoice);
 
     //Then
-    verify(dataBaseMock).save(invoice);
+    verify(databaseMock).save(invoice);
   }
 
   @Test
@@ -56,7 +56,7 @@ public abstract class InvoiceBookTest {
     invoiceBook.removeInvoiceById(id);
 
     //Then
-    verify(dataBaseMock).removeInvoiceById(0);
+    verify(databaseMock).removeInvoiceById(0);
   }
 
 

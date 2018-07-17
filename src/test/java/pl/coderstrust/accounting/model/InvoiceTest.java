@@ -1,10 +1,10 @@
 package pl.coderstrust.accounting.model;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
 
 import org.junit.Test;
 
@@ -16,7 +16,7 @@ public class InvoiceTest {
 
   Company company = mock(Company.class);
   InvoiceEntry invoiceEntry = mock(InvoiceEntry.class);
-  Invoice invoice = new Invoice(1, company);
+  Invoice invoice = new Invoice();
 
 
   @Test
@@ -25,8 +25,9 @@ public class InvoiceTest {
     when(invoiceEntry.getNetPrice()).thenReturn(BigDecimal.TEN);
     when(invoiceEntry.getQuantity()).thenReturn(BigDecimal.TEN);
     when(company.getDiscount()).thenReturn(0.2);
-    invoice.addsInvoiceEntry(invoiceEntry);
+    invoice.addInvoiceEntry(invoiceEntry);
     BigDecimal expected = BigDecimal.valueOf(80.0);
+    invoice.setBuyer(new Company());
     BigDecimal actual = invoice.getNetValue();
 
     //Then
@@ -46,7 +47,7 @@ public class InvoiceTest {
   @Test
   public void addEntryToList() {
     //When
-    invoice.addsInvoiceEntry(invoiceEntry);
+    invoice.addInvoiceEntry(invoiceEntry);
 
     //Then
     assertTrue(!invoice.getEntries().isEmpty());
@@ -55,6 +56,7 @@ public class InvoiceTest {
   @Test
   public void returnsId() {
     //When
+    invoice.setId(1);
     int actual = invoice.getId();
 
     assertThat(actual, is(1));

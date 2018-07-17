@@ -3,6 +3,7 @@ package pl.coderstrust.accounting.database;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -17,9 +18,9 @@ import java.util.Collection;
 @RunWith(MockitoJUnitRunner.class)
 public abstract class DataBaseTest {
 
-  public abstract DataBase getDatabase();
+  public abstract Database getDatabase();
 
-  DataBase dataBase = getDatabase();
+  private Database database = getDatabase();
 
   @Test
   public void shouldSaveInvoices() {
@@ -27,20 +28,19 @@ public abstract class DataBaseTest {
     Invoice invoice = mock(Invoice.class);
 
     //When
-    dataBase.save(invoice);
+    database.save(invoice);
 
     //Then
-    verify(invoice).getId();
-    assertTrue(!dataBase.getInvoices().isEmpty());
+    assertThat(database.getInvoices().isEmpty(), is(false));
   }
 
   @Test
   public void shouldReturnCollectionsOfInvoices() {
     //When
-    Collection<Invoice> collectionOfinvoices = dataBase.getInvoices();
+    Collection<Invoice> invoices = database.getInvoices();
 
     //Then
-    assertThat(collectionOfinvoices.getClass().getName(), is("java.util.HashMap$Values"));
+    assertThat(invoices.isEmpty(), is(true));
   }
 
   @Test
@@ -50,11 +50,11 @@ public abstract class DataBaseTest {
     when(invoice.getId()).thenReturn(0);
 
     //When
-    dataBase.save(invoice);
-    dataBase.removeInvoiceById(0);
+    database.save(invoice);
+    database.removeInvoiceById(0);
 
     //Then
-    assertTrue(dataBase.getInvoices().isEmpty());
+    assertTrue(database.getInvoices().isEmpty());
   }
 
   @Test
@@ -66,11 +66,11 @@ public abstract class DataBaseTest {
     when(invoice2.getId()).thenReturn(0);
 
     //When
-    dataBase.save(invoice);
-    dataBase.update(invoice2);
-    dataBase.removeInvoiceById(0);
+    database.save(invoice);
+    database.updateInvoice(invoice2);
+    database.removeInvoiceById(0);
 
     //Then
-    assertTrue(dataBase.getInvoices().isEmpty());
+    assertTrue(database.getInvoices().isEmpty());
   }
 }

@@ -1,34 +1,34 @@
 package pl.coderstrust.accounting.logic;
 
-import pl.coderstrust.accounting.database.DataBase;
+import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 public class InvoiceBook {
 
-  private DataBase dataBase;
+  private Database database;
 
-  public InvoiceBook(DataBase dataBase) {
-    this.dataBase = dataBase;
+  public InvoiceBook(Database database) {
+    this.database = database;
   }
 
   public void save(Invoice invoice) {
-    if (invoice != null) {
-      dataBase.save(invoice);
+    if (invoice == null) {
+      throw new IllegalArgumentException("Incorrect invoice property");
     }
+    database.save(invoice);
   }
 
   public Collection<Invoice> getInvoices() {
-    return dataBase.getInvoices();
+    return database.getInvoices();
   }
 
   public void update(Invoice invoice) {
-    dataBase.save(invoice);
+    database.save(invoice);
   }
 
   public void removeInvoiceById(int id) {
-    dataBase.removeInvoiceById(id);
+    database.removeInvoiceById(id);
   }
 }
