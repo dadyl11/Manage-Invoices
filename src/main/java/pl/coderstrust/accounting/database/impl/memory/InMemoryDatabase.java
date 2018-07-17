@@ -39,7 +39,7 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public void updateInvoice(Invoice invoice) {
-    invoices.put(invoice.getId(), invoice);
+    invoices.put(id, invoice);
   }
 
   @Override

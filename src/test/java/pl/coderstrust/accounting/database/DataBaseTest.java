@@ -3,15 +3,11 @@ package pl.coderstrust.accounting.database;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import pl.coderstrust.accounting.database.impl.memory.InMemoryDatabase;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.util.Collection;
@@ -62,13 +58,11 @@ public abstract class DataBaseTest {
     //Given
     Invoice invoice = mock(Invoice.class);
     Invoice invoice2 = mock(Invoice.class);
-    when(invoice.getId()).thenReturn(0);
-    when(invoice2.getId()).thenReturn(0);
 
     //When
     database.save(invoice);
     database.updateInvoice(invoice2);
-    database.removeInvoiceById(0);
+    database.removeInvoiceById(1);
 
     //Then
     assertTrue(database.getInvoices().isEmpty());
