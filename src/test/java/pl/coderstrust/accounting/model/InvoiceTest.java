@@ -56,7 +56,6 @@ public class InvoiceTest {
     assertTrue(!invoice.getEntries().isEmpty());
   }
 
-
   @Test
   public void shouldPassAllPojoTestsForGettersAndSetters() {
     // given

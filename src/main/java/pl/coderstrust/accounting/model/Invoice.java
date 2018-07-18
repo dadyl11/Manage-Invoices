@@ -39,9 +39,4 @@ public class Invoice {
   public void addInvoiceEntry(InvoiceEntry invoiceEntry) {
     entries.add(invoiceEntry);
   }
-
-  public static void main(String[] args) {
-    System.out
-        .println(BigDecimal.TEN.multiply(BigDecimal.TEN).multiply(BigDecimal.valueOf(1 - 0.2)));
-  }
 }
