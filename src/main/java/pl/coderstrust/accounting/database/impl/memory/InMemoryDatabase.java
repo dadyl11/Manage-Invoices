@@ -14,22 +14,22 @@ import java.util.Scanner;
 public class InMemoryDatabase implements Database {
 
   private final Map<Integer, Invoice> invoices = new HashMap<>();
-  private int id = 0;
+  private int iD = 0;
 
   private int getNextId() {
 //    Scanner scanner = new Scanner("invoiceId.txt");
 //    id = scanner.nextInt();
-    id++;
+    iD++;
 //    DataOutputStream dataStream = new DataOutputStream(new FileOutputStream("invoice.txt"));
 //    dataStream.write(id);
-    return id;
+    return iD;
   }
 
   @Override
   public int save(Invoice invoice) {
-    id = getNextId();
-    invoices.put(id, invoice);
-    return id;
+    invoice.setId(getNextId());
+    invoices.put(invoice.getId(), invoice);
+    return invoice.getId();
   }
 
   @Override
@@ -39,7 +39,7 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public void updateInvoice(Invoice invoice) {
-    invoices.put(id, invoice);
+    invoices.put(invoice.getId(), invoice);
   }
 
   @Override

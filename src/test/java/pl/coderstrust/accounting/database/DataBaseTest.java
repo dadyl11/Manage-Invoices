@@ -4,6 +4,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,7 @@ import java.util.Collection;
 @RunWith(MockitoJUnitRunner.class)
 public abstract class DataBaseTest {
 
-  public abstract Database getDatabase();
+  protected abstract Database getDatabase();
 
   private Database database = getDatabase();
 
@@ -44,10 +45,11 @@ public abstract class DataBaseTest {
   public void shouldRemoveInvoices() {
     //Given
     Invoice invoice = mock(Invoice.class);
+    when(invoice.getId()).thenReturn(2);
 
     //When
     database.save(invoice);
-    database.removeInvoiceById(1);
+    database.removeInvoiceById(2);
 
     //Then
     assertTrue(database.getInvoices().isEmpty());
@@ -58,11 +60,13 @@ public abstract class DataBaseTest {
     //Given
     Invoice invoice = mock(Invoice.class);
     Invoice invoice2 = mock(Invoice.class);
+    when(invoice.getId()).thenReturn(0);
+    when(invoice2.getId()).thenReturn(0);
 
     //When
     database.save(invoice);
     database.updateInvoice(invoice2);
-    database.removeInvoiceById(1);
+    database.removeInvoiceById(0);
 
     //Then
     assertTrue(database.getInvoices().isEmpty());

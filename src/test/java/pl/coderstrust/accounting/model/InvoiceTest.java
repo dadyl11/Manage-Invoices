@@ -16,8 +16,7 @@ public class InvoiceTest {
 
   Company company = mock(Company.class);
   InvoiceEntry invoiceEntry = mock(InvoiceEntry.class);
-  Invoice invoice = new Invoice();
-
+  Invoice invoice = new Invoice(company);
 
   @Test
   public void shouldCalculateNetValue() {
@@ -27,7 +26,7 @@ public class InvoiceTest {
     when(company.getDiscount()).thenReturn(0.2);
     invoice.addInvoiceEntry(invoiceEntry);
     BigDecimal expected = BigDecimal.valueOf(80.0);
-    invoice.setBuyer(new Company());
+    //invoice.setBuyer(new Company());
     BigDecimal actual = invoice.getNetValue();
 
     //Then

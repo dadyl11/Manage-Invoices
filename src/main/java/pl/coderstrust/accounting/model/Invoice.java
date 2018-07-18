@@ -40,10 +40,10 @@ public class Invoice {
   }
 
   //Constructor JUST for test purposes
-//  public Invoice(int id, Company buyer) {
-//    this.buyer = buyer;
-//    this.id = id;
-//  }
+  public Invoice(Company buyer) {
+    this.buyer = buyer;
+   // this.id = id;
+  }
 
 
   public BigDecimal getNetValue() {
