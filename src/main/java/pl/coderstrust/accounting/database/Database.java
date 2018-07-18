@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public interface Database {
 
-  int save(Invoice invoice);
+  int saveInvoice(Invoice invoice);
 
   Collection<Invoice> getInvoices();
 

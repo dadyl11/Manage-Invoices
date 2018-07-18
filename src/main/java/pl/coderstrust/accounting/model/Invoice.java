@@ -7,44 +7,24 @@ import java.util.List;
 
 public class Invoice {
 
-  private int id;
   private String identifier;
   private String type;
   private LocalDate issueDate;
   private LocalDate saleDate;
   private String salesPlace;
-
-
   private Company buyer;
   private Company seller;
   private List<InvoiceEntry> entries = new ArrayList<>();
 
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public int getId() {
-    return id;
-  }
+  //TODO - add setters and getters, when we're going to need them - will need tests to pass jacoco
 
   public void setBuyer(Company buyer) {
     this.buyer = buyer;
   }
 
-  public Company getBuyer() {
-    return buyer;
-  }
-
   public List<InvoiceEntry> getEntries() {
     return entries;
   }
-
-  //Constructor JUST for test purposes
-//  public Invoice(int id, Company buyer) {
-//    this.buyer = buyer;
-//    this.id = id;
-//  }
-
 
   public BigDecimal getNetValue() {
     BigDecimal netValue = BigDecimal.ZERO;
@@ -58,5 +38,10 @@ public class Invoice {
 
   public void addInvoiceEntry(InvoiceEntry invoiceEntry) {
     entries.add(invoiceEntry);
+  }
+
+  public static void main(String[] args) {
+    System.out
+        .println(BigDecimal.TEN.multiply(BigDecimal.TEN).multiply(BigDecimal.valueOf(1 - 0.2)));
   }
 }

@@ -5,8 +5,12 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
 import org.junit.Test;
+import pl.pojo.tester.api.ClassAndFieldPredicatePair;
+import pl.pojo.tester.api.FieldPredicate;
+import pl.pojo.tester.api.assertion.Method;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,7 +22,6 @@ public class InvoiceTest {
   InvoiceEntry invoiceEntry = mock(InvoiceEntry.class);
   Invoice invoice = new Invoice();
 
-
   @Test
   public void shouldCalculateNetValue() {
     //When
@@ -27,7 +30,7 @@ public class InvoiceTest {
     when(company.getDiscount()).thenReturn(0.2);
     invoice.addInvoiceEntry(invoiceEntry);
     BigDecimal expected = BigDecimal.valueOf(80.0);
-    invoice.setBuyer(new Company());
+    invoice.setBuyer(company);
     BigDecimal actual = invoice.getNetValue();
 
     //Then
@@ -53,13 +56,15 @@ public class InvoiceTest {
     assertTrue(!invoice.getEntries().isEmpty());
   }
 
+
   @Test
-  public void returnsId() {
-    //When
-    invoice.setId(1);
-    int actual = invoice.getId();
+  public void shouldPassAllPojoTestsForGettersAndSetters() {
+    // given
+    final Class<?> classUnderTest = InvoiceEntry.class;
 
-    assertThat(actual, is(1));
+    // when
 
+    // then
+    assertPojoMethodsFor(classUnderTest).testing(Method.GETTER, Method.SETTER).areWellImplemented();
   }
 }

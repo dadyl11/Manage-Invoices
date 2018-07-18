@@ -17,15 +17,15 @@ public class InvoiceBook {
     if (invoice == null) {
       throw new IllegalArgumentException("Incorrect invoice property");
     }
-    database.save(invoice);
+    database.saveInvoice(invoice);
   }
 
-  public Collection<Invoice> getInvoices() {
+  public Collection<Invoice> get() {
     return database.getInvoices();
   }
 
   public void update(Invoice invoice) {
-    database.save(invoice);
+    database.saveInvoice(invoice);
   }
 
   public void removeInvoiceById(int id) {

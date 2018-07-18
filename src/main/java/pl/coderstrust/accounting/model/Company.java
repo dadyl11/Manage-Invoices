@@ -12,5 +12,5 @@ public class Company {
   public double getDiscount() {
     return discount;
   }
-//TODO - add missing gettters and setters when you want to implement it.
+  //TODO - add setters and getters, when we're going to need them - will need tests to pass jacoco
 }

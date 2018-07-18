@@ -5,8 +5,4 @@ import pl.coderstrust.accounting.database.impl.memory.InMemoryDatabase;
 
 public class InMemoryDataBaseForInvoiceBookTest extends InvoiceBookTest {
 
-  @Override
-  public Database getDatabase() {
-    return new InMemoryDatabase();
-  }
 }

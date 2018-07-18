@@ -1,6 +1,7 @@
 package pl.coderstrust.accounting.model;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class InvoiceEntry {
 
@@ -9,11 +10,19 @@ public class InvoiceEntry {
   private VatRate vatRate;
   private BigDecimal quantity;
 
-  public InvoiceEntry(String description, BigDecimal netPrice,
-      VatRate vatrate, BigDecimal quantity) {
+  public void setDescription(String description) {
     this.description = description;
+  }
+
+  public void setNetPrice(BigDecimal netPrice) {
     this.netPrice = netPrice;
-    this.vatRate = vatrate;
+  }
+
+  public void setVatRate(VatRate vatRate) {
+    this.vatRate = vatRate;
+  }
+
+  public void setQuantity(BigDecimal quantity) {
     this.quantity = quantity;
   }
 

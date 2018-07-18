@@ -1,7 +1,9 @@
 package pl.coderstrust.accounting.database;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 
@@ -13,7 +15,7 @@ import pl.coderstrust.accounting.model.Invoice;
 import java.util.Collection;
 
 @RunWith(MockitoJUnitRunner.class)
-public abstract class DataBaseTest {
+public abstract class DatabaseTest {
 
   public abstract Database getDatabase();
 
@@ -25,10 +27,10 @@ public abstract class DataBaseTest {
     Invoice invoice = mock(Invoice.class);
 
     //When
-    database.save(invoice);
+    database.saveInvoice(invoice);
 
     //Then
-    assertThat(database.getInvoices().isEmpty(), is(false));
+    assertThat(database.getInvoices(), is(not(empty())));
   }
 
   @Test
@@ -37,7 +39,7 @@ public abstract class DataBaseTest {
     Collection<Invoice> invoices = database.getInvoices();
 
     //Then
-    assertThat(invoices.isEmpty(), is(true));
+    assertThat(database.getInvoices(), is(empty()));
   }
 
   @Test
@@ -46,11 +48,11 @@ public abstract class DataBaseTest {
     Invoice invoice = mock(Invoice.class);
 
     //When
-    database.save(invoice);
+    database.saveInvoice(invoice);
     database.removeInvoiceById(1);
 
     //Then
-    assertTrue(database.getInvoices().isEmpty());
+    assertThat(database.getInvoices(), is(empty()));
   }
 
   @Test
@@ -60,7 +62,7 @@ public abstract class DataBaseTest {
     Invoice invoice2 = mock(Invoice.class);
 
     //When
-    database.save(invoice);
+    database.saveInvoice(invoice);
     database.updateInvoice(invoice2);
     database.removeInvoiceById(1);
 
