@@ -6,6 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +18,7 @@ import java.util.Collection;
 @RunWith(MockitoJUnitRunner.class)
 public abstract class DatabaseTest {
 
-  public abstract Database getDatabase();
+  protected abstract Database getDatabase();
 
   private Database database = getDatabase();
 
