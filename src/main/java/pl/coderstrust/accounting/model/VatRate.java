@@ -1,15 +1,18 @@
 package pl.coderstrust.accounting.model;
 
+import java.math.BigDecimal;
+
 public enum VatRate {
-  NORMAL(23), REDUCED8(8), REDUCED7(7), REDUCED4(4), ZERO(0);
+  NORMAL(BigDecimal.valueOf(23)), REDUCED8(BigDecimal.valueOf(8)), REDUCED7(
+      BigDecimal.valueOf(7)), REDUCED4(BigDecimal.valueOf(4)), ZERO(BigDecimal.ZERO);
 
-  private double vatRate;
+  private BigDecimal vatRate;
 
-  VatRate(double vatRate) {
+  VatRate(BigDecimal vatRate) {
     this.vatRate = vatRate;
   }
 
-  public double getVatRateDouble() {
+  public BigDecimal getVatRate() {
     return vatRate;
   }
 }
