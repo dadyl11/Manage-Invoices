@@ -47,6 +47,7 @@ public abstract class DatabaseTest {
   public void shouldRemoveInvoices() {
     //Given
     Invoice invoice = mock(Invoice.class);
+    when(invoice.getId()).thenReturn(1);
 
     //When
     database.saveInvoice(invoice);
@@ -61,6 +62,8 @@ public abstract class DatabaseTest {
     //Given
     Invoice invoice = mock(Invoice.class);
     Invoice invoice2 = mock(Invoice.class);
+    when(invoice.getId()).thenReturn(1);
+    when(invoice2.getId()).thenReturn(1);
 
     //When
     database.saveInvoice(invoice);

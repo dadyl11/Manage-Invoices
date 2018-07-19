@@ -66,4 +66,19 @@ public class InvoiceTest {
     // then
     assertPojoMethodsFor(classUnderTest).testing(Method.GETTER, Method.SETTER).areWellImplemented();
   }
+
+
+  @Test
+  public void shouldSetAndGetId() {
+    //Given
+
+    // when
+    invoice.setId(2);
+    int expected = 2;
+
+    // then
+    assertThat(invoice.getId(), is(expected));
+
+  }
+
 }

@@ -10,7 +10,7 @@ import java.util.Map;
 public class InMemoryDatabase implements Database {
 
   private final Map<Integer, Invoice> invoices = new HashMap<>();
-  private int id = 0;
+  private static int id = 0;
 
   private int getNextId() {
     id++;
@@ -19,8 +19,8 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public int saveInvoice(Invoice invoice) {
-    id = getNextId();
-    invoices.put(id, invoice);
+    invoice.setId(getNextId());
+    invoices.put(invoice.getId(), invoice);
     return id;
   }
 
@@ -31,7 +31,7 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public void updateInvoice(Invoice invoice) {
-    invoices.put(id, invoice);
+    invoices.put(invoice.getId(), invoice);
   }
 
   @Override
