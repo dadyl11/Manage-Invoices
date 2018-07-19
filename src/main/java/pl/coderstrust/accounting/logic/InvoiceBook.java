@@ -3,7 +3,7 @@ package pl.coderstrust.accounting.logic;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
 
-import java.util.Collection;
+import java.util.List;
 
 public class InvoiceBook {
 
@@ -13,18 +13,18 @@ public class InvoiceBook {
     this.database = database;
   }
 
-  public void save(Invoice invoice) {
+  public void saveInvoice(Invoice invoice) {
     if (invoice == null) {
-      throw new IllegalArgumentException("Incorrect invoice property");
+      throw new IllegalArgumentException("invoice cannot be null");
     }
     database.saveInvoice(invoice);
   }
 
-  public Collection<Invoice> get() {
+  public List<Invoice> getInvoices() {
     return database.getInvoices();
   }
 
-  public void update(Invoice invoice) {
+  public void updateInvoice(Invoice invoice) {
     database.saveInvoice(invoice);
   }
 

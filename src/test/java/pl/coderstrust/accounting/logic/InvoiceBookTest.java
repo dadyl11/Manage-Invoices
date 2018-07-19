@@ -1,7 +1,6 @@
 package pl.coderstrust.accounting.logic;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -9,62 +8,70 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import pl.coderstrust.accounting.database.Database;
+import pl.coderstrust.accounting.helpers.InvoiceProvider;
 import pl.coderstrust.accounting.model.Invoice;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
-public abstract class InvoiceBookTest {
+public class InvoiceBookTest {
 
   @Mock
-  Collection<Invoice> collection;
-  Database databaseMock = mock(Database.class);
-  Invoice invoice = mock(Invoice.class);
-  InvoiceBook invoiceBook = new InvoiceBook(databaseMock);
+  Database databaseMock;
+
+  @InjectMocks
+  InvoiceBook invoiceBook;
 
   @Test
   public void shouldSaveInvoice() {
-    //When
-    invoiceBook.save(invoice);
+    //given
 
-    //Then
-    verify(databaseMock).saveInvoice(invoice);
+    //when
+    invoiceBook.saveInvoice(InvoiceProvider.invoice1);
+
+    //then
+    verify(databaseMock).saveInvoice(InvoiceProvider.invoice1);
   }
 
   @Test
   public void shouldGetCollectionOfInvoices() {
-    //Given
-    when(databaseMock.getInvoices()).thenReturn(collection);
+    //given
+    List<Invoice> invoices = new ArrayList<>();
+    when(databaseMock.getInvoices()).thenReturn(invoices);
 
-    //When
-    invoiceBook.get();
+    //when
+    invoiceBook.getInvoices();
 
-    //Then
+    //then
     verify(databaseMock).getInvoices();
-    assertThat(databaseMock.getInvoices(), is(invoiceBook.get()));
+    assertThat(databaseMock.getInvoices(), is(invoiceBook.getInvoices()));
+    assertThat(invoiceBook.getInvoices(), is(invoices));
   }
 
   @Test
   public void shouldUpdateInvoice() {
-    //When
-    invoiceBook.update(invoice);
+    //when
+    invoiceBook.updateInvoice(InvoiceProvider.invoice1);
 
-    //Then
-    verify(databaseMock).saveInvoice(invoice);
+    //then
+    verify(databaseMock).saveInvoice(InvoiceProvider.invoice1);
   }
 
   @Test
   public void shouldRemoveInvoiceById() {
-    //Given
+    //given
     int id = 0;
 
-    //When
+    //when
     invoiceBook.removeInvoiceById(id);
 
-    //Then
+    //then
     verify(databaseMock).removeInvoiceById(0);
   }
 

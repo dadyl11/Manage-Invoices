@@ -1,5 +1,5 @@
 package pl.coderstrust.accounting.model;
 
-public enum ModeOfPayement {
+public enum ModeOfPayment {
   BANK_TRANSFER, CASH, CREDIT_CARD, CHEQUE
 }

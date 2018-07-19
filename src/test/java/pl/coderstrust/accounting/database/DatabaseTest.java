@@ -1,7 +1,6 @@
 package pl.coderstrust.accounting.database;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
@@ -11,9 +10,10 @@ import static org.mockito.Mockito.when;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+import pl.coderstrust.accounting.helpers.InvoiceProvider;
 import pl.coderstrust.accounting.model.Invoice;
 
-import java.util.Collection;
+import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class DatabaseTest {
@@ -24,53 +24,50 @@ public abstract class DatabaseTest {
 
   @Test
   public void shouldSaveInvoices() {
-    //Given
-    Invoice invoice = mock(Invoice.class);
+    //given
 
-    //When
-    database.saveInvoice(invoice);
+    //when
+    database.saveInvoice(InvoiceProvider.invoice1);
+    List<Invoice> invoices = database.getInvoices();
 
-    //Then
-    assertThat(database.getInvoices(), is(not(empty())));
+    //then
+    assertThat(invoices.get(0), is(InvoiceProvider.invoice1));
   }
 
   @Test
   public void shouldReturnCollectionsOfInvoices() {
-    //When
-    Collection<Invoice> invoices = database.getInvoices();
+    //when
+    database.saveInvoice(InvoiceProvider.invoice1);
+    database.saveInvoice(InvoiceProvider.invoice2);
+    List<Invoice> invoices = database.getInvoices();
 
-    //Then
-    assertThat(database.getInvoices(), is(empty()));
+    //then
+    assertThat(database.getInvoices().size(), is(2));
   }
 
   @Test
   public void shouldRemoveInvoices() {
-    //Given
-    Invoice invoice = mock(Invoice.class);
-    when(invoice.getId()).thenReturn(1);
+    //given
+    database.saveInvoice(InvoiceProvider.invoice1);
+    database.saveInvoice(InvoiceProvider.invoice2);
 
-    //When
-    database.saveInvoice(invoice);
+    //when
     database.removeInvoiceById(1);
 
-    //Then
-    assertThat(database.getInvoices(), is(empty()));
+    //then
+    assertThat(database.getInvoices().get(0), is(InvoiceProvider.invoice2));
   }
 
   @Test
   public void shouldUpdateInvoice() {
-    //Given
-    Invoice invoice = mock(Invoice.class);
-    Invoice invoice2 = mock(Invoice.class);
-    when(invoice.getId()).thenReturn(1);
-    when(invoice2.getId()).thenReturn(1);
+    //given
+    database.saveInvoice(InvoiceProvider.invoice2);
+    database.saveInvoice(InvoiceProvider.invoice1);
 
-    //When
-    database.saveInvoice(invoice);
-    database.updateInvoice(invoice2);
-    database.removeInvoiceById(1);
+    //when
+    database.updateInvoice(InvoiceProvider.invoice4);
 
-    //Then
-    assertTrue(database.getInvoices().isEmpty());
+    //then
+    assertThat(database.getInvoices().get(1), is(InvoiceProvider.invoice4));
   }
 }

@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
 import org.junit.Test;
+import pl.coderstrust.accounting.helpers.InvoiceEntryProvider;
+import pl.coderstrust.accounting.helpers.InvoiceProvider;
 import pl.pojo.tester.api.ClassAndFieldPredicatePair;
 import pl.pojo.tester.api.FieldPredicate;
 import pl.pojo.tester.api.assertion.Method;
@@ -18,46 +20,44 @@ import java.util.List;
 
 public class InvoiceTest {
 
-  Company company = mock(Company.class);
-  InvoiceEntry invoiceEntry = mock(InvoiceEntry.class);
-  Invoice invoice = new Invoice();
-
   @Test
   public void shouldCalculateNetValue() {
-    //When
-    when(invoiceEntry.getNetPrice()).thenReturn(BigDecimal.TEN);
-    when(invoiceEntry.getQuantity()).thenReturn(BigDecimal.TEN);
-    when(company.getDiscount()).thenReturn(0.2);
-    invoice.addInvoiceEntry(invoiceEntry);
-    BigDecimal expected = BigDecimal.valueOf(80.0);
-    invoice.setBuyer(company);
-    BigDecimal actual = invoice.getNetValue();
+    //when
+    InvoiceProvider.invoice2.addInvoiceEntry(InvoiceEntryProvider.InvoiceEntry1);
+    InvoiceProvider.invoice2.addInvoiceEntry(InvoiceEntryProvider.InvoiceEntry2);
+    BigDecimal actual = InvoiceProvider.invoice1.getNetValue();
+    BigDecimal expected = BigDecimal.valueOf(50.4);
 
-    //Then
+    //then
     assertThat(actual, is(expected));
   }
 
   @Test
   public void returnsListOfEntries() {
-    //When
-    List<InvoiceEntry> actual = invoice.getEntries();
+    //given
+    InvoiceProvider.invoice2.addInvoiceEntry(InvoiceEntryProvider.InvoiceEntry1);
     List<InvoiceEntry> expected = new ArrayList<>();
+    expected.add(InvoiceEntryProvider.InvoiceEntry1);
 
-    //Then
+    //when
+    List<InvoiceEntry> actual = InvoiceProvider.invoice2.getEntries();
+
+    //then
     assertThat(actual, is(expected));
   }
 
   @Test
   public void addEntryToList() {
-    //When
-    invoice.addInvoiceEntry(invoiceEntry);
+    //when
+    InvoiceProvider.invoice1.addInvoiceEntry(InvoiceEntryProvider.InvoiceEntry3);
 
-    //Then
-    assertTrue(!invoice.getEntries().isEmpty());
+    //then
+    assertThat(InvoiceProvider.invoice1.getEntries().get(0),
+        is(InvoiceEntryProvider.InvoiceEntry3));
   }
 
   @Test
-  public void shouldPassAllPojoTestsForGettersAndSetters() {
+  public void invoiceEntryShouldPassAllPojoTestsForGettersAndSetters() {
     // given
     final Class<?> classUnderTest = InvoiceEntry.class;
 
@@ -67,18 +67,14 @@ public class InvoiceTest {
     assertPojoMethodsFor(classUnderTest).testing(Method.GETTER, Method.SETTER).areWellImplemented();
   }
 
-
   @Test
-  public void shouldSetAndGetId() {
-    //Given
+  public void invoiceShouldPassAllPojoTestsForGettersAndSetters() {
+    // given
+    final Class<?> classUnderTest = Invoice.class;
 
     // when
-    invoice.setId(2);
-    int expected = 2;
 
     // then
-    assertThat(invoice.getId(), is(expected));
-
+    assertPojoMethodsFor(classUnderTest).testing(Method.GETTER, Method.SETTER).areWellImplemented();
   }
-
 }
