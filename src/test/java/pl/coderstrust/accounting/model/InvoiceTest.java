@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
 import org.junit.Test;
+import pl.coderstrust.accounting.helpers.CompanyProvider;
 import pl.coderstrust.accounting.helpers.InvoiceEntryProvider;
 import pl.coderstrust.accounting.helpers.InvoiceProvider;
 import pl.pojo.tester.api.ClassAndFieldPredicatePair;
@@ -25,7 +26,7 @@ public class InvoiceTest {
     //when
     InvoiceProvider.invoice2.addInvoiceEntry(InvoiceEntryProvider.InvoiceEntry1);
     InvoiceProvider.invoice2.addInvoiceEntry(InvoiceEntryProvider.InvoiceEntry2);
-    BigDecimal actual = InvoiceProvider.invoice1.getNetValue();
+    BigDecimal actual = InvoiceProvider.invoice2.getNetValue();
     BigDecimal expected = BigDecimal.valueOf(50.4);
 
     //then
@@ -35,12 +36,12 @@ public class InvoiceTest {
   @Test
   public void returnsListOfEntries() {
     //given
-    InvoiceProvider.invoice2.addInvoiceEntry(InvoiceEntryProvider.InvoiceEntry1);
+    InvoiceProvider.invoice3.addInvoiceEntry(InvoiceEntryProvider.InvoiceEntry1);
     List<InvoiceEntry> expected = new ArrayList<>();
     expected.add(InvoiceEntryProvider.InvoiceEntry1);
 
     //when
-    List<InvoiceEntry> actual = InvoiceProvider.invoice2.getEntries();
+    List<InvoiceEntry> actual = InvoiceProvider.invoice3.getEntries();
 
     //then
     assertThat(actual, is(expected));
