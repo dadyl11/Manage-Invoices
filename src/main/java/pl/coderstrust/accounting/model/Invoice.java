@@ -100,14 +100,14 @@ public class Invoice {
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (this == o) {
+  public boolean equals(Object object) {
+    if (this == object) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+    if (object == null || getClass() != object.getClass()) {
       return false;
     }
-    Invoice invoice = (Invoice) o;
+    Invoice invoice = (Invoice) object;
     return getId() == invoice.getId();
   }
 

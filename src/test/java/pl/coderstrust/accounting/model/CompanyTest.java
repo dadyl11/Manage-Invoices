@@ -1,6 +1,5 @@
 package pl.coderstrust.accounting.model;
 
-import static org.junit.Assert.*;
 import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
 import org.junit.Test;

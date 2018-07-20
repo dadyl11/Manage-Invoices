@@ -2,7 +2,6 @@ package pl.coderstrust.accounting.logic;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -16,7 +15,6 @@ import pl.coderstrust.accounting.helpers.InvoiceProvider;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)

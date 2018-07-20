@@ -2,17 +2,11 @@ package pl.coderstrust.accounting.model;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
 import org.junit.Test;
-import pl.coderstrust.accounting.helpers.CompanyProvider;
 import pl.coderstrust.accounting.helpers.InvoiceEntryProvider;
 import pl.coderstrust.accounting.helpers.InvoiceProvider;
-import pl.pojo.tester.api.ClassAndFieldPredicatePair;
-import pl.pojo.tester.api.FieldPredicate;
 import pl.pojo.tester.api.assertion.Method;
 
 import java.math.BigDecimal;
