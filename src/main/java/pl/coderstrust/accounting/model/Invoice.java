@@ -101,6 +101,8 @@ public class Invoice {
     this.seller = seller;
   }
 
+  public Invoice() {
+  }
 
   @JsonIgnore
   public BigDecimal getNetValue() {

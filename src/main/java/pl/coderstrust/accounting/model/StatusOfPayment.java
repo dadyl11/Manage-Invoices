@@ -1,5 +1,5 @@
 package pl.coderstrust.accounting.model;
 
-public enum StatusOfPayement {
+public enum StatusOfPayment {
   PAYED, NOT_PAYED, PAYED_PARTLY
 }

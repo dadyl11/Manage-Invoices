@@ -18,9 +18,9 @@ public class InvoiceTest {
   @Test
   public void shouldCalculateNetValue() {
     //when
-    InvoiceProvider.invoice2.addInvoiceEntry(InvoiceEntryProvider.InvoiceEntry1);
-    InvoiceProvider.invoice2.addInvoiceEntry(InvoiceEntryProvider.InvoiceEntry2);
-    BigDecimal actual = InvoiceProvider.invoice2.getNetValue();
+    InvoiceProvider.INVOICE_GRUDZIADZ_2017.addInvoiceEntry(InvoiceEntryProvider.SPAN);
+    InvoiceProvider.INVOICE_GRUDZIADZ_2017.addInvoiceEntry(InvoiceEntryProvider.CLAMP);
+    BigDecimal actual = InvoiceProvider.INVOICE_GRUDZIADZ_2017.getNetValue();
     BigDecimal expected = BigDecimal.valueOf(50.4);
 
     //then
@@ -30,12 +30,12 @@ public class InvoiceTest {
   @Test
   public void returnsListOfEntries() {
     //given
-    InvoiceProvider.invoice3.addInvoiceEntry(InvoiceEntryProvider.InvoiceEntry1);
+    InvoiceProvider.INVOICE_CHELMNO_2016.addInvoiceEntry(InvoiceEntryProvider.SPAN);
     List<InvoiceEntry> expected = new ArrayList<>();
-    expected.add(InvoiceEntryProvider.InvoiceEntry1);
+    expected.add(InvoiceEntryProvider.SPAN);
 
     //when
-    List<InvoiceEntry> actual = InvoiceProvider.invoice3.getEntries();
+    List<InvoiceEntry> actual = InvoiceProvider.INVOICE_CHELMNO_2016.getEntries();
 
     //then
     assertThat(actual, is(expected));
@@ -44,11 +44,11 @@ public class InvoiceTest {
   @Test
   public void addEntryToList() {
     //when
-    InvoiceProvider.invoice1.addInvoiceEntry(InvoiceEntryProvider.InvoiceEntry3);
+    InvoiceProvider.INVOICE_KRAKOW_2018.addInvoiceEntry(InvoiceEntryProvider.SUPPORT);
 
     //then
-    assertThat(InvoiceProvider.invoice1.getEntries().get(0),
-        is(InvoiceEntryProvider.InvoiceEntry3));
+    assertThat(InvoiceProvider.INVOICE_KRAKOW_2018.getEntries().get(0),
+        is(InvoiceEntryProvider.SUPPORT));
   }
 
   @Test

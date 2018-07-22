@@ -2,11 +2,14 @@ package pl.coderstrust.accounting.database;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BYDGOSZCZ_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
-import pl.coderstrust.accounting.helpers.InvoiceProvider;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.util.List;
@@ -23,47 +26,52 @@ public abstract class DatabaseTest {
     //given
 
     //when
-    database.saveInvoice(InvoiceProvider.invoice1);
+    int index = database.saveInvoice(INVOICE_KRAKOW_2018);
     List<Invoice> invoices = database.getInvoices();
 
     //then
-    assertThat(invoices.get(0), is(InvoiceProvider.invoice1));
+    assertThat(invoices.size(), is(1));
+    assertThat(invoices.get(0), is(INVOICE_KRAKOW_2018));
   }
 
   @Test
   public void shouldReturnCollectionsOfInvoices() {
     //when
-    database.saveInvoice(InvoiceProvider.invoice1);
-    database.saveInvoice(InvoiceProvider.invoice2);
+    database.saveInvoice(INVOICE_KRAKOW_2018);
+    database.saveInvoice(INVOICE_GRUDZIADZ_2017);
     List<Invoice> invoices = database.getInvoices();
 
     //then
     assertThat(database.getInvoices().size(), is(2));
+    assertTrue(invoices.contains(INVOICE_KRAKOW_2018));
+    assertTrue(invoices.contains(INVOICE_GRUDZIADZ_2017));
   }
 
   @Test
   public void shouldRemoveInvoices() {
     //given
-    database.saveInvoice(InvoiceProvider.invoice1);
-    database.saveInvoice(InvoiceProvider.invoice2);
+    int ida = database.saveInvoice(INVOICE_KRAKOW_2018);
+    int idb = database.saveInvoice(INVOICE_GRUDZIADZ_2017);
 
     //when
-    database.removeInvoiceById(1);
+    database.removeInvoiceById(INVOICE_KRAKOW_2018.getId());
 
     //then
-    assertThat(database.getInvoices().get(0), is(InvoiceProvider.invoice2));
+    assertThat(database.getInvoices().size(), is(1));
+    assertThat(database.getInvoices().get(0), is(INVOICE_GRUDZIADZ_2017));
   }
 
   @Test
   public void shouldUpdateInvoice() {
     //given
-    database.saveInvoice(InvoiceProvider.invoice2);
-    database.saveInvoice(InvoiceProvider.invoice1);
+    int index = database.saveInvoice(INVOICE_GRUDZIADZ_2017);
+    System.out.println(index);
 
     //when
-    database.updateInvoice(InvoiceProvider.invoice4);
+    database.updateInvoice(index, INVOICE_BYDGOSZCZ_2018);
 
     //then
-    assertThat(database.getInvoices().get(1), is(InvoiceProvider.invoice4));
+    assertThat(database.getInvoices().size(), is(1));
+    assertThat(database.getInvoices().get(index), is(INVOICE_BYDGOSZCZ_2018));
   }
 }

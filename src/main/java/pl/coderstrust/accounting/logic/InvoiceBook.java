@@ -24,8 +24,8 @@ public class InvoiceBook {
     return database.getInvoices();
   }
 
-  public void updateInvoice(Invoice invoice) {
-    database.saveInvoice(invoice);
+  public void updateInvoice(int id, Invoice invoice) {
+    database.updateInvoice(id, invoice);
   }
 
   public void removeInvoiceById(int id) {

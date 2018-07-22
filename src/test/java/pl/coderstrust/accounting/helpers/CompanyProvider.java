@@ -4,7 +4,7 @@ import pl.coderstrust.accounting.model.Company;
 
 public class CompanyProvider {
 
-  public static final Company company1 = new Company(
+  public static final Company COMPANY_TRANSPOL = new Company(
       "Transpol",
       "6752339483",
       "Grodzka",
@@ -12,7 +12,7 @@ public class CompanyProvider {
       "Krakow",
       0);
 
-  public static final Company company2 = new Company(
+  public static final Company COMPANY_DRUTEX = new Company(
       "Drutex",
       "1239514823",
       "Rybna",
@@ -20,7 +20,7 @@ public class CompanyProvider {
       "Rybnik",
       0.2);
 
-  public static final Company company3 = new Company(
+  public static final Company COMPANY_WASBUD = new Company(
       "WasBud",
       "1458796325",
       "Targowa",
@@ -28,7 +28,7 @@ public class CompanyProvider {
       "warszawa",
       0.1);
 
-  public static final Company company4 = new Company(
+  public static final Company COMPANY_DRUKPOL = new Company(
       "DrukPol",
       "1452369135",
       "Bolesnej Meki Panskiej",
