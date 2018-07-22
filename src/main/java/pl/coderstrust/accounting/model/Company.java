@@ -1,6 +1,7 @@
 package pl.coderstrust.accounting.model;
 
-import java.util.Objects;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 public class Company {
 
@@ -70,20 +71,36 @@ public class Company {
   }
 
   @Override
-  public boolean equals(Object object) {
-    if (this == object) {
+  public boolean equals(Object obj) {
+    if (this == obj) {
       return true;
     }
-    if (object == null || getClass() != object.getClass()) {
+
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
-    Company company = (Company) object;
-    return Objects.equals(getNip(), company.getNip());
+
+    Company company = (Company) obj;
+
+    return new EqualsBuilder()
+        .append(discount, company.discount)
+        .append(name, company.name)
+        .append(nip, company.nip)
+        .append(street, company.street)
+        .append(postalCode, company.postalCode)
+        .append(city, company.city)
+        .isEquals();
   }
 
   @Override
   public int hashCode() {
-
-    return Objects.hash(getNip());
+    return new HashCodeBuilder(17, 37)
+        .append(name)
+        .append(nip)
+        .append(street)
+        .append(postalCode)
+        .append(city)
+        .append(discount)
+        .toHashCode();
   }
 }

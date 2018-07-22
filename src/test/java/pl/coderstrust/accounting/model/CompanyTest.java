@@ -10,12 +10,17 @@ public class CompanyTest {
   @Test
   public void shouldPassAllPojoTestsForGettersAndSetters() {
     // given
-    final Class<?> classUnderTest = Company.class;
+    Class<?> classUnderTest = Company.class;
 
     // when
 
     // then
-    assertPojoMethodsFor(classUnderTest).testing(Method.GETTER, Method.SETTER).areWellImplemented();
+    assertPojoMethodsFor(classUnderTest)
+        .testing(Method.GETTER, Method.SETTER)
+        .testing(Method.EQUALS)
+        .testing(Method.HASH_CODE)
+        .areWellImplemented();
   }
+
 
 }

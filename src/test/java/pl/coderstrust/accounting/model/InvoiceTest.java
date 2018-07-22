@@ -70,6 +70,8 @@ public class InvoiceTest {
     // when
 
     // then
-    assertPojoMethodsFor(classUnderTest).testing(Method.GETTER, Method.SETTER).areWellImplemented();
+    assertPojoMethodsFor(classUnderTest)
+        .testing(Method.GETTER, Method.SETTER)
+        .areWellImplemented();
   }
 }

@@ -11,7 +11,12 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-
+  <repositories>
+    <repository>
+      <id>jcenter</id>
+      <url>http://jcenter.bintray.com/</url>
+    </repository>
+  </repositories>
   <build>
     <plugins>
       <plugin>
@@ -98,6 +103,7 @@
         </executions>
       </plugin>
     </plugins>
+
   </build>
   <dependencies>
     <dependency>

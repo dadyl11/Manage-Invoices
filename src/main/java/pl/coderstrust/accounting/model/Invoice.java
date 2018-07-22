@@ -1,6 +1,8 @@
 package pl.coderstrust.accounting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -99,23 +101,6 @@ public class Invoice {
     this.seller = seller;
   }
 
-  @Override
-  public boolean equals(Object object) {
-    if (this == object) {
-      return true;
-    }
-    if (object == null || getClass() != object.getClass()) {
-      return false;
-    }
-    Invoice invoice = (Invoice) object;
-    return getId() == invoice.getId();
-  }
-
-  @Override
-  public int hashCode() {
-
-    return Objects.hash(getId());
-  }
 
   @JsonIgnore
   public BigDecimal getNetValue() {
