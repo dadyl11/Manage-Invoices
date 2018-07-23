@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('BUILD') {
             steps {
-                sh '''
+                bat '''
                 mvnw clean verify
                 '''
             }
