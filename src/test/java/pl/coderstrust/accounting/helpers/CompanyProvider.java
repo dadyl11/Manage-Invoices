@@ -2,6 +2,8 @@ package pl.coderstrust.accounting.helpers;
 
 import pl.coderstrust.accounting.model.Company;
 
+import java.math.BigDecimal;
+
 public class CompanyProvider {
 
   public static final Company COMPANY_TRANSPOL = new Company(
@@ -10,7 +12,7 @@ public class CompanyProvider {
       "Grodzka",
       "32008",
       "Krakow",
-      0);
+      BigDecimal.ZERO);
 
   public static final Company COMPANY_DRUTEX = new Company(
       "Drutex",
@@ -18,7 +20,7 @@ public class CompanyProvider {
       "Rybna",
       "31158",
       "Rybnik",
-      0.2);
+      BigDecimal.valueOf(0.2));
 
   public static final Company COMPANY_WASBUD = new Company(
       "WasBud",
@@ -26,7 +28,7 @@ public class CompanyProvider {
       "Targowa",
       "15689",
       "warszawa",
-      0.1);
+      BigDecimal.valueOf(0.1));
 
   public static final Company COMPANY_DRUKPOL = new Company(
       "DrukPol",
@@ -34,5 +36,5 @@ public class CompanyProvider {
       "Bolesnej Meki Panskiej",
       "58963",
       "Sosnowiec",
-      0.3);
+      BigDecimal.valueOf(0.3));
 }

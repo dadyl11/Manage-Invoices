@@ -1,5 +1,10 @@
 package pl.coderstrust.accounting.helpers;
 
+import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.CLAMP_LINK;
+import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN_CLAMP;
+import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SUPPORT_LINK;
+import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SUPPORT_SPAN;
+
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.time.LocalDate;
@@ -13,7 +18,8 @@ public class InvoiceProvider {
       LocalDate.of(2018, 05, 12),
       "Krakow",
       CompanyProvider.COMPANY_TRANSPOL,
-      CompanyProvider.COMPANY_DRUTEX);
+      CompanyProvider.COMPANY_DRUTEX,
+      SUPPORT_LINK);
 
   public static final Invoice INVOICE_GRUDZIADZ_2017 = new Invoice(
       2,
@@ -22,7 +28,8 @@ public class InvoiceProvider {
       LocalDate.of(2017, 03, 02),
       "Grudziadz",
       CompanyProvider.COMPANY_DRUKPOL,
-      CompanyProvider.COMPANY_WASBUD);
+      CompanyProvider.COMPANY_WASBUD,
+      SPAN_CLAMP);
 
   public static final Invoice INVOICE_CHELMNO_2016 = new Invoice(
       3,
@@ -31,7 +38,8 @@ public class InvoiceProvider {
       LocalDate.of(2016, 02, 04),
       "Chelmno",
       CompanyProvider.COMPANY_DRUKPOL,
-      CompanyProvider.COMPANY_TRANSPOL);
+      CompanyProvider.COMPANY_TRANSPOL,
+      CLAMP_LINK);
 
   public static final Invoice INVOICE_BYDGOSZCZ_2018 = new Invoice(
       1,
@@ -40,5 +48,6 @@ public class InvoiceProvider {
       LocalDate.of(2018, 05, 12),
       "Bydgoszcz",
       CompanyProvider.COMPANY_WASBUD,
-      CompanyProvider.COMPANY_DRUTEX);
+      CompanyProvider.COMPANY_DRUTEX,
+      SUPPORT_SPAN);
 }

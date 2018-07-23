@@ -1,6 +1,7 @@
 package pl.coderstrust.accounting.logic;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -56,9 +57,9 @@ public class InvoiceBookTest {
     //then
     verify(databaseMock).getInvoices();
     assertThat(actual, is(invoices));
-    assertTrue(actual.contains(INVOICE_BYDGOSZCZ_2018));
-    assertTrue(actual.contains(INVOICE_CHELMNO_2016));
-    assertTrue(actual.contains(INVOICE_GRUDZIADZ_2017));
+    assertThat(actual, hasItem(INVOICE_BYDGOSZCZ_2018));
+    assertThat(actual, hasItem(INVOICE_CHELMNO_2016));
+    assertThat(actual, hasItem(INVOICE_GRUDZIADZ_2017));
   }
 
   @Test

@@ -91,7 +91,7 @@ public class Invoice {
 
   public Invoice(int id, String identifier, LocalDate issueDate,
       LocalDate saleDate, String salePlace, Company buyer,
-      Company seller) {
+      Company seller, List<InvoiceEntry> entries) {
     this.id = id;
     this.identifier = identifier;
     this.issueDate = issueDate;
@@ -99,6 +99,7 @@ public class Invoice {
     this.salePlace = salePlace;
     this.buyer = buyer;
     this.seller = seller;
+    this.entries = entries;
   }
 
   public Invoice() {
@@ -110,7 +111,7 @@ public class Invoice {
     for (InvoiceEntry entry : entries) {
       netValue = netValue
           .add(entry.getNetPrice().multiply(entry.getQuantity())
-              .multiply(BigDecimal.valueOf(1 - buyer.getDiscount())));
+              .multiply(BigDecimal.valueOf(1).subtract(buyer.getDiscount())));
     }
     return netValue;
   }

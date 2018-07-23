@@ -3,6 +3,8 @@ package pl.coderstrust.accounting.model;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.math.BigDecimal;
+
 public class Company {
 
   private String name;
@@ -10,7 +12,7 @@ public class Company {
   private String street;
   private String postalCode;
   private String city;
-  private double discount;
+  private BigDecimal discount;
 
   public String getName() {
     return name;
@@ -52,16 +54,16 @@ public class Company {
     this.city = city;
   }
 
-  public double getDiscount() {
+  public BigDecimal getDiscount() {
     return discount;
   }
 
-  public void setDiscount(double discount) {
+  public void setDiscount(BigDecimal discount) {
     this.discount = discount;
   }
 
   public Company(String name, String nip, String street, String postalCode, String city,
-      double discount) {
+      BigDecimal discount) {
     this.name = name;
     this.nip = nip;
     this.street = street;

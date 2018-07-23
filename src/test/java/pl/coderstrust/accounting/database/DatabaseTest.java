@@ -1,8 +1,8 @@
 package pl.coderstrust.accounting.database;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertTrue;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BYDGOSZCZ_2018;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
@@ -43,15 +43,15 @@ public abstract class DatabaseTest {
 
     //then
     assertThat(database.getInvoices().size(), is(2));
-    assertTrue(invoices.contains(INVOICE_KRAKOW_2018));
-    assertTrue(invoices.contains(INVOICE_GRUDZIADZ_2017));
+    assertThat(invoices, hasItem(INVOICE_KRAKOW_2018));
+    assertThat(invoices, hasItem(INVOICE_GRUDZIADZ_2017));
   }
 
   @Test
   public void shouldRemoveInvoices() {
     //given
-    int ida = database.saveInvoice(INVOICE_KRAKOW_2018);
-    int idb = database.saveInvoice(INVOICE_GRUDZIADZ_2017);
+    database.saveInvoice(INVOICE_KRAKOW_2018);
+    database.saveInvoice(INVOICE_GRUDZIADZ_2017);
 
     //when
     database.removeInvoiceById(INVOICE_KRAKOW_2018.getId());
@@ -65,7 +65,6 @@ public abstract class DatabaseTest {
   public void shouldUpdateInvoice() {
     //given
     int index = database.saveInvoice(INVOICE_GRUDZIADZ_2017);
-    System.out.println(index);
 
     //when
     database.updateInvoice(index, INVOICE_BYDGOSZCZ_2018);
