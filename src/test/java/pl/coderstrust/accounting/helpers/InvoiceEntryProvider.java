@@ -5,6 +5,7 @@ import pl.coderstrust.accounting.model.VatRate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class InvoiceEntryProvider {
@@ -34,13 +35,13 @@ public class InvoiceEntryProvider {
       VatRate.ZERO,
       BigDecimal.valueOf(6));
 
-  public static final List<InvoiceEntry> SPAN_CLAMP = new ArrayList<>(List.of(SPAN, CLAMP));
+  public static final List<InvoiceEntry> SPAN_CLAMP = new ArrayList<>(Arrays.asList(SPAN, CLAMP));
 
   public static final List<InvoiceEntry> SPAN_CLAMP_SUPPORT = new ArrayList<>(
-      List.of(SPAN, CLAMP, SUPPORT));
+      Arrays.asList(SPAN, CLAMP, SUPPORT));
 
-  public static final List<InvoiceEntry> EMPTY = new ArrayList<>(List.of());
+  public static final List<InvoiceEntry> EMPTY = new ArrayList<>(Arrays.asList());
 
-  public static final List<InvoiceEntry> ONE_LINK = new ArrayList<>(List.of(LINK));
+  public static final List<InvoiceEntry> ONE_LINK = new ArrayList<>(Arrays.asList(LINK));
 
 }
