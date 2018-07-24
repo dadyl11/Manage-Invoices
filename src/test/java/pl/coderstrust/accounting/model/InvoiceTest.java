@@ -4,10 +4,10 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.CLAMP;
-import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.LINK;
+import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN;
+import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SUPPORT;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_2016;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
 import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
 import org.junit.Test;
@@ -35,19 +35,23 @@ public class InvoiceTest {
     List<InvoiceEntry> actual = INVOICE_CHELMNO_2016.getEntries();
 
     //then
-    assertThat(actual, hasItem(LINK));
+    assertThat(actual, hasItem(SPAN));
     assertThat(actual, hasItem(CLAMP));
-    assertThat(actual.size(), is(2));
+    assertThat(actual, hasItem(SUPPORT));
+    assertThat(actual.size(), is(3));
 
   }
 
   @Test
   public void addEntryToList() {
+    //given
+    Invoice invoice = new Invoice();
+
     //when
-    INVOICE_KRAKOW_2018.addInvoiceEntry(CLAMP);
+    invoice.addInvoiceEntry(CLAMP);
 
     //then
-    assertThat(INVOICE_KRAKOW_2018.getEntries(), hasItem(CLAMP));
+    assertThat(invoice.getEntries(), hasItem(CLAMP));
   }
 
   @Test

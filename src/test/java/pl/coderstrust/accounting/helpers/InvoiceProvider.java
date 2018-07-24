@@ -1,9 +1,9 @@
 package pl.coderstrust.accounting.helpers;
 
-import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.CLAMP_LINK;
+import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.ONE_LINK;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN_CLAMP;
-import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SUPPORT_LINK;
-import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SUPPORT_SPAN;
+import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN_CLAMP_SUPPORT;
+
 
 import pl.coderstrust.accounting.model.Invoice;
 
@@ -19,7 +19,7 @@ public class InvoiceProvider {
       "Krakow",
       CompanyProvider.COMPANY_TRANSPOL,
       CompanyProvider.COMPANY_DRUTEX,
-      SUPPORT_LINK);
+      SPAN_CLAMP_SUPPORT);
 
   public static final Invoice INVOICE_GRUDZIADZ_2017 = new Invoice(
       2,
@@ -39,7 +39,7 @@ public class InvoiceProvider {
       "Chelmno",
       CompanyProvider.COMPANY_DRUKPOL,
       CompanyProvider.COMPANY_TRANSPOL,
-      CLAMP_LINK);
+      SPAN_CLAMP_SUPPORT);
 
   public static final Invoice INVOICE_BYDGOSZCZ_2018 = new Invoice(
       1,
@@ -49,5 +49,5 @@ public class InvoiceProvider {
       "Bydgoszcz",
       CompanyProvider.COMPANY_WASBUD,
       CompanyProvider.COMPANY_DRUTEX,
-      SUPPORT_SPAN);
+      ONE_LINK);
 }

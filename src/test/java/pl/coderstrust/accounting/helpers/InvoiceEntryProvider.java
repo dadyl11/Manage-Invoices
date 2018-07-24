@@ -36,10 +36,11 @@ public class InvoiceEntryProvider {
 
   public static final List<InvoiceEntry> SPAN_CLAMP = new ArrayList<>(List.of(SPAN, CLAMP));
 
-  public static final List<InvoiceEntry> SUPPORT_LINK = new ArrayList<>(List.of(SPAN, CLAMP));
+  public static final List<InvoiceEntry> SPAN_CLAMP_SUPPORT = new ArrayList<>(
+      List.of(SPAN, CLAMP, SUPPORT));
 
-  public static final List<InvoiceEntry> CLAMP_LINK = new ArrayList<>(List.of(CLAMP, LINK));
+  public static final List<InvoiceEntry> EMPTY = new ArrayList<>(List.of());
 
-  public static final List<InvoiceEntry> SUPPORT_SPAN = new ArrayList<>(List.of(SUPPORT, SPAN));
+  public static final List<InvoiceEntry> ONE_LINK = new ArrayList<>(List.of(LINK));
 
 }
