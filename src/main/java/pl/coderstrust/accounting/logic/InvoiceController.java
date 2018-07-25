@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.util.List;
@@ -25,13 +24,9 @@ public class InvoiceController {
     this.invoiceService = invoiceService;
   }
 
-//  public InvoiceController(Database database) {
-//    this.database = database;
-//  }
-
   @PostMapping
   public int saveInvoice(@RequestBody Invoice invoice) {
-  invoiceService.saveInvoice(invoice);
+    invoiceService.saveInvoice(invoice);
     return invoice.getId();
   }
 
