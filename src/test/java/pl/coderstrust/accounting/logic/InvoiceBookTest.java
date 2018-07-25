@@ -27,7 +27,7 @@ public class InvoiceBookTest {
   private Database databaseMock;
 
   @InjectMocks
-  private InvoiceBook invoiceBook;
+  private InvoiceService invoiceBook;
 
   @Test
   public void shouldSaveInvoice() throws Exception {
