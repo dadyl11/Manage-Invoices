@@ -1,7 +1,9 @@
 package pl.coderstrust.accounting.logic;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
@@ -27,14 +29,20 @@ public class InvoiceService {
   }
 
   public Invoice getInvoiceById(int id) {
-    return database.getInvoices().get(id);
+    List<Invoice> result = database.getInvoices().stream()
+        .filter(item -> item.getId() == id)
+        .collect(Collectors.toList());
+    return result.get(0);
   }
 
-  public List<Invoice> getInvoicesByDate(LocalDate startDate, LocalDate endDate) {
+  public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate) {
+    List<Invoice> result = new ArrayList<>();
     for (Invoice invoice : database.getInvoices()) {
-
+      if (invoice.getIssueDate().isAfter(startDate) && invoice.getIssueDate().isBefore(endDate)) {
+        result.add(invoice);
+      }
     }
-    return database.getInvoices();
+    return result;
   }
 
   public void updateInvoice(int id, Invoice invoice) {

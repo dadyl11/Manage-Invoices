@@ -2,6 +2,7 @@ package pl.coderstrust.accounting.logic;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -10,6 +11,7 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
@@ -88,14 +90,31 @@ public class InvoiceServiceTest {
     invoices.add(INVOICE_BYDGOSZCZ_2018);
     invoices.add(INVOICE_CHELMNO_2016);
     invoices.add(INVOICE_GRUDZIADZ_2017);
-    int id = 1;
+    int id = 3;
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
     Invoice expected = invoiceService.getInvoiceById(id);
-    Invoice actual = INVOICE_CHELMNO_2016;
+    Invoice actual = invoices.get(1);
 
     //then
     assertThat(actual, is(expected));
+  }
+
+  @Test
+  public void getInvoicesByIssueDate() {
+    //given
+    List<Invoice> invoices = new ArrayList<>();
+    invoices.add(INVOICE_KRAKOW_2018);
+    invoices.add(INVOICE_BYDGOSZCZ_2018);
+    invoices.add(INVOICE_GRUDZIADZ_2017);
+    when(databaseMock.getInvoices()).thenReturn(invoices);
+
+    //when
+    List<Invoice> actual = invoiceService
+        .getInvoicesByIssueDate(LocalDate.of(2018, 04, 12), LocalDate.of(2018, 06, 25));
+
+    //then
+    assertThat(actual, hasItems(INVOICE_KRAKOW_2018, INVOICE_BYDGOSZCZ_2018));
   }
 }
