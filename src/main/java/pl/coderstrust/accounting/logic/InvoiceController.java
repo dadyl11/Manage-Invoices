@@ -1,5 +1,8 @@
 package pl.coderstrust.accounting.logic;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.coderstrust.accounting.model.Invoice;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequestMapping("/invoices")
@@ -30,12 +35,25 @@ public class InvoiceController {
     return invoice.getId();
   }
 
+//  @GetMapping
+//  public List<Invoice> getInvoices(
+//      @RequestParam(name = "identifierContains", required = false) String identifierQuery) {
+//    return invoiceService.getInvoices().stream()
+//        .filter(invoice -> invoice.getIdentifier().contains(identifierQuery))
+//        .collect(Collectors.toList());
+//  }
   @GetMapping
-  public List<Invoice> getInvoices(
-      @RequestParam(name = "identifierContains", required = false) String identifierQuery) {
-    return invoiceService.getInvoices().stream()
-        .filter(invoice -> invoice.getIdentifier().contains(identifierQuery))
-        .collect(Collectors.toList());
+  public List<Invoice> getInvoices(){
+    return invoiceService.getInvoices();
+  }
+
+  @GetMapping("/dates")
+  public List<Invoice> getInvoicesByIssueDateRange(
+      @RequestParam(name = "startDateEndDate", required = false)
+  @DateTimeFormat(iso = ISO.DATE)
+  LocalDate startDate, LocalDate endDate)
+  {
+    return invoiceService.getInvoicesByIssueDate(startDate, endDate);
   }
 
   @GetMapping("/{id}")

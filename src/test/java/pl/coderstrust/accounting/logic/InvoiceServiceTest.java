@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BYDGOSZCZ_2018;
@@ -102,7 +103,7 @@ public class InvoiceServiceTest {
   }
 
   @Test
-  public void getInvoicesByIssueDate() {
+  public void shouldReturnInvoicesByIssueDate() {
     //given
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_KRAKOW_2018);
@@ -116,5 +117,22 @@ public class InvoiceServiceTest {
 
     //then
     assertThat(actual, hasItems(INVOICE_KRAKOW_2018, INVOICE_BYDGOSZCZ_2018));
+  }
+
+  @Test
+  public void shouldNotReturnInvoicesWithIssueDateOutOfTheRange() {
+    //given
+    List<Invoice> invoices = new ArrayList<>();
+    invoices.add(INVOICE_KRAKOW_2018);
+    invoices.add(INVOICE_BYDGOSZCZ_2018);
+    invoices.add(INVOICE_GRUDZIADZ_2017);
+    when(databaseMock.getInvoices()).thenReturn(invoices);
+
+    //when
+    List<Invoice> actual = invoiceService
+        .getInvoicesByIssueDate(LocalDate.of(2018, 04, 12), LocalDate.of(2018, 06, 25));
+
+    //then
+    assertThat(actual, not(hasItem(INVOICE_GRUDZIADZ_2017)));
   }
 }
