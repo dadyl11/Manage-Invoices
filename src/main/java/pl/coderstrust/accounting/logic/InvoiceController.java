@@ -39,8 +39,8 @@ public class InvoiceController {
   }
 
   @GetMapping("/{id}")
-  public Invoice getSingleInvoices(@PathVariable(name = "id", required = true) int id) {
-    return invoiceService.getInvoices().get(id);
+  public Invoice getSingleInvoice(@PathVariable(name = "id", required = true) int id) {
+    return invoiceService.getInvoiceById(id);
   }
 
   @PutMapping("/{id}")

@@ -1,5 +1,6 @@
 package pl.coderstrust.accounting.logic;
 
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.stereotype.Component;
 import pl.coderstrust.accounting.database.Database;
@@ -22,6 +23,17 @@ public class InvoiceService {
   }
 
   public List<Invoice> getInvoices() {
+    return database.getInvoices();
+  }
+
+  public Invoice getInvoiceById(int id) {
+    return database.getInvoices().get(id);
+  }
+
+  public List<Invoice> getInvoicesByDate(LocalDate startDate, LocalDate endDate) {
+    for (Invoice invoice : database.getInvoices()) {
+
+    }
     return database.getInvoices();
   }
 

@@ -21,20 +21,20 @@ import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
 
 @RunWith(MockitoJUnitRunner.class)
-public class InvoiceBookTest {
+public class InvoiceServiceTest {
 
   @Mock
   private Database databaseMock;
 
   @InjectMocks
-  private InvoiceService invoiceBook;
+  private InvoiceService invoiceService;
 
   @Test
   public void shouldSaveInvoice() throws Exception {
     //given
 
     //when
-    invoiceBook.saveInvoice(INVOICE_KRAKOW_2018);
+    invoiceService.saveInvoice(INVOICE_KRAKOW_2018);
 
     //then
     verify(databaseMock).saveInvoice(INVOICE_KRAKOW_2018);
@@ -50,7 +50,7 @@ public class InvoiceBookTest {
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
-    List<Invoice> actual = invoiceBook.getInvoices();
+    List<Invoice> actual = invoiceService.getInvoices();
 
     //then
     verify(databaseMock).getInvoices();
@@ -63,7 +63,7 @@ public class InvoiceBookTest {
   @Test
   public void shouldUpdateInvoice() throws Exception {
     //when
-    invoiceBook.updateInvoice(3, INVOICE_KRAKOW_2018);
+    invoiceService.updateInvoice(3, INVOICE_KRAKOW_2018);
 
     //then
     verify(databaseMock).updateInvoice(3, INVOICE_KRAKOW_2018);
@@ -75,9 +75,27 @@ public class InvoiceBookTest {
     int id = 0;
 
     //when
-    invoiceBook.removeInvoiceById(id);
+    invoiceService.removeInvoiceById(id);
 
     //then
     verify(databaseMock).removeInvoiceById(id);
+  }
+
+  @Test
+  public void shouldReturnInvoiceById() {
+    //given
+    List<Invoice> invoices = new ArrayList<>();
+    invoices.add(INVOICE_BYDGOSZCZ_2018);
+    invoices.add(INVOICE_CHELMNO_2016);
+    invoices.add(INVOICE_GRUDZIADZ_2017);
+    int id = 1;
+    when(databaseMock.getInvoices()).thenReturn(invoices);
+
+    //when
+    Invoice expected = invoiceService.getInvoiceById(id);
+    Invoice actual = INVOICE_CHELMNO_2016;
+
+    //then
+    assertThat(actual, is(expected));
   }
 }
