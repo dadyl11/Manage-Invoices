@@ -37,13 +37,6 @@ public class InvoiceController {
     return invoice.getId();
   }
 
-  //  @GetMapping
-//  public List<Invoice> getInvoices(
-//      @RequestParam(name = "identifierContains", required = false) String identifierQuery) {
-//    return invoiceService.getInvoices().stream()
-//        .filter(invoice -> invoice.getIdentifier().contains(identifierQuery))
-//        .collect(Collectors.toList());
-//  }
   @GetMapping
   public List<Invoice> getInvoices() {
     return invoiceService.getInvoices();
@@ -51,8 +44,8 @@ public class InvoiceController {
 
   @GetMapping("/dates")
   public List<Invoice> getInvoicesByIssueDateRange(
-      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @RequestParam @ModelAttribute LocalDate startDate,
-      LocalDate endDate) {
+      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+      @RequestParam @ModelAttribute LocalDate startDate, LocalDate endDate) {
     return invoiceService.getInvoicesByIssueDate(startDate, endDate);
   }
 
