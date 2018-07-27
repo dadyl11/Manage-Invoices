@@ -1,5 +1,6 @@
 package pl.coderstrust.accounting.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ public class Invoice {
 
   private int id;
   private String identifier;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private LocalDate issueDate;
   private LocalDate saleDate;
   private String salePlace;
