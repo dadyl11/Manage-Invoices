@@ -32,7 +32,7 @@ public class InvoiceBookTest {
   private InvoiceBook invoiceBook;
 
   @Test
-  public void shouldSaveInvoice() {
+  public void shouldSaveInvoice() throws Exception {
     //given
 
     //when
@@ -43,7 +43,7 @@ public class InvoiceBookTest {
   }
 
   @Test
-  public void shouldGetCollectionOfInvoices() {
+  public void shouldGetCollectionOfInvoices() throws Exception {
     //given
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_BYDGOSZCZ_2018);
@@ -63,7 +63,7 @@ public class InvoiceBookTest {
   }
 
   @Test
-  public void shouldUpdateInvoice() {
+  public void shouldUpdateInvoice() throws Exception {
     //when
     invoiceBook.updateInvoice(3, INVOICE_KRAKOW_2018);
 
@@ -72,7 +72,7 @@ public class InvoiceBookTest {
   }
 
   @Test
-  public void shouldRemoveInvoiceById() {
+  public void shouldRemoveInvoiceById() throws Exception {
     //given
     int id = 0;
 

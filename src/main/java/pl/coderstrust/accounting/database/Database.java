@@ -6,11 +6,12 @@ import java.util.List;
 
 public interface Database {
 
-  int saveInvoice(Invoice invoice);
+  void saveInvoice(Invoice invoice) throws Exception;
 
-  List<Invoice> getInvoices();
+  List<Invoice> getInvoices() throws Exception;
 
-  void updateInvoice(int id, Invoice invoice);
+  void updateInvoice(int id, Invoice invoice) throws Exception;
 
-  void removeInvoiceById(int id);
+  void removeInvoiceById(int id) throws Exception;
+
 }

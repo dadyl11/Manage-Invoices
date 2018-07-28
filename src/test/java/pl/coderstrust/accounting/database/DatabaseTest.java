@@ -22,7 +22,7 @@ public abstract class DatabaseTest {
   private Database database = getDatabase();
 
   @Test
-  public void shouldSaveInvoices() {
+  public void shouldSaveInvoices() throws Exception {
     //given
 
     //when
@@ -35,7 +35,7 @@ public abstract class DatabaseTest {
   }
 
   @Test
-  public void shouldReturnCollectionsOfInvoices() {
+  public void shouldReturnCollectionsOfInvoices() throws Exception {
     //when
     database.saveInvoice(INVOICE_KRAKOW_2018);
     database.saveInvoice(INVOICE_GRUDZIADZ_2017);
@@ -48,7 +48,7 @@ public abstract class DatabaseTest {
   }
 
   @Test
-  public void shouldRemoveInvoices() {
+  public void shouldRemoveInvoices() throws Exception {
     //given
     database.saveInvoice(INVOICE_KRAKOW_2018);
     database.saveInvoice(INVOICE_GRUDZIADZ_2017);

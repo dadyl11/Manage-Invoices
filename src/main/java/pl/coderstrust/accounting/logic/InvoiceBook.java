@@ -13,14 +13,14 @@ public class InvoiceBook {
     this.database = database;
   }
 
-  public void saveInvoice(Invoice invoice) {
+  public void saveInvoice(Invoice invoice) throws Exception {
     if (invoice == null) {
       throw new IllegalArgumentException("invoice cannot be null");
     }
     database.saveInvoice(invoice);
   }
 
-  public List<Invoice> getInvoices() {
+  public List<Invoice> getInvoices() throws Exception {
     return database.getInvoices();
   }
 
@@ -28,7 +28,7 @@ public class InvoiceBook {
     database.updateInvoice(id, invoice);
   }
 
-  public void removeInvoiceById(int id) {
+  public void removeInvoiceById(int id) throws Exception {
     database.removeInvoiceById(id);
   }
 }
