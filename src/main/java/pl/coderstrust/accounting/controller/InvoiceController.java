@@ -1,6 +1,7 @@
-package pl.coderstrust.accounting.logic;
+package pl.coderstrust.accounting.controller;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import pl.coderstrust.accounting.logic.InvoiceService;
+import pl.coderstrust.accounting.logic.InvoiceValidator;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.time.LocalDate;
@@ -25,16 +28,22 @@ public class InvoiceController {
     return LocalDate.now();
   }
 
+  private InvoiceValidator invoiceValidator;
   private InvoiceService invoiceService;
 
-  public InvoiceController(InvoiceService invoiceService) {
+  public InvoiceController(InvoiceService invoiceService, InvoiceValidator invoiceValidator) {
     this.invoiceService = invoiceService;
+    this.invoiceValidator = invoiceValidator;
   }
 
   @PostMapping
-  public int saveInvoice(@RequestBody Invoice invoice) {
+  public ResponseEntity<?> saveInvoice(@RequestBody Invoice invoice) {
+    List<String> validationResult = invoiceValidator.validate(invoice);
+    if (!validationResult.isEmpty()) {
+      return ResponseEntity.badRequest().body(validationResult);
+    }
     invoiceService.saveInvoice(invoice);
-    return invoice.getId();
+    return ResponseEntity.ok(invoice.getId());
   }
 
   @GetMapping
@@ -55,10 +64,14 @@ public class InvoiceController {
   }
 
   @PutMapping("/{id}")
-  public void updateInvoice(@PathVariable(name = "id", required = true) int id,
+  public ResponseEntity<?> updateInvoice(@PathVariable(name = "id", required = true) int id,
       @RequestBody Invoice invoice) {
-    invoice.setId(id);
+    List<String> validationResult = invoiceValidator.validate(invoice);
+    if (!validationResult.isEmpty()) {
+      return ResponseEntity.badRequest().body(validationResult);
+    }
     invoiceService.updateInvoice(id, invoice);
+    return ResponseEntity.ok().build();
   }
 
   @DeleteMapping("/{id}")

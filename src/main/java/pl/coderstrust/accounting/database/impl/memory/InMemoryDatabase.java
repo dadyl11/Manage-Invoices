@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
 
-@Component
+@Repository
 public class InMemoryDatabase implements Database {
 
   private final Map<Integer, Invoice> invoices = new HashMap<>();
@@ -32,6 +32,7 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public void updateInvoice(int id, Invoice invoice) {
+    invoice.setId(id);
     invoices.put(id, invoice);
   }
 

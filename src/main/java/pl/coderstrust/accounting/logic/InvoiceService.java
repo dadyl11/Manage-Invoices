@@ -3,12 +3,11 @@ package pl.coderstrust.accounting.logic;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
 
-@Component
+@Service
 public class InvoiceService {
 
   private Database database;
@@ -17,11 +16,11 @@ public class InvoiceService {
     this.database = database;
   }
 
-  public void saveInvoice(Invoice invoice) {
+  public int saveInvoice(Invoice invoice) {
     if (invoice == null) {
       throw new IllegalArgumentException("invoice cannot be null");
     }
-    database.saveInvoice(invoice);
+    return database.saveInvoice(invoice);
   }
 
   public List<Invoice> getInvoices() {
@@ -29,10 +28,8 @@ public class InvoiceService {
   }
 
   public Invoice getInvoiceById(int id) {
-    List<Invoice> result = database.getInvoices().stream()
-        .filter(item -> item.getId() == id)
-        .collect(Collectors.toList());
-    return result.get(0);
+    return database.getInvoices().stream().filter(invoice -> invoice.getId() == id).findAny()
+        .orElse(null);
   }
 
   public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate) {
