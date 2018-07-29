@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Invoice {
 
@@ -132,14 +131,28 @@ public class Invoice {
         + '}';
   }
 
+
   @JsonIgnore
-  public BigDecimal getNetValue() {
+  public BigDecimal getTotalNetValue() {
     BigDecimal netValue = BigDecimal.ZERO;
     for (InvoiceEntry entry : entries) {
       netValue = netValue
-          .add(entry.getNetPrice().multiply(entry.getQuantity())
-              .multiply(BigDecimal.valueOf(1).subtract(buyer.getDiscount())));
+          .add(entry.getNetValue())
+          .multiply(BigDecimal.ONE.subtract(getBuyer().getDiscount()));
     }
     return netValue;
   }
+
+  @JsonIgnore
+  public BigDecimal getVatValue() {
+    BigDecimal vatValue = BigDecimal.ZERO;
+    for (InvoiceEntry entry : entries) {
+      vatValue = vatValue.add((entry.getNetValue())
+          .multiply(BigDecimal.ONE.subtract(getBuyer().getDiscount()))
+          .multiply(entry.getVatRate().getVatRateValue()));
+    }
+    return vatValue;
+  }
+
+
 }

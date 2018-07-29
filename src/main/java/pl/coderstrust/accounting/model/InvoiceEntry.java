@@ -1,5 +1,7 @@
 package pl.coderstrust.accounting.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -68,5 +70,10 @@ public class InvoiceEntry {
   @Override
   public int hashCode() {
     return Objects.hash(getDescription());
+  }
+
+  @JsonIgnore
+  public BigDecimal getNetValue() {
+    return getNetPrice().multiply(getQuantity());
   }
 }

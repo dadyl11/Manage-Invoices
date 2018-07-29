@@ -38,13 +38,6 @@ public class InvoiceController {
     return invoice.getId();
   }
 
-  //  @GetMapping
-//  public List<Invoice> getInvoices(
-//      @RequestParam(name = "identifierContains", required = false) String identifierQuery) {
-//    return invoiceService.getInvoices().stream()
-//        .filter(invoice -> invoice.getIdentifier().contains(identifierQuery))
-//        .collect(Collectors.toList());
-//  }
   @GetMapping
   public List<Invoice> getInvoices() {
     return invoiceService.getInvoices();
