@@ -1,5 +1,7 @@
 package pl.coderstrust.accounting.logic;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.database.Database;
@@ -31,5 +33,15 @@ public class InvoiceService {
 
   public void removeInvoiceById(int id) {
     database.removeInvoiceById(id);
+  }
+
+  public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate) {
+    List<Invoice> result = new ArrayList<>();
+    for (Invoice invoice : database.getInvoices()) {
+      if (invoice.getIssueDate().isAfter(startDate) && invoice.getIssueDate().isBefore(endDate)) {
+        result.add(invoice);
+      }
+    }
+    return result;
   }
 }
