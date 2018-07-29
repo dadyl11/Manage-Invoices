@@ -1,4 +1,4 @@
-package pl.coderstrust.accounting.controllers.;
+package pl.coderstrust.accounting.controllers;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.DeleteMapping;
