@@ -1,10 +1,6 @@
 package pl.coderstrust.accounting.logic;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
@@ -18,41 +14,22 @@ public class InvoiceService {
     this.database = database;
   }
 
-  public int saveInvoice(Invoice invoice) throws IOException {
+  public void saveInvoice(Invoice invoice) {
     if (invoice == null) {
       throw new IllegalArgumentException("invoice cannot be null");
     }
-    return database.saveInvoice(invoice);
+    database.saveInvoice(invoice);
   }
 
-  public List<Invoice> getInvoices() throws IOException {
+  public List<Invoice> getInvoices() {
     return database.getInvoices();
   }
 
-  public Optional<Invoice> getInvoiceById(int id) throws IOException {
-    return database.getInvoices().stream().filter(invoice -> invoice.getId() == id).findAny();
-  }
-
-  public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate) throws IOException {
-    List<Invoice> result = new ArrayList<>();
-    for (Invoice invoice : database.getInvoices()) {
-      if (invoice.getIssueDate().isAfter(startDate) && invoice.getIssueDate().isBefore(endDate)) {
-        result.add(invoice);
-      }
-    }
-    return result;
-  }
-
-  public void updateInvoice(int id, Invoice invoice) throws IOException {
-    Optional<Invoice> inoiceFromDatabe = getInvoiceById(id);
-
-    if (!inoiceFromDatabe.isPresent()) {
-      throw new IllegalStateException("Invoice with id: " + id + " does not exist");
-    }
+  public void updateInvoice(int id, Invoice invoice) {
     database.updateInvoice(id, invoice);
   }
 
-  public void removeInvoiceById(int id) throws IOException {
+  public void removeInvoiceById(int id) {
     database.removeInvoiceById(id);
   }
 }
