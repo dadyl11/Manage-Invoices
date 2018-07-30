@@ -6,6 +6,8 @@ import pl.coderstrust.accounting.model.Company;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.math.BigDecimal;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 @Service
 public class TaxCalculatorService {
@@ -21,15 +23,21 @@ public class TaxCalculatorService {
     this.company = company;
   }
 
-  public BigDecimal getValueFromInvoices() {
+  public BigDecimal getValueFromInvoices(Predicate<Invoice> predicate,
+      Function<Invoice, BigDecimal> function) {
     return invoiceService
         .getInvoices()
         .stream()
-        .filter(this::buyerOrSeller)
-        .map(this::taxOrIncome)
-        .reduce((sum, item) -> sum.add(item))
-        .get();
+        .filter(predicate)
+        .map(function)
+        .reduce(BigDecimal.ZERO, (sum, item) -> sum.add(item));
   }
+
+
+  public BigDecimal getIncomeNow() {
+    return getValueFromInvoices(this::buyerOrSeller);
+  }
+
 
   public BigDecimal taxOrIncome(Invoice invoice) {
     return (vat) ? invoice.getVatValue() : invoice.getTotalNetValue();
