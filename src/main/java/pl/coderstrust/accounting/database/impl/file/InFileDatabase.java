@@ -54,7 +54,7 @@ public class InFileDatabase implements Database {
       }
       if (inv.getId() == id) {
         list.remove(id);
-        inv.setId(id);
+        invoice.setId(id);
         fileHelper.writeInvoice(invoiceConverter.writeJson(inv), temporaryDataBaseFile);
       } else {
         throw new NoSuchElementException("Can't update invoice, such id doesn't exist");
