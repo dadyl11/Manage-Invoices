@@ -1,4 +1,4 @@
-package pl.coderstrust.accounting.controllers;
+package pl.coderstrust.accounting.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

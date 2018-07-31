@@ -1,8 +1,5 @@
 package pl.coderstrust.accounting.controller;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,7 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.coderstrust.accounting.logic.InvoiceService;
+import pl.coderstrust.accounting.logic.InvoiceValidator;
 import pl.coderstrust.accounting.model.Invoice;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @RequestMapping("/invoices")
 @RestController
@@ -30,7 +31,7 @@ public class InvoiceController {
   }
 
   @PostMapping
-  public ResponseEntity<?> saveInvoice(@RequestBody Invoice invoice) throws IOException {
+  public ResponseEntity<?> saveInvoice(@RequestBody Invoice invoice) {
     List<String> validationResult = invoiceValidator.validate(invoice);
     if (!validationResult.isEmpty()) {
       return ResponseEntity.badRequest().body(validationResult);
@@ -40,7 +41,7 @@ public class InvoiceController {
   }
 
   @GetMapping
-  public List<Invoice> getInvoices() throws IOException {
+  public List<Invoice> getInvoices() {
     return invoiceService.getInvoices();
   }
 
@@ -49,25 +50,19 @@ public class InvoiceController {
       @RequestParam(name = "startDate", required = true)
       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
       @RequestParam(name = "endDate", required = true)
-      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) throws IOException {
+      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
     return invoiceService.getInvoicesByIssueDate(startDate, endDate);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getSingleInvoice(@PathVariable(name = "id", required = true) int id) throws IOException {
-    if (invoiceService.getInvoiceById(id) == null) {
-      return ResponseEntity.notFound().build();
-    }
-    invoiceService.getInvoiceById(id);
-    return ResponseEntity.ok().build();
+  public Invoice getSingleInvoice(@PathVariable(name = "id", required = true) int id) {
+    return invoiceService.getInvoiceById(id);
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<?> updateInvoice(@PathVariable(name = "id", required = true) int id,
-      @RequestBody Invoice invoice) throws IOException {
-    if (invoiceService.getInvoiceById(id) == null) {
-      return ResponseEntity.notFound().build();
-    }
+      @RequestBody Invoice invoice) {
+    //if(!idExist)
     List<String> validationResult = invoiceValidator.validate(invoice);
     if (!validationResult.isEmpty()) {
       return ResponseEntity.badRequest().body(validationResult);
@@ -77,7 +72,7 @@ public class InvoiceController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> removeInvoiceById(@PathVariable(name = "id", required = true) int id) throws IOException {
+  public ResponseEntity<?> removeInvoiceById(@PathVariable(name = "id", required = true) int id) {
     if (invoiceService.getInvoiceById(id) == null) {
       return ResponseEntity.notFound().build();
     }
