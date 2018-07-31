@@ -139,8 +139,7 @@ public class Invoice {
     BigDecimal netValue = BigDecimal.ZERO;
     for (InvoiceEntry entry : entries) {
       netValue = netValue
-          .add(entry.getNetValue())
-          .multiply(BigDecimal.ONE.subtract(getBuyer().getDiscount()));
+          .add(entry.getNetValue().multiply(BigDecimal.ONE.subtract(getBuyer().getDiscount())));
     }
     return netValue;
   }

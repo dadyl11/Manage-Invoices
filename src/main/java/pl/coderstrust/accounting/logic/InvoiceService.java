@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
@@ -13,6 +14,7 @@ public class InvoiceService {
 
   private Database database;
 
+  @Autowired
   public InvoiceService(Database database) {
     this.database = database;
   }

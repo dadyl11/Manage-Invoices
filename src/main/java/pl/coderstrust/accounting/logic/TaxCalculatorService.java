@@ -16,9 +16,8 @@ public class TaxCalculatorService {
   private Company company;
 
   @Autowired
-  public TaxCalculatorService(InvoiceService invoiceService, Company company) {
+  public TaxCalculatorService(InvoiceService invoiceService) {
     this.invoiceService = invoiceService;
-    this.company = company;
   }
 
   public BigDecimal getValueFromInvoices(Predicate<Invoice> buyerOrSeller,
@@ -28,24 +27,27 @@ public class TaxCalculatorService {
         .stream()
         .filter(buyerOrSeller)
         .map(taxOrIncomeToBigDecimal)
-        .reduce(BigDecimal.ZERO, (sum, item) -> sum.add(item));
+        .reduce((sum, item) -> sum.add(item))
+        .orElse(BigDecimal.ZERO);
   }
 
-
-  public boolean predicateBuyer(Invoice invoice) {
+  public boolean filterBuyer(Invoice invoice) {
     return invoice.getBuyer().equals(company);
   }
 
-  public boolean predicateSeller(Invoice invoice) {
+  public boolean filterSeller(Invoice invoice) {
     return invoice.getSeller().equals(company);
   }
 
-  public BigDecimal functionTax(Invoice invoice) {
+  public BigDecimal taxToBigDecimal(Invoice invoice) {
     return invoice.getVatValue();
   }
 
-  public BigDecimal functionIncome(Invoice invoice) {
+  public BigDecimal incomeToBigDecimal(Invoice invoice) {
     return invoice.getTotalNetValue();
   }
-}
 
+  public void setCompany(Company company) {
+    this.company = company;
+  }
+}

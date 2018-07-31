@@ -45,7 +45,7 @@ public class InvoiceProvider {
       SPAN_CLAMP_SUPPORT);
 
   public static final Invoice INVOICE_BYDGOSZCZ_2018 = new Invoice(
-      1,
+      4,
       "4/2018",
       LocalDate.of(2018, 06, 13),
       LocalDate.of(2018, 05, 12),
@@ -263,4 +263,14 @@ public class InvoiceProvider {
       CompanyProvider.COMPANY_DRUTEX,
       CompanyProvider.COMPANY_WASBUD,
       EMPTY_QUANTITY);
+
+  public static final Invoice INVOICE_RADOMSKO_2018 = new Invoice(
+      5,
+      "4/2018",
+      LocalDate.of(2018, 06, 13),
+      LocalDate.of(2018, 05, 12),
+      "Bydgoszcz",
+      CompanyProvider.COMPANY_DRUTEX,
+      CompanyProvider.COMPANY_WASBUD,
+      ONE_LINK);
 }

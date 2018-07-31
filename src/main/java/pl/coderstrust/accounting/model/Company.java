@@ -3,7 +3,9 @@ package pl.coderstrust.accounting.model;
 import java.math.BigDecimal;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class Company {
 
   private String name;
