@@ -14,8 +14,6 @@ public class TaxCalculatorService {
 
   private InvoiceService invoiceService;
   private Company company;
-  private boolean vat = false;
-  private boolean buyer = false;
 
   @Autowired
   public TaxCalculatorService(InvoiceService invoiceService, Company company) {
@@ -23,59 +21,31 @@ public class TaxCalculatorService {
     this.company = company;
   }
 
-  public BigDecimal getValueFromInvoices(Predicate<Invoice> predicate,
-      Function<Invoice, BigDecimal> function) {
+  public BigDecimal getValueFromInvoices(Predicate<Invoice> buyerOrSeller,
+      Function<Invoice, BigDecimal> taxOrIncomeToBigDecimal) {
     return invoiceService
         .getInvoices()
         .stream()
-        .filter(predicate)
-        .map(function)
+        .filter(buyerOrSeller)
+        .map(taxOrIncomeToBigDecimal)
         .reduce(BigDecimal.ZERO, (sum, item) -> sum.add(item));
   }
 
 
-  public BigDecimal getIncomeNow() {
-    return getValueFromInvoices(this::buyerOrSeller);
+  public boolean predicateBuyer(Invoice invoice) {
+    return invoice.getBuyer().equals(company);
   }
 
-
-  public BigDecimal taxOrIncome(Invoice invoice) {
-    return (vat) ? invoice.getVatValue() : invoice.getTotalNetValue();
+  public boolean predicateSeller(Invoice invoice) {
+    return invoice.getSeller().equals(company);
   }
 
-  public boolean buyerOrSeller(Invoice invoice) {
-    return (buyer) ? invoice.getBuyer().equals(company) : invoice.getSeller().equals(company);
+  public BigDecimal functionTax(Invoice invoice) {
+    return invoice.getVatValue();
   }
 
-  public BigDecimal getDueVat() {
-    buyer = false;
-    vat = true;
-    return this.getValueFromInvoices();
-  }
-
-  public BigDecimal getIncludedVat() {
-    buyer = true;
-    vat = true;
-    return this.getValueFromInvoices();
-  }
-
-  public BigDecimal getPayableVat() {
-    return getDueVat().subtract(getIncludedVat());
-  }
-
-  public BigDecimal getRevenue() {
-    buyer = false;
-    vat = false;
-    return this.getValueFromInvoices();
-  }
-
-  public BigDecimal getCosts() {
-    buyer = true;
-    vat = false;
-    return this.getValueFromInvoices();
-  }
-
-  public BigDecimal getIncome() {
-    return getRevenue().subtract(getCosts());
+  public BigDecimal functionIncome(Invoice invoice) {
+    return invoice.getTotalNetValue();
   }
 }
+
