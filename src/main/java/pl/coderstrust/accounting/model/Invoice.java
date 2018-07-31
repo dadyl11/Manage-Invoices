@@ -11,7 +11,6 @@ public class Invoice {
 
   private int id;
   private String identifier;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private LocalDate issueDate;
   private LocalDate saleDate;
   private String salePlace;

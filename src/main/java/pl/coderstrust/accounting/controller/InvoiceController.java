@@ -4,7 +4,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,11 +21,6 @@ import java.util.List;
 @RequestMapping("/invoices")
 @RestController
 public class InvoiceController {
-
-  @ModelAttribute
-  LocalDate startDate() {
-    return LocalDate.now();
-  }
 
   private InvoiceValidator invoiceValidator;
   private InvoiceService invoiceService;
@@ -53,8 +47,10 @@ public class InvoiceController {
 
   @GetMapping("/dates")
   public List<Invoice> getInvoicesByIssueDateRange(
-      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-      @RequestParam @ModelAttribute LocalDate startDate, LocalDate endDate) {
+      @RequestParam(name = "startDate", required = true)
+      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+      @RequestParam(name = "endDate", required = true)
+      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
     return invoiceService.getInvoicesByIssueDate(startDate, endDate);
   }
 
@@ -66,6 +62,7 @@ public class InvoiceController {
   @PutMapping("/{id}")
   public ResponseEntity<?> updateInvoice(@PathVariable(name = "id", required = true) int id,
       @RequestBody Invoice invoice) {
+    //if(!idExist)
     List<String> validationResult = invoiceValidator.validate(invoice);
     if (!validationResult.isEmpty()) {
       return ResponseEntity.badRequest().body(validationResult);
@@ -75,7 +72,11 @@ public class InvoiceController {
   }
 
   @DeleteMapping("/{id}")
-  public void removeInvoiceById(@PathVariable(name = "id", required = true) int id) {
+  public ResponseEntity<?> removeInvoiceById(@PathVariable(name = "id", required = true) int id) {
+    if (invoiceService.getInvoiceById(id) == null) {
+      return ResponseEntity.notFound().build();
+    }
     invoiceService.removeInvoiceById(id);
+    return ResponseEntity.ok().build();
   }
 }
