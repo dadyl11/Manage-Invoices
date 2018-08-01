@@ -14,6 +14,9 @@ public class Company {
   private String city;
   private BigDecimal discount;
 
+  public Company() {
+  }
+
   public String getName() {
     return name;
   }

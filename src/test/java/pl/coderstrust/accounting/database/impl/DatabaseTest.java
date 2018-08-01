@@ -1,4 +1,4 @@
-package pl.coderstrust.accounting.database;
+package pl.coderstrust.accounting.database.impl;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -10,6 +10,8 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+import pl.coderstrust.accounting.database.Database;
+import pl.coderstrust.accounting.helpers.InvoiceProvider;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.util.List;

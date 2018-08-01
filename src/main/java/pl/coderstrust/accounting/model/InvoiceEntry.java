@@ -10,6 +10,17 @@ public class InvoiceEntry {
   private VatRate vatRate;
   private BigDecimal quantity;
 
+  public InvoiceEntry() {
+  }
+
+  public InvoiceEntry(String description, BigDecimal netPrice,
+      VatRate vatRate, BigDecimal quantity) {
+    this.description = description;
+    this.netPrice = netPrice;
+    this.vatRate = vatRate;
+    this.quantity = quantity;
+  }
+
   public String getDescription() {
     return description;
   }
@@ -39,14 +50,6 @@ public class InvoiceEntry {
   }
 
   public void setQuantity(BigDecimal quantity) {
-    this.quantity = quantity;
-  }
-
-  public InvoiceEntry(String description, BigDecimal netPrice,
-      VatRate vatRate, BigDecimal quantity) {
-    this.description = description;
-    this.netPrice = netPrice;
-    this.vatRate = vatRate;
     this.quantity = quantity;
   }
 

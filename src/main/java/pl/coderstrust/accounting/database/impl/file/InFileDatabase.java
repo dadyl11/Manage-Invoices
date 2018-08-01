@@ -11,7 +11,6 @@ import pl.coderstrust.accounting.model.Invoice;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public class InFileDatabase implements Database {
 
@@ -26,40 +25,48 @@ public class InFileDatabase implements Database {
     this.indexHelper = indexHelper;
   }
 
-  private InFileDatabase inFileDatabase;
 
   @Override
   public void saveInvoice(Invoice invoice) throws Exception {
     int id = indexHelper.generateId();
     invoice.setId(id);
-    fileHelper.writeInvoice(invoiceConverter.writeJson(invoice), dataBaseFile);
+    List<Invoice> allInvoices = getInvoices();
+    allInvoices.add(invoice);
+    fileHelper.writeInvoice(invoiceConverter.writeJson(allInvoices), dataBaseFile);
   }
 
   @Override
   public List<Invoice> getInvoices() throws Exception {
     List<Invoice> invoiceList = new ArrayList<>();
-    List<String> jsonList = fileHelper.readLines(dataBaseFile);
-    for (String invoice : jsonList) {
-      invoiceList.add(invoiceConverter.readJson(invoice));
-    }
-    return invoiceList;
+    String jsonList = fileHelper.readLines(dataBaseFile);
+    return invoiceConverter.readJson(jsonList);
+
   }
 
   @Override
   public void updateInvoice(int id, Invoice invoice) throws Exception {
-    List<Invoice> list = new ArrayList<>(inFileDatabase.getInvoices());
-    for (Invoice inv : list) {
-      if (inv.getId() != id) {
-        fileHelper.writeInvoice(invoiceConverter.writeJson(inv), temporaryDataBaseFile);
-      }
+    ArrayList<Invoice> list = new ArrayList<>(getInvoices());
+    for (int i = 0; i < list.size(); i++) {
+      Invoice inv = list.get(i);
       if (inv.getId() == id) {
-        list.remove(id);
-        invoice.setId(id);
-        fileHelper.writeInvoice(invoiceConverter.writeJson(inv), temporaryDataBaseFile);
-      } else {
-        throw new NoSuchElementException("Can't update invoice, such id doesn't exist");
+        list.add(i, invoice);
       }
     }
+
+    fileHelper.writeInvoice(invoiceConverter.writeJson(list), temporaryDataBaseFile);
+
+//    for (Invoice inv : list) {
+//      if (inv.getId() != id) {
+//        fileHelper.writeInvoice(invoiceConverter.writeJson(inv), temporaryDataBaseFile);
+//      }
+//      if (inv.getId() == id) {
+//        list.remove(id);
+//        invoice.setId(id);
+//        fileHelper.writeInvoice(invoiceConverter.writeJson(inv), temporaryDataBaseFile);
+//      } else {
+//        throw new NoSuchElementException("Can't update invoice, such id doesn't exist");
+//      }
+//    }
     fileHelper.replaceInvoicesFiles();
   }
 
@@ -67,9 +74,7 @@ public class InFileDatabase implements Database {
   public void removeInvoiceById(int id) throws Exception {
     List<Invoice> list = new ArrayList<>(getInvoices());
     list.remove(id);
-    for (Invoice inv : list) {
-      fileHelper.writeInvoice(invoiceConverter.writeJson(inv), temporaryDataBaseFile);
-    }
+    fileHelper.writeInvoice(invoiceConverter.writeJson(list), temporaryDataBaseFile);
     fileHelper.replaceInvoicesFiles();
   }
 }

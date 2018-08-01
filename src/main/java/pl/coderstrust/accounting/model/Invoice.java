@@ -1,8 +1,6 @@
 package pl.coderstrust.accounting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,6 +18,21 @@ public class Invoice {
   private Company buyer;
   private Company seller;
   private List<InvoiceEntry> entries = new ArrayList<>();
+
+  public Invoice() {
+  }
+
+  public Invoice(int id, String identifier, LocalDate issueDate,
+      LocalDate saleDate, String salePlace, Company buyer,
+      Company seller) {
+    this.id = id;
+    this.identifier = identifier;
+    this.issueDate = issueDate;
+    this.saleDate = saleDate;
+    this.salePlace = salePlace;
+    this.buyer = buyer;
+    this.seller = seller;
+  }
 
   public String getIdentifier() {
     return identifier;
@@ -89,20 +102,36 @@ public class Invoice {
     entries.add(invoiceEntry);
   }
 
-  public Invoice(int id, String identifier, LocalDate issueDate,
-      LocalDate saleDate, String salePlace, Company buyer,
-      Company seller, List<InvoiceEntry> entries) {
-    this.id = id;
-    this.identifier = identifier;
-    this.issueDate = issueDate;
-    this.saleDate = saleDate;
-    this.salePlace = salePlace;
-    this.buyer = buyer;
-    this.seller = seller;
-    this.entries = entries;
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+    if (object == null || getClass() != object.getClass()) {
+      return false;
+    }
+    Invoice invoice = (Invoice) object;
+    return getId() == invoice.getId();
   }
 
-  public Invoice() {
+  @Override
+  public int hashCode() {
+
+    return Objects.hash(getId());
+  }
+
+  @Override
+  public String toString() {
+    return "Invoice{"
+        + "id=" + id
+        + ", identifier='" + identifier + '\''
+        + ", issueDate=" + issueDate
+        + ", saleDate=" + saleDate
+        + ", salePlace='" + salePlace + '\''
+        + ", buyer=" + buyer
+        + ", seller=" + seller
+        + ", entries=" + entries
+        + '}';
   }
 
   @JsonIgnore

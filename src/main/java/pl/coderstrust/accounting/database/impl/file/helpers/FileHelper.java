@@ -6,11 +6,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 
 public class FileHelper {
 
@@ -18,19 +13,19 @@ public class FileHelper {
   public static File temporaryDataBaseFile = new File("temporaryInvoices.json");
 
   public void writeInvoice(String string, File path) {
-    try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path, true))) {
+    try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path, false))) {
       bufferedWriter.write(string);
     } catch (IOException exception) {
       exception.printStackTrace();
     }
   }
 
-  public List<String> readLines(File path) {
-    List<String> invoicesList = new ArrayList<>();
+  public String readLines(File path) {
+    String invoicesList = "";
     String currentJson;
     try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
       while ((currentJson = bufferedReader.readLine()) != null) {
-        invoicesList.add(currentJson);
+        invoicesList = invoicesList + currentJson;
       }
     } catch (IOException exception) {
       exception.printStackTrace();
@@ -39,8 +34,14 @@ public class FileHelper {
   }
 
   public void replaceInvoicesFiles() throws IOException {
-    Path source = Paths.get(temporaryDataBaseFile.getPath());
-    Path goal = Paths.get(dataBaseFile.getPath());
-    Files.move(source, goal.resolve(source.getFileName()));
+
+    File temporaryFile = new File(temporaryDataBaseFile.getPath());
+    File originalDatabaseFile = new File(dataBaseFile.getPath());
+    originalDatabaseFile.delete();
+    temporaryFile.renameTo(dataBaseFile);
+
+//    Path source = Paths.get(temporaryDataBaseFile.getPath());
+//    Path goal = Paths.get(dataBaseFile.getPath());
+//    Files.move(source, goal.resolve(source.getFileName()));
   }
 }
