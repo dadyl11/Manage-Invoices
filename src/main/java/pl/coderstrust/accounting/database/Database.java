@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface Database {
 
-  void saveInvoice(Invoice invoice) throws Exception;
+  int saveInvoice(Invoice invoice) throws Exception;
 
   List<Invoice> getInvoices() throws Exception;
 

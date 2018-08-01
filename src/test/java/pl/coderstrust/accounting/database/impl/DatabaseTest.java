@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import pl.coderstrust.accounting.database.Database;
-import pl.coderstrust.accounting.helpers.InvoiceProvider;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.util.List;
@@ -64,7 +63,7 @@ public abstract class DatabaseTest {
   }
 
   @Test
-  public void shouldUpdateInvoice() {
+  public void shouldUpdateInvoice() throws Exception {
     //given
     int index = database.saveInvoice(INVOICE_GRUDZIADZ_2017);
 
@@ -73,6 +72,6 @@ public abstract class DatabaseTest {
 
     //then
     assertThat(database.getInvoices().size(), is(1));
-    assertThat(database.getInvoices().get(index), is(INVOICE_BYDGOSZCZ_2018));
+    assertThat(database.getInvoices().get(0), is(INVOICE_BYDGOSZCZ_2018));
   }
 }

@@ -18,7 +18,7 @@ public class InMemoryDatabase implements Database {
   }
 
   @Override
-  public void saveInvoice(Invoice invoice) {
+  public int saveInvoice(Invoice invoice) {
     invoice.setId(getNextId());
     invoices.put(invoice.getId(), invoice);
     return invoice.getId();

@@ -27,6 +27,12 @@ public class InFileDatabaseTest extends DatabaseTest {
       System.out.println("File deleted");
     }
 
+    File file1 = new File("currentId.txt");
+    if (file1.exists()) {
+      file1.delete();
+      System.out.println("File deleted");
+    }
+
     File file2 = file;
     file2.createNewFile();
     new FileHelper().writeInvoice("[]", file2);

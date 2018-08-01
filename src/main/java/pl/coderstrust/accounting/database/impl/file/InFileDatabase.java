@@ -11,6 +11,7 @@ import pl.coderstrust.accounting.model.Invoice;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InFileDatabase implements Database {
 
@@ -26,12 +27,13 @@ public class InFileDatabase implements Database {
   }
 
   @Override
-  public void saveInvoice(Invoice invoice) throws Exception {
+  public int saveInvoice(Invoice invoice) throws Exception {
     int id = indexHelper.generateId();
     invoice.setId(id);
     List<Invoice> allInvoices = getInvoices();
     allInvoices.add(invoice);
     fileHelper.writeInvoice(invoiceConverter.writeJson(allInvoices), dataBaseFile);
+    return id;
   }
 
   @Override
@@ -59,7 +61,9 @@ public class InFileDatabase implements Database {
   @Override
   public void removeInvoiceById(int id) throws Exception {
     List<Invoice> invoiceList = new ArrayList<>(getInvoices());
-    invoiceList.remove(id);
+    invoiceList = invoiceList.stream()
+        .filter(invoice -> invoice.getId() != id)
+        .collect(Collectors.toList());
     fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList), temporaryDataBaseFile);
     fileHelper.replaceInvoicesFiles();
   }

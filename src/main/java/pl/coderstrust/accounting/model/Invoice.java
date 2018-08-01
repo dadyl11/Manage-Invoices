@@ -23,7 +23,7 @@ public class Invoice {
   }
 
   public Invoice(int id, String identifier, LocalDate issueDate, LocalDate saleDate,
-      String salePlace, Company buyer, Company seller) {
+      String salePlace, Company buyer, Company seller, List<InvoiceEntry> entries) {
     this.id = id;
     this.identifier = identifier;
     this.issueDate = issueDate;
@@ -31,6 +31,7 @@ public class Invoice {
     this.salePlace = salePlace;
     this.buyer = buyer;
     this.seller = seller;
+    this.entries = entries;
   }
 
   public String getIdentifier() {

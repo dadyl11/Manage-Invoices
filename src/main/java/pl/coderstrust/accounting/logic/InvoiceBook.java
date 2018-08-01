@@ -24,7 +24,7 @@ public class InvoiceBook {
     return database.getInvoices();
   }
 
-  public void updateInvoice(int id, Invoice invoice) {
+  public void updateInvoice(int id, Invoice invoice) throws Exception {
     database.updateInvoice(id, invoice);
   }
 
