@@ -3,6 +3,7 @@ package pl.coderstrust.accounting.logic;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
@@ -27,9 +28,8 @@ public class InvoiceService {
     return database.getInvoices();
   }
 
-  public Invoice getInvoiceById(int id) {
-    return database.getInvoices().stream().filter(invoice -> invoice.getId() == id).findAny()
-        .orElse(null);
+  public Optional<Invoice> getInvoiceById(int id) {
+    return database.getInvoices().stream().filter(invoice -> invoice.getId() == id).findAny();
   }
 
   public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate) {

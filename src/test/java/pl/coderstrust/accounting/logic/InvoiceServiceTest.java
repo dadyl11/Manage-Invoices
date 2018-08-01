@@ -15,6 +15,7 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -95,8 +96,8 @@ public class InvoiceServiceTest {
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
-    Invoice expected = invoiceService.getInvoiceById(id);
-    Invoice actual = invoices.get(1);
+    Optional<Invoice> expected = invoiceService.getInvoiceById(id);
+    Optional<Invoice> actual = Optional.ofNullable(invoices.get(1));
 
     //then
     assertThat(actual, is(expected));

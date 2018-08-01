@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.coderstrust.accounting.logic.InvoiceService;
-import pl.coderstrust.accounting.logic.InvoiceValidator;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.time.LocalDate;
@@ -55,14 +54,20 @@ public class InvoiceController {
   }
 
   @GetMapping("/{id}")
-  public Invoice getSingleInvoice(@PathVariable(name = "id", required = true) int id) {
-    return invoiceService.getInvoiceById(id);
+  public ResponseEntity<?> getSingleInvoice(@PathVariable(name = "id", required = true) int id) {
+    if (invoiceService.getInvoiceById(id) == null) {
+      return ResponseEntity.notFound().build();
+    }
+    invoiceService.getInvoiceById(id);
+    return ResponseEntity.ok().build();
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<?> updateInvoice(@PathVariable(name = "id", required = true) int id,
       @RequestBody Invoice invoice) {
-    //if(!idExist)
+    if (invoiceService.getInvoiceById(id) == null) {
+      return ResponseEntity.notFound().build();
+    }
     List<String> validationResult = invoiceValidator.validate(invoice);
     if (!validationResult.isEmpty()) {
       return ResponseEntity.badRequest().body(validationResult);

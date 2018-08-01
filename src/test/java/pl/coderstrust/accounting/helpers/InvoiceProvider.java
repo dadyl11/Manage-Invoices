@@ -48,4 +48,14 @@ public class InvoiceProvider {
       CompanyProvider.COMPANY_WASBUD,
       CompanyProvider.COMPANY_DRUTEX,
       ONE_LINK);
+
+  public static final Invoice INVOICE_SANOK_2018 = new Invoice(
+      4,
+      "4/2018",
+      LocalDate.of(2018, 06, 13),
+      LocalDate.of(2018, 05, 12),
+      "",
+      CompanyProvider.COMPANY_WASBUD,
+      CompanyProvider.COMPANY_DRUTEX,
+      ONE_LINK);
 }
