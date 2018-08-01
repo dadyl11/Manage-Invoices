@@ -17,6 +17,16 @@ public class Company {
   public Company() {
   }
 
+  public Company(String name, String nip, String street, String postalCode, String city,
+      BigDecimal discount) {
+    this.name = name;
+    this.nip = nip;
+    this.street = street;
+    this.postalCode = postalCode;
+    this.city = city;
+    this.discount = discount;
+  }
+
   public String getName() {
     return name;
   }
@@ -62,16 +72,6 @@ public class Company {
   }
 
   public void setDiscount(BigDecimal discount) {
-    this.discount = discount;
-  }
-
-  public Company(String name, String nip, String street, String postalCode, String city,
-      BigDecimal discount) {
-    this.name = name;
-    this.nip = nip;
-    this.street = street;
-    this.postalCode = postalCode;
-    this.city = city;
     this.discount = discount;
   }
 

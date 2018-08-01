@@ -22,9 +22,8 @@ public class Invoice {
   public Invoice() {
   }
 
-  public Invoice(int id, String identifier, LocalDate issueDate,
-      LocalDate saleDate, String salePlace, Company buyer,
-      Company seller) {
+  public Invoice(int id, String identifier, LocalDate issueDate, LocalDate saleDate,
+      String salePlace, Company buyer, Company seller) {
     this.id = id;
     this.identifier = identifier;
     this.issueDate = issueDate;
@@ -116,7 +115,6 @@ public class Invoice {
 
   @Override
   public int hashCode() {
-
     return Objects.hash(getId());
   }
 

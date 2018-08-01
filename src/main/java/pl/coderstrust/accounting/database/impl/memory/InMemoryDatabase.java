@@ -1,10 +1,8 @@
 package pl.coderstrust.accounting.database.impl.memory;
 
 import pl.coderstrust.accounting.database.Database;
-import pl.coderstrust.accounting.model.Company;
 import pl.coderstrust.accounting.model.Invoice;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

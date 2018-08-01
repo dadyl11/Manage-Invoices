@@ -33,15 +33,10 @@ public class FileHelper {
     return invoicesList;
   }
 
-  public void replaceInvoicesFiles() throws IOException {
-
+  public void replaceInvoicesFiles() {
     File temporaryFile = new File(temporaryDataBaseFile.getPath());
     File originalDatabaseFile = new File(dataBaseFile.getPath());
     originalDatabaseFile.delete();
     temporaryFile.renameTo(dataBaseFile);
-
-//    Path source = Paths.get(temporaryDataBaseFile.getPath());
-//    Path goal = Paths.get(dataBaseFile.getPath());
-//    Files.move(source, goal.resolve(source.getFileName()));
   }
 }

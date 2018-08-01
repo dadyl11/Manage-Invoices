@@ -25,7 +25,6 @@ public class InFileDatabase implements Database {
     this.indexHelper = indexHelper;
   }
 
-
   @Override
   public void saveInvoice(Invoice invoice) throws Exception {
     int id = indexHelper.generateId();
@@ -40,41 +39,28 @@ public class InFileDatabase implements Database {
     List<Invoice> invoiceList = new ArrayList<>();
     String jsonList = fileHelper.readLines(dataBaseFile);
     return invoiceConverter.readJson(jsonList);
-
   }
 
   @Override
   public void updateInvoice(int id, Invoice invoice) throws Exception {
-    ArrayList<Invoice> list = new ArrayList<>(getInvoices());
-    for (int i = 0; i < list.size(); i++) {
-      Invoice inv = list.get(i);
+    List<Invoice> invoiceList = new ArrayList<>(getInvoices());
+    for (int i = 0; i < invoiceList.size(); i++) {
+      Invoice inv = invoiceList.get(i);
       if (inv.getId() == id) {
-        list.add(i, invoice);
+        invoiceList.remove(inv);
+        invoice.setId(id);
+        invoiceList.add(invoice);
       }
     }
-
-    fileHelper.writeInvoice(invoiceConverter.writeJson(list), temporaryDataBaseFile);
-
-//    for (Invoice inv : list) {
-//      if (inv.getId() != id) {
-//        fileHelper.writeInvoice(invoiceConverter.writeJson(inv), temporaryDataBaseFile);
-//      }
-//      if (inv.getId() == id) {
-//        list.remove(id);
-//        invoice.setId(id);
-//        fileHelper.writeInvoice(invoiceConverter.writeJson(inv), temporaryDataBaseFile);
-//      } else {
-//        throw new NoSuchElementException("Can't update invoice, such id doesn't exist");
-//      }
-//    }
+    fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList), temporaryDataBaseFile);
     fileHelper.replaceInvoicesFiles();
   }
 
   @Override
   public void removeInvoiceById(int id) throws Exception {
-    List<Invoice> list = new ArrayList<>(getInvoices());
-    list.remove(id);
-    fileHelper.writeInvoice(invoiceConverter.writeJson(list), temporaryDataBaseFile);
+    List<Invoice> invoiceList = new ArrayList<>(getInvoices());
+    invoiceList.remove(id);
+    fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList), temporaryDataBaseFile);
     fileHelper.replaceInvoicesFiles();
   }
 }

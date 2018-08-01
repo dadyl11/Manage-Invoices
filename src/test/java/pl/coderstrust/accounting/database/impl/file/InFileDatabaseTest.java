@@ -11,15 +11,11 @@ import java.io.File;
 
 public class InFileDatabaseTest extends DatabaseTest {
 
-  private FileHelper fileHelper;
-  private InvoiceConverter invoiceConverter;
-  private IndexHelper indexHelper;
-
   @Override
   protected Database getDatabase() {
-    fileHelper = new FileHelper();
-    invoiceConverter = new InvoiceConverter();
-    indexHelper = new IndexHelper();
+    FileHelper fileHelper = new FileHelper();
+    InvoiceConverter invoiceConverter = new InvoiceConverter();
+    IndexHelper indexHelper = new IndexHelper();
     return new InFileDatabase(fileHelper, invoiceConverter, indexHelper);
   }
 
@@ -31,10 +27,8 @@ public class InFileDatabaseTest extends DatabaseTest {
       System.out.println("File deleted");
     }
 
-    File file2 = new File("invoices.json");
+    File file2 = file;
     file2.createNewFile();
     new FileHelper().writeInvoice("[]", file2);
-
-//    indexHelper.saveId(0);
   }
 }
