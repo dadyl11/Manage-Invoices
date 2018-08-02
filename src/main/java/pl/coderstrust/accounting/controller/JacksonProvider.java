@@ -12,7 +12,7 @@ public class JacksonProvider {
 
   @Primary
   @Bean
-  public ObjectMapper getObjectMapper() {
+  public static ObjectMapper getObjectMapper() {
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
     mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);

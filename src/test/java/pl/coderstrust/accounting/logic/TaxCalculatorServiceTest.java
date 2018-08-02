@@ -12,12 +12,16 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIAD
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_RADOMSKO_2018;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import pl.coderstrust.accounting.controller.JacksonProvider;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.math.BigDecimal;
@@ -28,6 +32,9 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TaxCalculatorServiceTest {
+
+  @Rule
+  public ExpectedException expectedException = ExpectedException.none();
 
   @Mock
   InvoiceService invoiceService;
@@ -50,18 +57,28 @@ public class TaxCalculatorServiceTest {
   }
 
   @Test
-  public void shouldReturnZeroWhenNoCompanySpecified() {
+  public void shouldReturnIllegalArgumentExceptionWhenNoCompanySpecified() {
     //when
     List<Invoice> invoices = Arrays.asList(INVOICE_KRAKOW_2018, INVOICE_GRUDZIADZ_2017);
     when(invoiceService.getInvoices()).thenReturn(invoices);
 
     //given
+    expectedException.expect(IllegalArgumentException.class);
+    expectedException.expectMessage("No company was specified!");
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::filterSeller,
             taxCalculatorService::incomeToBigDecimal);
+  }
+
+  @Test
+  public void setsCompanytoCalculateIncomeOrTax() {
+    //when
+
+    //given
+    taxCalculatorService.setCompany(COMPANY_DRUTEX);
 
     //then
-    assertThat(actual, is(BigDecimal.ZERO));
+    assertThat(taxCalculatorService.getCompany(), is(COMPANY_DRUTEX));
   }
 
   @Test
@@ -79,6 +96,7 @@ public class TaxCalculatorServiceTest {
     //then
     assertThat(actual, is(BigDecimal.valueOf(138)));
   }
+
 
   @Test
   public void shouldReturnCosts() {
@@ -98,7 +116,7 @@ public class TaxCalculatorServiceTest {
 
 
   @Test
-  public void shouldReturnVATdue() {
+  public void shouldReturnVatDue() {
     //when
     List<Invoice> invoices = Arrays.asList(INVOICE_RADOMSKO_2018, INVOICE_GRUDZIADZ_2017);
     when(invoiceService.getInvoices()).thenReturn(invoices);
@@ -114,7 +132,7 @@ public class TaxCalculatorServiceTest {
   }
 
   @Test
-  public void shouldReturnVATincluded() {
+  public void shouldReturnVatIncluded() {
     //when
     List<Invoice> invoices = Arrays
         .asList(INVOICE_RADOMSKO_2018, INVOICE_GRUDZIADZ_2017, INVOICE_CHELMNO_2016);

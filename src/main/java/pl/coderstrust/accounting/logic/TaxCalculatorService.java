@@ -21,14 +21,18 @@ public class TaxCalculatorService {
   }
 
   public BigDecimal getValueFromInvoices(Predicate<Invoice> buyerOrSeller,
-      Function<Invoice, BigDecimal> taxOrIncomeToBigDecimal) {
-    return invoiceService
-        .getInvoices()
-        .stream()
-        .filter(buyerOrSeller)
-        .map(taxOrIncomeToBigDecimal)
-        .reduce((sum, item) -> sum.add(item))
-        .orElse(BigDecimal.ZERO);
+      Function<Invoice, BigDecimal> taxOrIncomeToBigDecimal) throws IllegalArgumentException {
+    if (this.getCompany() == null) {
+      throw new IllegalArgumentException("No company was specified!");
+    } else {
+      return invoiceService
+          .getInvoices()
+          .stream()
+          .filter(buyerOrSeller)
+          .map(taxOrIncomeToBigDecimal)
+          .reduce((sum, item) -> sum.add(item))
+          .orElse(BigDecimal.ZERO);
+    }
   }
 
   public boolean filterBuyer(Invoice invoice) {
@@ -45,6 +49,10 @@ public class TaxCalculatorService {
 
   public BigDecimal incomeToBigDecimal(Invoice invoice) {
     return invoice.getTotalNetValue();
+  }
+
+  public Company getCompany() {
+    return company;
   }
 
   public void setCompany(Company company) {

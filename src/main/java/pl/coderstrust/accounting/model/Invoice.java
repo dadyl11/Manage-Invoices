@@ -168,7 +168,8 @@ public class Invoice {
         + ", saleDate="
         + saleDate
         + ", salePlace='"
-        + salePlace + '\''
+        + salePlace
+        + '\''
         + ", buyer="
         + buyer
         + ", seller="
