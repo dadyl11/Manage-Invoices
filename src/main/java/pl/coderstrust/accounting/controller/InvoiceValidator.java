@@ -21,8 +21,12 @@ public class InvoiceValidator {
       validationErrors.add("Identifier not found");
     }
 
-    if (invoice.getIssueDate() == null || invoice.getIdentifier().trim().equals("")) {
-      validationErrors.add("Issue date not found");
+    if (invoice.getIssueDate() == null) {
+      validationErrors.add("Sale date not found");
+    }
+
+    if (invoice.getSaleDate() == null) {
+      validationErrors.add("Sale date not found");
     }
 
     if (invoice.getSalePlace() == null || invoice.getSalePlace().trim().equals("")) {
@@ -54,7 +58,6 @@ public class InvoiceValidator {
       validationErrors.add("Discount not found");
     }
 
-    //seller
     if (invoice.getSeller().getName() == null || invoice.getSeller().getName().equals("")) {
       validationErrors.add("Seller name not found");
     }

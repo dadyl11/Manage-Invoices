@@ -66,11 +66,19 @@ public class InvoiceServiceTest {
 
   @Test
   public void shouldUpdateInvoice() throws Exception {
+    //given
+    List<Invoice> invoices = new ArrayList<>();
+    invoices.add(INVOICE_BYDGOSZCZ_2018);
+    invoices.add(INVOICE_CHELMNO_2016);
+    invoices.add(INVOICE_GRUDZIADZ_2017);
+    int id = 3;
+    when(databaseMock.getInvoices()).thenReturn(invoices);
     //when
-    invoiceService.updateInvoice(3, INVOICE_KRAKOW_2018);
+    invoiceService.getInvoiceById(id);
+    invoiceService.updateInvoice(id, INVOICE_KRAKOW_2018);
 
     //then
-    verify(databaseMock).updateInvoice(3, INVOICE_KRAKOW_2018);
+    verify(databaseMock).updateInvoice(id, INVOICE_KRAKOW_2018);
   }
 
   @Test
