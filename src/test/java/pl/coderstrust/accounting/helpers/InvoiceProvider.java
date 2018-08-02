@@ -5,6 +5,7 @@ import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN_CLAMP;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN_CLAMP_SUPPORT;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import pl.coderstrust.accounting.model.Invoice;
 
 public class InvoiceProvider {
@@ -58,4 +59,34 @@ public class InvoiceProvider {
       CompanyProvider.COMPANY_WASBUD,
       CompanyProvider.COMPANY_DRUTEX,
       ONE_LINK);
+
+  public static final Invoice INVOICE_LESKO_2018 = new Invoice(
+      4,
+      "",
+      LocalDate.of(2018, 06, 13),
+      LocalDate.of(2018, 05, 12),
+      "LODZ",
+      CompanyProvider.COMPANY_WASBUD,
+      CompanyProvider.COMPANY_DRUTEX,
+      ONE_LINK);
+
+  public static final Invoice INVOICE_RZESZOW_2018 = new Invoice(
+      4,
+      "555/mm",
+      null,
+      LocalDate.of(2018, 05, 12),
+      "LODZ",
+      CompanyProvider.COMPANY_WASBUD,
+      CompanyProvider.COMPANY_DRUTEX,
+      ONE_LINK);
+
+  public static final Invoice INVOICE_GDANSK_2018 = new Invoice(
+      4,
+      "555/mm",
+      LocalDate.of(2018, 02, 12),
+      LocalDate.of(2018, 05, 12),
+      "LODZ",
+      CompanyProvider.COMPANY_WASBUD,
+      CompanyProvider.COMPANY_DRUTEX,
+      Collections.emptyList());
 }

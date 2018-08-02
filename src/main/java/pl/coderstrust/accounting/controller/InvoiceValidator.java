@@ -5,6 +5,7 @@ import pl.coderstrust.accounting.model.Invoice;
 import pl.coderstrust.accounting.model.InvoiceEntry;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -20,12 +21,8 @@ public class InvoiceValidator {
       validationErrors.add("Identifier not found");
     }
 
-    if (invoice.getBuyer() == null) {
-      validationErrors.add("Buyer not found");
-    }
-
-    if (invoice.getSeller() == null) {
-      validationErrors.add("Seller not found");
+    if (invoice.getIssueDate() == null || invoice.getIdentifier().trim().equals("")) {
+      validationErrors.add("Issue date not found");
     }
 
     if (invoice.getSalePlace() == null || invoice.getSalePlace().trim().equals("")) {
@@ -83,8 +80,8 @@ public class InvoiceValidator {
       validationErrors.add("Discount not found");
     }
 
-    if (invoice.getEntries() == null) {
-      validationErrors.add("Entry not found");
+    if (invoice.getEntries().equals(Collections.emptyList())) {
+      validationErrors.add("Entries not found");
     }
 
     for (InvoiceEntry entry : invoice.getEntries()) {
