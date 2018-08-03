@@ -12,7 +12,6 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIAD
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_RADOMSKO_2018;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -21,7 +20,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import pl.coderstrust.accounting.controller.JacksonProvider;
 import pl.coderstrust.accounting.model.Invoice;
 
 import java.math.BigDecimal;
@@ -32,6 +30,11 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TaxCalculatorServiceTest {
+
+  private String drukpolNip = "1452369135";
+  private String wasbudNip = "1458796325";
+  private String drutexNip = "1239514823";
+  private String transpolNip = "6752339483";
 
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
@@ -48,37 +51,19 @@ public class TaxCalculatorServiceTest {
     when(invoiceService.getInvoices()).thenReturn(new ArrayList<>());
 
     //when
-    taxCalculatorService.setCompany(COMPANY_WASBUD);
-    BigDecimal actual = taxCalculatorService.getValueFromInvoices(taxCalculatorService::filterBuyer,
-        taxCalculatorService::taxToBigDecimal);
+
+    BigDecimal actual = taxCalculatorService
+        .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
+            taxCalculatorService::taxToBigDecimal, wasbudNip);
 
     //then
     assertThat(actual, is(BigDecimal.ZERO));
   }
 
+
+  //TODO make test, implement REGEX
   @Test
-  public void shouldReturnIllegalArgumentExceptionWhenNoCompanySpecified() {
-    //when
-    List<Invoice> invoices = Arrays.asList(INVOICE_KRAKOW_2018, INVOICE_GRUDZIADZ_2017);
-    when(invoiceService.getInvoices()).thenReturn(invoices);
-
-    //given
-    expectedException.expect(IllegalArgumentException.class);
-    expectedException.expectMessage("No company was specified!");
-    BigDecimal actual = taxCalculatorService
-        .getValueFromInvoices(taxCalculatorService::filterSeller,
-            taxCalculatorService::incomeToBigDecimal);
-  }
-
-  @Test
-  public void setsCompanytoCalculateIncomeOrTax() {
-    //when
-
-    //given
-    taxCalculatorService.setCompany(COMPANY_DRUTEX);
-
-    //then
-    assertThat(taxCalculatorService.getCompany(), is(COMPANY_DRUTEX));
+  public void shouldReturnIllegalArgumentExceptionWhenNipIsInvalid() {
   }
 
   @Test
@@ -88,10 +73,10 @@ public class TaxCalculatorServiceTest {
     when(invoiceService.getInvoices()).thenReturn(invoices);
 
     //given
-    taxCalculatorService.setCompany(COMPANY_DRUTEX);
+
     BigDecimal actual = taxCalculatorService
-        .getValueFromInvoices(taxCalculatorService::filterSeller,
-            taxCalculatorService::incomeToBigDecimal);
+        .getValueFromInvoices(taxCalculatorService::biFilterSeller,
+            taxCalculatorService::incomeToBigDecimal, drutexNip);
 
     //then
     assertThat(actual, is(BigDecimal.valueOf(138)));
@@ -105,10 +90,10 @@ public class TaxCalculatorServiceTest {
     when(invoiceService.getInvoices()).thenReturn(invoices);
 
     //given
-    taxCalculatorService.setCompany(COMPANY_TRANSPOL);
+
     BigDecimal actual = taxCalculatorService
-        .getValueFromInvoices(taxCalculatorService::filterBuyer,
-            taxCalculatorService::incomeToBigDecimal);
+        .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
+            taxCalculatorService::incomeToBigDecimal, transpolNip);
 
     //then
     assertThat(actual, is(BigDecimal.valueOf(138)));
@@ -122,10 +107,9 @@ public class TaxCalculatorServiceTest {
     when(invoiceService.getInvoices()).thenReturn(invoices);
 
     //given
-    taxCalculatorService.setCompany(COMPANY_WASBUD);
     BigDecimal actual = taxCalculatorService
-        .getValueFromInvoices(taxCalculatorService::filterSeller,
-            taxCalculatorService::taxToBigDecimal);
+        .getValueFromInvoices(taxCalculatorService::biFilterSeller,
+            taxCalculatorService::taxToBigDecimal, wasbudNip);
 
     //then
     assertThat(actual, is(BigDecimal.valueOf(11.592)));
@@ -139,10 +123,10 @@ public class TaxCalculatorServiceTest {
     when(invoiceService.getInvoices()).thenReturn(invoices);
 
     //given
-    taxCalculatorService.setCompany(COMPANY_DRUKPOL);
+
     BigDecimal actual = taxCalculatorService
-        .getValueFromInvoices(taxCalculatorService::filterBuyer,
-            taxCalculatorService::taxToBigDecimal);
+        .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
+            taxCalculatorService::taxToBigDecimal, drukpolNip);
 
     //then
     assertThat(actual, is(BigDecimal.valueOf(25.032)));

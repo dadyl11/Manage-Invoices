@@ -1,11 +1,9 @@
 package pl.coderstrust.accounting.controller;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.model.Invoice;
-import pl.coderstrust.accounting.model.InvoiceEntry;
 
 @Service
 public class InvoiceValidator {

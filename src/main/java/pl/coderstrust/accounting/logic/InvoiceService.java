@@ -1,10 +1,9 @@
 package pl.coderstrust.accounting.logic;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
@@ -14,44 +13,46 @@ public class InvoiceService {
 
   private Database database;
 
-  @Autowired
   public InvoiceService(Database database) {
     this.database = database;
   }
 
-  public void saveInvoice(Invoice invoice) {
+  public int saveInvoice(Invoice invoice) {
     if (invoice == null) {
       throw new IllegalArgumentException("invoice cannot be null");
     }
-    database.saveInvoice(invoice);
+    return database.saveInvoice(invoice);
   }
 
   public List<Invoice> getInvoices() {
     return database.getInvoices();
   }
 
+  public Optional<Invoice> getInvoiceById(int id) {
+    return database.getInvoices()
+        .stream()
+        .filter(invoice -> invoice.getId() == id)
+        .findAny();
+  }
+
+  public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate) {
+    return database.getInvoices()
+        .stream()
+        .filter(n -> n.getIssueDate().isAfter(startDate))
+        .filter(n -> n.getIssueDate().isBefore(endDate))
+        .collect(Collectors.toList());
+  }
+
   public void updateInvoice(int id, Invoice invoice) {
+    Optional<Invoice> inoiceFromDatabe = getInvoiceById(id);
+
+    if (!inoiceFromDatabe.isPresent()) {
+      throw new IllegalStateException("Invoice with id: " + id + " does not exist");
+    }
     database.updateInvoice(id, invoice);
   }
 
   public void removeInvoiceById(int id) {
     database.removeInvoiceById(id);
-  }
-
-  public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate) {
-    List<Invoice> result = new ArrayList<>();
-    for (Invoice invoice : database.getInvoices()) {
-      if (invoice.getIssueDate().isAfter(startDate) && invoice.getIssueDate().isBefore(endDate)) {
-        result.add(invoice);
-      }
-    }
-    return result;
-  }
-
-  public Invoice getInvoiceById(int id) {
-    List<Invoice> result = database.getInvoices().stream()
-        .filter(item -> item.getId() == id)
-        .collect(Collectors.toList());
-    return result.get(0);
   }
 }
