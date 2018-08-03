@@ -5,12 +5,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 
 public class IndexHelper {
 
-  private static File currentIdFile = new File("currentId.txt");
+  public static File currentIdFile = new File("currentIdFile.txt");
 
-  public int generateId() throws Exception {
+  public int generateId() throws IOException {
     if (currentIdFile.exists()) {
       try (BufferedReader br = new BufferedReader(new FileReader(currentIdFile))) {
         int id = Integer.parseInt(br.readLine());
@@ -23,7 +24,7 @@ public class IndexHelper {
     }
   }
 
-  public void saveId(int id) throws Exception {
+  public void saveId(int id) throws IOException {
     try (BufferedWriter bw = new BufferedWriter(new FileWriter(currentIdFile))) {
       String stringId = String.valueOf(id + 1);
       bw.write(stringId);

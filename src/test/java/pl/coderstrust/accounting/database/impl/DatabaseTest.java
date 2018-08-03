@@ -27,7 +27,7 @@ public abstract class DatabaseTest {
     //given
 
     //when
-    int index = database.saveInvoice(INVOICE_KRAKOW_2018);
+    database.saveInvoice(INVOICE_KRAKOW_2018);
     List<Invoice> invoices = database.getInvoices();
 
     //then

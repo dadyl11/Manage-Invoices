@@ -9,6 +9,7 @@ import pl.coderstrust.accounting.database.impl.file.helpers.IndexHelper;
 import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 import pl.coderstrust.accounting.model.Invoice;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class InFileDatabase implements Database {
   }
 
   @Override
-  public int saveInvoice(Invoice invoice) throws Exception {
+  public int saveInvoice(Invoice invoice) throws IOException {
     int id = indexHelper.generateId();
     invoice.setId(id);
     List<Invoice> allInvoices = getInvoices();
@@ -37,14 +38,14 @@ public class InFileDatabase implements Database {
   }
 
   @Override
-  public List<Invoice> getInvoices() throws Exception {
+  public List<Invoice> getInvoices() throws IOException {
     List<Invoice> invoiceList = new ArrayList<>();
     String jsonList = fileHelper.readLines(dataBaseFile);
     return invoiceConverter.readJson(jsonList);
   }
 
   @Override
-  public void updateInvoice(int id, Invoice invoice) throws Exception {
+  public void updateInvoice(int id, Invoice invoice) throws IOException {
     List<Invoice> invoiceList = new ArrayList<>(getInvoices());
     for (int i = 0; i < invoiceList.size(); i++) {
       Invoice inv = invoiceList.get(i);
@@ -59,7 +60,7 @@ public class InFileDatabase implements Database {
   }
 
   @Override
-  public void removeInvoiceById(int id) throws Exception {
+  public void removeInvoiceById(int id) throws IOException {
     List<Invoice> invoiceList = new ArrayList<>(getInvoices());
     invoiceList = invoiceList.stream()
         .filter(invoice -> invoice.getId() != id)
