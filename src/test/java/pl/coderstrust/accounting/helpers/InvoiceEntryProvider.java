@@ -34,6 +34,30 @@ public class InvoiceEntryProvider {
       VatRate.ZERO,
       BigDecimal.valueOf(6));
 
+  public static final InvoiceEntry BLANK_DESCRIPTION = new InvoiceEntry(
+      "",
+      BigDecimal.valueOf(13),
+      VatRate.ZERO,
+      BigDecimal.valueOf(6));
+
+  public static final InvoiceEntry NULL_NET_PRICE = new InvoiceEntry(
+      "link",
+      null,
+      VatRate.ZERO,
+      BigDecimal.valueOf(6));
+
+  public static final InvoiceEntry NULL_VAT_RATE = new InvoiceEntry(
+      "link",
+      BigDecimal.valueOf(13),
+      null,
+      BigDecimal.valueOf(6));
+
+  public static final InvoiceEntry NULL_QUANTITY = new InvoiceEntry(
+      "link",
+      BigDecimal.valueOf(13),
+      VatRate.ZERO,
+      null);
+
   public static final List<InvoiceEntry> SPAN_CLAMP = new ArrayList<>(Arrays.asList(SPAN, CLAMP));
 
   public static final List<InvoiceEntry> SPAN_CLAMP_SUPPORT = new ArrayList<>(
@@ -42,5 +66,15 @@ public class InvoiceEntryProvider {
   public static final List<InvoiceEntry> EMPTY = new ArrayList<>(Arrays.asList());
 
   public static final List<InvoiceEntry> ONE_LINK = new ArrayList<>(Arrays.asList(LINK));
+
+  public static final List<InvoiceEntry> EMPTY_QUANTITY = new ArrayList<>(
+      Arrays.asList(NULL_QUANTITY));
+  public static final List<InvoiceEntry> EMPTY_DESCRIPTION = new ArrayList<>(
+      Arrays.asList(BLANK_DESCRIPTION));
+  public static final List<InvoiceEntry> EMPTY_NET_PRICE = new ArrayList<>(
+      Arrays.asList(NULL_NET_PRICE));
+  public static final List<InvoiceEntry> EMPTY_VAT_RATE = new ArrayList<>(
+      Arrays.asList(NULL_VAT_RATE));
+
 
 }
