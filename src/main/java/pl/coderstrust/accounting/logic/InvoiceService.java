@@ -1,5 +1,6 @@
 package pl.coderstrust.accounting.logic;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -17,25 +18,25 @@ public class InvoiceService {
     this.database = database;
   }
 
-  public int saveInvoice(Invoice invoice) {
+  public int saveInvoice(Invoice invoice) throws IOException {
     if (invoice == null) {
       throw new IllegalArgumentException("invoice cannot be null");
     }
     return database.saveInvoice(invoice);
   }
 
-  public List<Invoice> getInvoices() {
+  public List<Invoice> getInvoices() throws IOException {
     return database.getInvoices();
   }
 
-  public Optional<Invoice> getInvoiceById(int id) {
+  public Optional<Invoice> getInvoiceById(int id) throws IOException {
     return database.getInvoices()
         .stream()
         .filter(invoice -> invoice.getId() == id)
         .findAny();
   }
 
-  public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate) {
+  public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate) throws IOException {
     return database.getInvoices()
         .stream()
         .filter(n -> n.getIssueDate().isAfter(startDate))
@@ -43,7 +44,7 @@ public class InvoiceService {
         .collect(Collectors.toList());
   }
 
-  public void updateInvoice(int id, Invoice invoice) {
+  public void updateInvoice(int id, Invoice invoice) throws IOException {
     Optional<Invoice> inoiceFromDatabe = getInvoiceById(id);
 
     if (!inoiceFromDatabe.isPresent()) {
@@ -52,7 +53,7 @@ public class InvoiceService {
     database.updateInvoice(id, invoice);
   }
 
-  public void removeInvoiceById(int id) {
+  public void removeInvoiceById(int id) throws IOException {
     database.removeInvoiceById(id);
   }
 }

@@ -1,12 +1,12 @@
 package pl.coderstrust.accounting.logic;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import pl.coderstrust.accounting.model.Invoice;
-
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import pl.coderstrust.accounting.model.Invoice;
 
 @Service
 public class TaxCalculatorService {
@@ -20,7 +20,7 @@ public class TaxCalculatorService {
 
   public BigDecimal getValueFromInvoices(BiPredicate<Invoice, String> buyerOrSeller,
       Function<Invoice, BigDecimal> taxOrIncomeToBigDecimal, String nip)
-      throws IllegalArgumentException {
+      throws IllegalArgumentException, IOException {
     return invoiceService
         .getInvoices()
         .stream()

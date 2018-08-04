@@ -74,10 +74,6 @@ public class InvoiceServiceTest {
     invoices.add(INVOICE_GRUDZIADZ_2017);
     int id = 3;
     when(databaseMock.getInvoices()).thenReturn(invoices);
-<<<<<<<HEAD
-        =======
-
->>>>>>>61 b88c8...made taxcontroller stateless & used ReflectiveStringbuilder @some minor changes
     //when
     invoiceService.getInvoiceById(id);
     invoiceService.updateInvoice(id, INVOICE_KRAKOW_2018);

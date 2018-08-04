@@ -1,5 +1,8 @@
 package pl.coderstrust.accounting.controller;
 
+import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,10 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.coderstrust.accounting.logic.InvoiceService;
 import pl.coderstrust.accounting.model.Invoice;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
 @RequestMapping("/invoices")
 @RestController
 public class InvoiceController {
@@ -31,7 +30,7 @@ public class InvoiceController {
   }
 
   @PostMapping
-  public ResponseEntity<?> saveInvoice(@RequestBody Invoice invoice) {
+  public ResponseEntity<?> saveInvoice(@RequestBody Invoice invoice) throws IOException {
     List<String> validationResult = invoiceValidator.validate(invoice);
     if (!validationResult.isEmpty()) {
       return ResponseEntity.badRequest().body(validationResult);
@@ -41,7 +40,7 @@ public class InvoiceController {
   }
 
   @GetMapping
-  public List<Invoice> getInvoices() {
+  public List<Invoice> getInvoices() throws IOException {
     return invoiceService.getInvoices();
   }
 
@@ -50,12 +49,12 @@ public class InvoiceController {
       @RequestParam(name = "startDate", required = true)
       @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
       @RequestParam(name = "endDate", required = true)
-      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+      @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) throws IOException {
     return invoiceService.getInvoicesByIssueDate(startDate, endDate);
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getSingleInvoice(@PathVariable(name = "id", required = true) int id) {
+  public ResponseEntity<?> getSingleInvoice(@PathVariable(name = "id", required = true) int id) throws IOException {
     if (invoiceService.getInvoiceById(id) == null) {
       return ResponseEntity.notFound().build();
     }
@@ -64,7 +63,7 @@ public class InvoiceController {
 
   @PutMapping("/{id}")
   public ResponseEntity<?> updateInvoice(@PathVariable(name = "id", required = true) int id,
-      @RequestBody Invoice invoice) {
+      @RequestBody Invoice invoice) throws IOException {
     if (invoiceService.getInvoiceById(id) == null) {
       return ResponseEntity.notFound().build();
     }
@@ -77,7 +76,7 @@ public class InvoiceController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> removeInvoiceById(@PathVariable(name = "id", required = true) int id) {
+  public ResponseEntity<?> removeInvoiceById(@PathVariable(name = "id", required = true) int id) throws IOException {
     if (invoiceService.getInvoiceById(id) == null) {
       return ResponseEntity.notFound().build();
     }

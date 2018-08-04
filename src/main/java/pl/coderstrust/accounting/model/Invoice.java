@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -119,20 +120,6 @@ public class Invoice {
   @Override
   public int hashCode() {
     return Objects.hash(getId());
-  }
-
-  @Override
-  public String toString() {
-    return "Invoice{"
-        + "id=" + id
-        + ", identifier='" + identifier + '\''
-        + ", issueDate=" + issueDate
-        + ", saleDate=" + saleDate
-        + ", salePlace='" + salePlace + '\''
-        + ", buyer=" + buyer
-        + ", seller=" + seller
-        + ", entries=" + entries
-        + '}';
   }
 
 
