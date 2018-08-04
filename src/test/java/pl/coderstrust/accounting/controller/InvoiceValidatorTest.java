@@ -25,6 +25,8 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_SE
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_SELLER_STREET;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_EMPTY_ENTRIES;
 
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,9 +34,6 @@ import org.junit.runners.Parameterized;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import pl.coderstrust.accounting.model.Invoice;
-
-import java.util.Arrays;
-import java.util.List;
 
 @RunWith(Parameterized.class)
 public class InvoiceValidatorTest {
