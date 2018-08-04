@@ -1,9 +1,8 @@
 package pl.coderstrust.accounting.logic;
 
+import java.util.List;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
-
-import java.util.List;
 
 public class InvoiceBook {
 

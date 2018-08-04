@@ -1,18 +1,14 @@
 package pl.coderstrust.accounting.database.impl.file;
 
-import static pl.coderstrust.accounting.database.impl.file.helpers.FileHelper.dataBaseFile;
-import static pl.coderstrust.accounting.database.impl.file.helpers.FileHelper.temporaryDataBaseFile;
-
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.database.impl.file.helpers.FileHelper;
 import pl.coderstrust.accounting.database.impl.file.helpers.IndexHelper;
 import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 import pl.coderstrust.accounting.model.Invoice;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class InFileDatabase implements Database {
 
@@ -33,14 +29,13 @@ public class InFileDatabase implements Database {
     invoice.setId(id);
     List<Invoice> allInvoices = getInvoices();
     allInvoices.add(invoice);
-    fileHelper.writeInvoice(invoiceConverter.writeJson(allInvoices), dataBaseFile);
+    fileHelper.writeInvoice(invoiceConverter.writeJson(allInvoices), fileHelper.getDataBaseFile());
     return id;
   }
 
   @Override
   public List<Invoice> getInvoices() throws IOException {
-    List<Invoice> invoiceList = new ArrayList<>();
-    String jsonList = fileHelper.readLines(dataBaseFile);
+    String jsonList = fileHelper.readLines(fileHelper.getDataBaseFile());
     return invoiceConverter.readJson(jsonList);
   }
 
@@ -55,7 +50,7 @@ public class InFileDatabase implements Database {
         invoiceList.add(invoice);
       }
     }
-    fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList), temporaryDataBaseFile);
+    fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList), fileHelper.getTemporaryDataBaseFile());
     fileHelper.replaceInvoicesFiles();
   }
 
@@ -65,7 +60,7 @@ public class InFileDatabase implements Database {
     invoiceList = invoiceList.stream()
         .filter(invoice -> invoice.getId() != id)
         .collect(Collectors.toList());
-    fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList), temporaryDataBaseFile);
+    fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList), fileHelper.getTemporaryDataBaseFile());
     fileHelper.replaceInvoicesFiles();
   }
 }

@@ -7,13 +7,12 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BYDGOSZC
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
 
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
-
-import java.util.List;
 
 @RunWith(MockitoJUnitRunner.class)
 public abstract class DatabaseTest {

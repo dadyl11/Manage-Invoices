@@ -9,8 +9,8 @@ import java.io.IOException;
 
 public class FileHelper {
 
-  public static File dataBaseFile = new File("invoices.json");
-  public static File temporaryDataBaseFile = new File("temporaryInvoices.json");
+  private File dataBaseFile = new File("invoices.json");
+  private File temporaryDataBaseFile = new File("temporaryInvoices.json");
 
   public void writeInvoice(String string, File path) {
     try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path, false))) {
@@ -21,6 +21,10 @@ public class FileHelper {
   }
 
   public String readLines(File path) {
+    if (!path.exists()) {
+      return "";
+    }
+
     String invoicesList = "";
     String currentJson;
     try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
@@ -38,5 +42,13 @@ public class FileHelper {
     File originalDatabaseFile = new File(dataBaseFile.getPath());
     originalDatabaseFile.delete();
     temporaryFile.renameTo(dataBaseFile);
+  }
+
+  public File getDataBaseFile() {
+    return dataBaseFile;
+  }
+
+  public File getTemporaryDataBaseFile() {
+    return temporaryDataBaseFile;
   }
 }

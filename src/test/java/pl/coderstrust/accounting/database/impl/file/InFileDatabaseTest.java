@@ -1,8 +1,9 @@
 package pl.coderstrust.accounting.database.impl.file;
 
-import static pl.coderstrust.accounting.database.impl.file.helpers.FileHelper.dataBaseFile;
 import static pl.coderstrust.accounting.database.impl.file.helpers.IndexHelper.currentIdFile;
 
+import java.io.File;
+import java.io.IOException;
 import org.junit.Before;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.database.impl.DatabaseTest;
@@ -10,14 +11,13 @@ import pl.coderstrust.accounting.database.impl.file.helpers.FileHelper;
 import pl.coderstrust.accounting.database.impl.file.helpers.IndexHelper;
 import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 
-import java.io.File;
-import java.io.IOException;
-
 public class InFileDatabaseTest extends DatabaseTest {
+
+  private FileHelper fileHelper;
 
   @Override
   protected Database getDatabase() {
-    FileHelper fileHelper = new FileHelper();
+    fileHelper = new FileHelper();
     InvoiceConverter invoiceConverter = new InvoiceConverter();
     IndexHelper indexHelper = new IndexHelper();
     return new InFileDatabase(fileHelper, invoiceConverter, indexHelper);
@@ -25,7 +25,7 @@ public class InFileDatabaseTest extends DatabaseTest {
 
   @Before
   public void beforeMethod() throws IOException {
-    File file = dataBaseFile;
+    File file = fileHelper.getDataBaseFile();
     if (file.exists()) {
       file.delete();
       System.out.println("File deleted");

@@ -1,9 +1,8 @@
 package pl.coderstrust.accounting.database;
 
-import pl.coderstrust.accounting.model.Invoice;
-
 import java.io.IOException;
 import java.util.List;
+import pl.coderstrust.accounting.model.Invoice;
 
 public interface Database {
 

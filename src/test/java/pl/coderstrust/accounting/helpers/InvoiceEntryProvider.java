@@ -1,12 +1,11 @@
 package pl.coderstrust.accounting.helpers;
 
-import pl.coderstrust.accounting.model.InvoiceEntry;
-import pl.coderstrust.accounting.model.VatRate;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import pl.coderstrust.accounting.model.InvoiceEntry;
+import pl.coderstrust.accounting.model.VatRate;
 
 public class InvoiceEntryProvider {
 

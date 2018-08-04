@@ -4,9 +4,8 @@ import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.ONE_LINK;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN_CLAMP;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN_CLAMP_SUPPORT;
 
-import pl.coderstrust.accounting.model.Invoice;
-
 import java.time.LocalDate;
+import pl.coderstrust.accounting.model.Invoice;
 
 public class InvoiceProvider {
 

@@ -10,11 +10,10 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
 import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
-import org.junit.Test;
-import pl.pojo.tester.api.assertion.Method;
-
 import java.math.BigDecimal;
 import java.util.List;
+import org.junit.Test;
+import pl.pojo.tester.api.assertion.Method;
 
 public class InvoiceTest {
 

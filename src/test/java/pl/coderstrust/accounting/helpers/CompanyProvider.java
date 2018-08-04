@@ -1,8 +1,7 @@
 package pl.coderstrust.accounting.helpers;
 
-import pl.coderstrust.accounting.model.Company;
-
 import java.math.BigDecimal;
+import pl.coderstrust.accounting.model.Company;
 
 public class CompanyProvider {
 

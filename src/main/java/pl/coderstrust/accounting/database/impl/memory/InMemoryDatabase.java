@@ -1,12 +1,11 @@
 package pl.coderstrust.accounting.database.impl.memory;
 
-import pl.coderstrust.accounting.database.Database;
-import pl.coderstrust.accounting.model.Invoice;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import pl.coderstrust.accounting.database.Database;
+import pl.coderstrust.accounting.model.Invoice;
 
 public class InMemoryDatabase implements Database {
 
