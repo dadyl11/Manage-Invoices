@@ -12,6 +12,7 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,7 +95,7 @@ public class InvoiceServiceTest {
   }
 
   @Test
-  public void shouldReturnInvoiceById() {
+  public void shouldReturnInvoiceById() throws IOException {
     //given
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_BYDGOSZCZ_2018);
@@ -112,7 +113,7 @@ public class InvoiceServiceTest {
   }
 
   @Test
-  public void shouldReturnInvoicesByIssueDate() {
+  public void shouldReturnInvoicesByIssueDate() throws IOException {
     //given
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_KRAKOW_2018);
@@ -129,7 +130,7 @@ public class InvoiceServiceTest {
   }
 
   @Test
-  public void shouldNotReturnInvoicesWithIssueDateOutOfTheRange() {
+  public void shouldNotReturnInvoicesWithIssueDateOutOfTheRange() throws IOException {
     //given
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_KRAKOW_2018);
