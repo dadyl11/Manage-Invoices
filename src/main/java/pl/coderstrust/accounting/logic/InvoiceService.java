@@ -45,8 +45,9 @@ public class InvoiceService {
   }
 
   public void updateInvoice(int id, Invoice invoice) throws IOException {
-    Optional<Invoice> invoiceById = getInvoiceById(id);
-    if (!invoiceById.isPresent()) {
+    Optional<Invoice> invoiceFromDatabase = getInvoiceById(id);
+
+    if (!invoiceFromDatabase.isPresent()) {
       throw new IllegalStateException("Invoice with id: " + id + " does not exist");
     }
     database.updateInvoice(id, invoice);

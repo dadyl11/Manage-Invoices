@@ -88,7 +88,7 @@ public class InvoiceController {
   @PutMapping("/{id}")
   public ResponseEntity<?> updateInvoice(@PathVariable(name = "id", required = true) int id,
       @RequestBody Invoice invoice) throws IOException {
-    if (invoiceService.getInvoiceById(id) == null) {
+    if (!invoiceService.getInvoiceById(id).isPresent()) {
       return ResponseEntity.notFound().build();
     }
     List<String> validationResult = invoiceValidator.validate(invoice);
