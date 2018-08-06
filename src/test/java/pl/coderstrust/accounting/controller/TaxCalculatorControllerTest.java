@@ -34,10 +34,10 @@ public class TaxCalculatorControllerTest {
   private static final String TAXCALCULATOR_SERVICE_PATH = "/taxcalculator";
   private static final String INVOICE_SERVICE_PATH = "/invoices";
   private static final MediaType JSON_CONTENT_TYPE = MediaType.APPLICATION_JSON_UTF8;
-  private String drukpolNip = "1452369135";
-  private String wasbudNip = "1458796325";
-  private String drutexNip = "1239514823";
-  private String transpolNip = "6752339483";
+  private String drukpolNip = "5311688030";
+  private String wasbudNip = "6271206366";
+  private String drutexNip = "8421622720";
+  private String transpolNip = "5621760000";
 
   @Autowired
   private InvoiceService invoiceService;

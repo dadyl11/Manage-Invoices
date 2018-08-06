@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -27,10 +28,10 @@ import pl.coderstrust.accounting.model.Invoice;
 @SpringBootTest
 public class TaxCalculatorServiceTest {
 
-  private String drukpolNip = "1452369135";
-  private String wasbudNip = "1458796325";
-  private String drutexNip = "1239514823";
-  private String transpolNip = "6752339483";
+  private String drukpolNip = "5311688030";
+  private String wasbudNip = "6271206366";
+  private String drutexNip = "8421622720";
+  private String transpolNip = "5621760000";
 
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
@@ -41,13 +42,15 @@ public class TaxCalculatorServiceTest {
   @InjectMocks
   TaxCalculatorService taxCalculatorService;
 
+  @Rule
+  public ExpectedException thrown = ExpectedException.none();
+
   @Test
   public void shouldReturnZeroWhenNoInvoices() throws IOException {
     //given
     when(invoiceService.getInvoices()).thenReturn(new ArrayList<>());
 
     //when
-
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
             taxCalculatorService::taxToBigDecimal, wasbudNip);
@@ -57,17 +60,21 @@ public class TaxCalculatorServiceTest {
   }
 
   @Test
-  public void shouldReturnIllegalArgumentExceptionWhenNipIsInvalid() {
+  public void shouldReturnIllegalArgumentExceptionWhenNipIsInvalid() throws IOException {
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("Nip is incorrect");
+    BigDecimal actual = taxCalculatorService
+        .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
+            taxCalculatorService::taxToBigDecimal, "1234567890");
   }
 
   @Test
   public void shouldReturnIncome() throws IOException {
-    //when
+    //given
     List<Invoice> invoices = Arrays.asList(INVOICE_KRAKOW_2018, INVOICE_RADOMSKO_2018);
     when(invoiceService.getInvoices()).thenReturn(invoices);
 
-    //given
-
+    //when
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterSeller,
             taxCalculatorService::incomeToBigDecimal, drutexNip);
@@ -79,12 +86,11 @@ public class TaxCalculatorServiceTest {
 
   @Test
   public void shouldReturnCosts() throws IOException {
-    //when
+    //given
     List<Invoice> invoices = Arrays.asList(INVOICE_KRAKOW_2018, INVOICE_CHELMNO_2016);
     when(invoiceService.getInvoices()).thenReturn(invoices);
 
-    //given
-
+    //when
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
             taxCalculatorService::incomeToBigDecimal, transpolNip);
@@ -96,11 +102,11 @@ public class TaxCalculatorServiceTest {
 
   @Test
   public void shouldReturnVatDue() throws IOException {
-    //when
+    //giben
     List<Invoice> invoices = Arrays.asList(INVOICE_RADOMSKO_2018, INVOICE_GRUDZIADZ_2017);
     when(invoiceService.getInvoices()).thenReturn(invoices);
 
-    //given
+    //when
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterSeller,
             taxCalculatorService::taxToBigDecimal, wasbudNip);
@@ -111,13 +117,12 @@ public class TaxCalculatorServiceTest {
 
   @Test
   public void shouldReturnVatIncluded() throws IOException {
-    //when
+    //given
     List<Invoice> invoices = Arrays
         .asList(INVOICE_RADOMSKO_2018, INVOICE_GRUDZIADZ_2017, INVOICE_CHELMNO_2016);
     when(invoiceService.getInvoices()).thenReturn(invoices);
 
-    //given
-
+    //when
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
             taxCalculatorService::taxToBigDecimal, drukpolNip);

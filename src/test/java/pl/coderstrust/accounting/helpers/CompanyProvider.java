@@ -1,13 +1,14 @@
 package pl.coderstrust.accounting.helpers;
 
 import java.math.BigDecimal;
+
 import pl.coderstrust.accounting.model.Company;
 
 public class CompanyProvider {
 
   public static final Company COMPANY_TRANSPOL = new Company(
       "Transpol",
-      "6752339483",
+      "5621760000",
       "Grodzka",
       "32008",
       "Krakow",
@@ -15,7 +16,7 @@ public class CompanyProvider {
 
   public static final Company COMPANY_DRUTEX = new Company(
       "Drutex",
-      "1239514823",
+      "8421622720",
       "Rybna",
       "31158",
       "Rybnik",
@@ -23,7 +24,7 @@ public class CompanyProvider {
 
   public static final Company COMPANY_WASBUD = new Company(
       "WasBud",
-      "1458796325",
+      "6271206366",
       "Targowa",
       "15689",
       "warszawa",
@@ -31,7 +32,7 @@ public class CompanyProvider {
 
   public static final Company COMPANY_DRUKPOL = new Company(
       "DrukPol",
-      "1452369135",
+      "5311688030",
       "Bolesnej Meki Panskiej",
       "58963",
       "Sosnowiec",

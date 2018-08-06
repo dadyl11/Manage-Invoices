@@ -3,12 +3,18 @@ package pl.coderstrust.accounting.controller;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class NipValidator {
 
-  private Pattern pattern = Pattern.compile("[1-9]{1}\\d{9}");
+  private static final Pattern PATTERN = Pattern.compile("[1-9]{1}\\d{9}");
 
-  public static boolean isValidNIP(String nip) {
-    Matcher matcher = pattern.matcher(nip);
+  public NipValidator() {
+  }
+
+  public static boolean isValidNip(String nip) {
+    Matcher matcher = PATTERN.matcher(nip);
     return matcher.matches() && controlSumIsCorrect(nip);
   }
 

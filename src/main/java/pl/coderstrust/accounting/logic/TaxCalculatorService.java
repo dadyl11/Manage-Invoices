@@ -13,17 +13,20 @@ import pl.coderstrust.accounting.model.Invoice;
 @Service
 public class TaxCalculatorService {
 
+  @Autowired
   private InvoiceService invoiceService;
+
 
   @Autowired
   public TaxCalculatorService(InvoiceService invoiceService) {
     this.invoiceService = invoiceService;
+
   }
 
   public BigDecimal getValueFromInvoices(BiPredicate<Invoice, String> buyerOrSeller,
       Function<Invoice, BigDecimal> taxOrIncomeToBigDecimal, String nip)
       throws IllegalArgumentException, IOException {
-    if (!NipValidator.isValidNIP(nip)) {
+    if (!NipValidator.isValidNip(nip)) {
       throw new IllegalArgumentException("Nip is incorrect");
     }
     return invoiceService
