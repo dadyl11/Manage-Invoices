@@ -1,5 +1,7 @@
 package pl.coderstrust.accounting.database.impl.file.helpers;
 
+import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,10 +9,15 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+@Service
 public class FileHelper {
 
   private File dataBaseFile = new File("invoices.json");
   private File temporaryDataBaseFile = new File("temporaryInvoices.json");
+
+  @Autowired
+  public FileHelper() {
+  }
 
   public void writeInvoice(String string, File path) {
     try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path, false))) {
@@ -50,5 +57,9 @@ public class FileHelper {
 
   public File getTemporaryDataBaseFile() {
     return temporaryDataBaseFile;
+  }
+
+  public void setDataBaseFile(File dataBaseFile) {
+    this.dataBaseFile = dataBaseFile;
   }
 }

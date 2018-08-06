@@ -4,10 +4,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import java.io.IOException;
 import java.util.List;
+
+import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.model.Invoice;
 
+@Service
 public class InvoiceConverter {
 
   private ObjectMapper mapper;

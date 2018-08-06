@@ -1,5 +1,7 @@
 package pl.coderstrust.accounting.database.impl.file.helpers;
 
+import org.springframework.stereotype.Service;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+@Service
 public class IndexHelper {
 
   public static File currentIdFile = new File("currentIdFile.txt");

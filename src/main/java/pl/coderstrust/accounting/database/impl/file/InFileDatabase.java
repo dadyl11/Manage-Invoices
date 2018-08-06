@@ -4,16 +4,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.database.impl.file.helpers.FileHelper;
 import pl.coderstrust.accounting.database.impl.file.helpers.IndexHelper;
 import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 import pl.coderstrust.accounting.model.Invoice;
 
+@Primary
+@Repository
 public class InFileDatabase implements Database {
 
+  @Autowired
   private FileHelper fileHelper;
+  @Autowired
   private InvoiceConverter invoiceConverter;
+  @Autowired
   private IndexHelper indexHelper;
 
   public InFileDatabase(FileHelper fileHelper,
@@ -50,7 +58,8 @@ public class InFileDatabase implements Database {
         invoiceList.add(invoice);
       }
     }
-    fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList), fileHelper.getTemporaryDataBaseFile());
+    fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList),
+        fileHelper.getTemporaryDataBaseFile());
     fileHelper.replaceInvoicesFiles();
   }
 
@@ -60,7 +69,8 @@ public class InFileDatabase implements Database {
     invoiceList = invoiceList.stream()
         .filter(invoice -> invoice.getId() != id)
         .collect(Collectors.toList());
-    fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList), fileHelper.getTemporaryDataBaseFile());
+    fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList),
+        fileHelper.getTemporaryDataBaseFile());
     fileHelper.replaceInvoicesFiles();
   }
 }

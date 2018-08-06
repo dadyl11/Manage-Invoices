@@ -14,6 +14,7 @@ import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 public class InFileDatabaseTest extends DatabaseTest {
 
   private FileHelper fileHelper;
+  private File dataBaseTestFile = new File("invoicesTest.json");
 
   @Override
   protected Database getDatabase() {
@@ -25,6 +26,7 @@ public class InFileDatabaseTest extends DatabaseTest {
 
   @Before
   public void beforeMethod() throws IOException {
+    fileHelper.setDataBaseFile(dataBaseTestFile);
     File file = fileHelper.getDataBaseFile();
     if (file.exists()) {
       file.delete();
