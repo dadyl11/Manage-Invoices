@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.model.Invoice;
 
@@ -16,6 +17,7 @@ public class InvoiceConverter {
 
   private ObjectMapper mapper;
 
+  @Autowired
   public InvoiceConverter() {
     this.mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());

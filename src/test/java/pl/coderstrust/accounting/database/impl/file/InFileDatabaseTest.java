@@ -4,7 +4,9 @@ import static pl.coderstrust.accounting.database.impl.file.helpers.IndexHelper.c
 
 import java.io.File;
 import java.io.IOException;
+
 import org.junit.Before;
+import org.springframework.beans.factory.annotation.Autowired;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.database.impl.DatabaseTest;
 import pl.coderstrust.accounting.database.impl.file.helpers.FileHelper;
@@ -13,6 +15,7 @@ import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 
 public class InFileDatabaseTest extends DatabaseTest {
 
+  @Autowired
   private FileHelper fileHelper;
   private File dataBaseTestFile = new File("invoicesTest.json");
 

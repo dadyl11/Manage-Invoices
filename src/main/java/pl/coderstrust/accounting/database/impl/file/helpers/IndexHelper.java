@@ -1,5 +1,6 @@
 package pl.coderstrust.accounting.database.impl.file.helpers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -13,6 +14,10 @@ import java.io.IOException;
 public class IndexHelper {
 
   public static File currentIdFile = new File("currentIdFile.txt");
+
+  @Autowired
+  public IndexHelper() {
+  }
 
   public int generateId() throws IOException {
     if (currentIdFile.exists()) {
