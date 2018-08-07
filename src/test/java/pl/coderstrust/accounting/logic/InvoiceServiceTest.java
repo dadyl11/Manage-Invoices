@@ -3,6 +3,7 @@ package pl.coderstrust.accounting.logic;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.verify;
@@ -87,7 +88,11 @@ public class InvoiceServiceTest {
   @Test
   public void shouldRemoveInvoiceById() throws Exception {
     //given
-    int id = 0;
+    List<Invoice> invoices = new ArrayList<>();
+    invoices.add(INVOICE_KRAKOW_2018);
+    invoices.add(INVOICE_GRUDZIADZ_2017);
+    int id = 1;
+    when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
     invoiceService.removeInvoiceById(id);
@@ -110,7 +115,7 @@ public class InvoiceServiceTest {
 
     //when
     Optional<Invoice> expected = invoiceService.getInvoiceById(id);
-    Optional<Invoice> actual = Optional.ofNullable(invoices.get(1));
+    Optional<Invoice> actual = Optional.of(invoices.get(1));
 
     //then
     assertThat(actual, is(expected));

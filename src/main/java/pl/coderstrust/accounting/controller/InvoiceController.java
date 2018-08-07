@@ -105,7 +105,7 @@ public class InvoiceController {
       responseContainer = "")
   @DeleteMapping("/{id}")
   public ResponseEntity<?> removeInvoiceById(@PathVariable(name = "id", required = true) int id) throws IOException {
-    if (invoiceService.getInvoiceById(id) == null) {
+    if (!invoiceService.getInvoiceById(id).isPresent()) {
       return ResponseEntity.notFound().build();
     }
     invoiceService.removeInvoiceById(id);

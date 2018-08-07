@@ -8,12 +8,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static pl.coderstrust.accounting.controller.JacksonProvider.getObjectMapper;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_IDENTIFIER;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BYDGOSZCZ_2018;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_2016;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_RADOMSKO_2018;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.time.LocalDate;
@@ -127,7 +130,22 @@ public class InvoiceControllerTest {
   }
 
   @Test
-  public void updateInvoice() {
+  public void updateInvoice() throws Exception {
+    int invoiceId = callRestServiceToAddInvoiceAndReturnId(INVOICE_RADOMSKO_2018);
+    mockMvc
+        .perform(put(INVOICE_SERVICE_PATH + "/" + invoiceId)
+            .contentType(JSON_CONTENT_TYPE)
+            .content(convertToJson(INVOICE_BYDGOSZCZ_2018)))
+        .andDo(print())
+        .andExpect(status().isOk());
+
+    mockMvc
+        .perform(get(INVOICE_SERVICE_PATH + "/" + invoiceId))
+        .andExpect(status().isOk())
+        .andExpect(content().contentType(JSON_CONTENT_TYPE))
+        .andExpect(jsonPath("$.id", is(0)))
+        .andExpect(jsonPath("$.identifier", is("4/2018")));
+    //.andExpect(jsonPath("$.buyer", is(equalTo(convertToJson(COMPANY_WASBUD)))));
   }
 
   @Test
@@ -141,6 +159,21 @@ public class InvoiceControllerTest {
   }
 
   @Test
+  public void shouldReturnErrorCausedByNotValidInvoiceUpdateMethod() throws Exception {
+
+    int invoiceId = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+
+    mockMvc
+        .perform(put(INVOICE_SERVICE_PATH + "/" + invoiceId)
+            .contentType(JSON_CONTENT_TYPE)
+            .content(convertToJson(INVOICE_BLANK_IDENTIFIER)))
+        .andDo(print())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$[0]",
+            is("Identifier not found")));
+  }
+
+  @Test
   public void removeInvoiceById() throws Exception {
     callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
     callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
@@ -150,6 +183,11 @@ public class InvoiceControllerTest {
         .perform(delete(INVOICE_SERVICE_PATH + "/1"))
         .andDo(print())
         .andExpect(status().isOk());
+
+    mockMvc
+        .perform(delete(INVOICE_SERVICE_PATH + "/5"))
+        .andDo(print())
+        .andExpect(status().isNotFound());
 
     mockMvc
         .perform(get(INVOICE_SERVICE_PATH))
