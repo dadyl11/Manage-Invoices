@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static pl.coderstrust.accounting.controller.JacksonProvider.getObjectMapper;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_CITY;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_IDENTIFIER;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BYDGOSZCZ_2018;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_2016;
@@ -51,7 +52,6 @@ public class InvoiceControllerTest {
   @Test
   public void contextLoads() throws Exception {
     assertNotNull(invoiceController);
-    //assertThat(invoiceController).isNotNull();
   }
 
   @Test
@@ -73,6 +73,18 @@ public class InvoiceControllerTest {
         .andExpect(jsonPath("$[0].issueDate", is("2018-05-12")))
         .equals(INVOICE_KRAKOW_2018);
 
+  }
+
+  @Test
+  public void shouldReturnErrorCausedByIncompletedInvoiceFie() throws Exception {
+    mockMvc.perform(
+        post(INVOICE_SERVICE_PATH)
+            .content(convertToJson(INVOICE_BLANK_BUYER_CITY))
+            .contentType(JSON_CONTENT_TYPE)
+    )
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$[0]",
+            is("Buyer city not found")));
   }
 
   @Test
