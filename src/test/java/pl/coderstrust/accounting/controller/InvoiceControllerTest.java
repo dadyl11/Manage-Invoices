@@ -1,8 +1,10 @@
 package pl.coderstrust.accounting.controller;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -21,6 +23,7 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_RADOMSKO
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.time.LocalDate;
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +74,7 @@ public class InvoiceControllerTest {
         .andExpect(jsonPath("$[0].id", is(Integer.valueOf(postResponse))))
         .andExpect(jsonPath("$[0].identifier", is("1/2018")))
         .andExpect(jsonPath("$[0].issueDate", is("2018-05-12")))
-        .equals(INVOICE_KRAKOW_2018);
-
+        .andReturn().getResponse().getContentAsString(); // jacskon przekonwertowac.
   }
 
   @Test

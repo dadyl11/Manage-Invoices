@@ -1,11 +1,13 @@
 package pl.coderstrust.accounting.logic;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BYDGOSZCZ_2018;
@@ -18,7 +20,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,6 +33,9 @@ import pl.coderstrust.accounting.model.Invoice;
 @RunWith(MockitoJUnitRunner.class)
 public class InvoiceServiceTest {
 
+  @Rule
+  public ExpectedException expectedEx = ExpectedException.none();
+
   @Mock
   private Database databaseMock;
 
@@ -38,11 +45,14 @@ public class InvoiceServiceTest {
   @Test
   public void shouldSaveInvoice() throws Exception {
     //given
+    when(databaseMock.saveInvoice(INVOICE_KRAKOW_2018)).thenReturn(INVOICE_KRAKOW_2018.getId());
 
     //when
-    invoiceService.saveInvoice(INVOICE_KRAKOW_2018);
+    int id = invoiceService.saveInvoice(INVOICE_KRAKOW_2018);
 
     //then
+    assertNotNull(id);
+    assertThat(id, is(equalTo(INVOICE_KRAKOW_2018.getId())));
     verify(databaseMock).saveInvoice(INVOICE_KRAKOW_2018);
   }
 
@@ -71,7 +81,6 @@ public class InvoiceServiceTest {
   public void shouldUpdateInvoice() throws Exception {
     //given
     List<Invoice> invoices = new ArrayList<>();
-    invoices.add(INVOICE_BYDGOSZCZ_2018);
     invoices.add(INVOICE_CHELMNO_2016);
     invoices.add(INVOICE_GRUDZIADZ_2017);
 
@@ -80,8 +89,10 @@ public class InvoiceServiceTest {
 
     //when
     invoiceService.updateInvoice(id, INVOICE_KRAKOW_2018);
+    List<Invoice> actual = invoiceService.getInvoices();
 
     //then
+    System.out.println(actual.toString()); //dlaczego tu sie nie zmienia na Krakow itp ten Chelmn.?
     verify(databaseMock).updateInvoice(id, INVOICE_KRAKOW_2018);
   }
 
@@ -91,7 +102,7 @@ public class InvoiceServiceTest {
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_KRAKOW_2018);
     invoices.add(INVOICE_GRUDZIADZ_2017);
-    int id = 1;
+    int id = INVOICE_GRUDZIADZ_2017.getId();
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
@@ -114,11 +125,10 @@ public class InvoiceServiceTest {
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
-    Optional<Invoice> expected = invoiceService.getInvoiceById(id);
-    Optional<Invoice> actual = Optional.of(invoices.get(1));
+    Optional<Invoice> actual = invoiceService.getInvoiceById(id);
 
     //then
-    assertThat(actual, is(expected));
+    assertTrue(actual.isPresent()); // TODO what if other was returned? :) add more assertions
   }
 
   @Test
@@ -161,5 +171,40 @@ public class InvoiceServiceTest {
 
     System.out.println("!!!!!!!! " + actual);
     assertThat(actual, not(hasItem(INVOICE_GRUDZIADZ_2017)));
+  }
+
+  @Test
+  public void shouldThrowExceptionCausedByMissingInvoiceWithProvidedIdForUpdate()
+      throws IOException {
+    //given
+    int id = 0;
+    expectedEx.expect(IllegalStateException.class);
+    expectedEx.expectMessage("Invoice with id: " + id + " does not exist");
+
+    //when
+    invoiceService.updateInvoice(0, INVOICE_GRUDZIADZ_2017);
+  }
+
+  @Test
+  public void shouldThrowExceptionCausedByMissingInvoiceWithProvidedIdToRemove()
+      throws IOException {
+    //given
+    int id = 0;
+    expectedEx.expect(IllegalStateException.class);
+    expectedEx.expectMessage("Invoice with id: " + id + " does not exist");
+
+    //when
+    invoiceService.removeInvoiceById(0);
+  }
+
+  @Test
+  public void shouldThrowExceptionCausedByNullInvoice() throws IOException {
+    //given
+    Invoice invoice = null;
+    expectedEx.expect(IllegalArgumentException.class);
+    expectedEx.expectMessage("invoice cannot be null");
+
+    //when
+    invoiceService.saveInvoice(invoice);
   }
 }
