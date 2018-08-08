@@ -22,6 +22,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import pl.coderstrust.accounting.controller.NipValidator;
 import pl.coderstrust.accounting.model.Invoice;
 
 @RunWith(SpringRunner.class)
@@ -39,6 +40,9 @@ public class TaxCalculatorServiceTest {
   @Mock
   InvoiceService invoiceService;
 
+  @Mock
+  NipValidator nipValidator;
+
   @InjectMocks
   TaxCalculatorService taxCalculatorService;
 
@@ -49,6 +53,7 @@ public class TaxCalculatorServiceTest {
   public void shouldReturnZeroWhenNoInvoices() throws IOException {
     //given
     when(invoiceService.getInvoices()).thenReturn(new ArrayList<>());
+    when(nipValidator.isValid(wasbudNip)).thenReturn(true);
 
     //when
     BigDecimal actual = taxCalculatorService
@@ -61,11 +66,15 @@ public class TaxCalculatorServiceTest {
 
   @Test
   public void shouldReturnIllegalArgumentExceptionWhenNipIsInvalid() throws IOException {
+    //given
+    String incorrectNip = "1234567890";
+    when(nipValidator.isValid(incorrectNip)).thenReturn(false);
+
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("Nip is incorrect");
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
-            taxCalculatorService::taxToBigDecimal, "1234567890");
+            taxCalculatorService::taxToBigDecimal, incorrectNip);
   }
 
   @Test
@@ -73,6 +82,7 @@ public class TaxCalculatorServiceTest {
     //given
     List<Invoice> invoices = Arrays.asList(INVOICE_KRAKOW_2018, INVOICE_RADOMSKO_2018);
     when(invoiceService.getInvoices()).thenReturn(invoices);
+    when(nipValidator.isValid(drutexNip)).thenReturn(true);
 
     //when
     BigDecimal actual = taxCalculatorService
@@ -89,6 +99,7 @@ public class TaxCalculatorServiceTest {
     //given
     List<Invoice> invoices = Arrays.asList(INVOICE_KRAKOW_2018, INVOICE_CHELMNO_2016);
     when(invoiceService.getInvoices()).thenReturn(invoices);
+    when(nipValidator.isValid(transpolNip)).thenReturn(true);
 
     //when
     BigDecimal actual = taxCalculatorService
@@ -105,6 +116,7 @@ public class TaxCalculatorServiceTest {
     //giben
     List<Invoice> invoices = Arrays.asList(INVOICE_RADOMSKO_2018, INVOICE_GRUDZIADZ_2017);
     when(invoiceService.getInvoices()).thenReturn(invoices);
+    when(nipValidator.isValid(wasbudNip)).thenReturn(true);
 
     //when
     BigDecimal actual = taxCalculatorService
@@ -121,6 +133,7 @@ public class TaxCalculatorServiceTest {
     List<Invoice> invoices = Arrays
         .asList(INVOICE_RADOMSKO_2018, INVOICE_GRUDZIADZ_2017, INVOICE_CHELMNO_2016);
     when(invoiceService.getInvoices()).thenReturn(invoices);
+    when(nipValidator.isValid(drukpolNip)).thenReturn(true);
 
     //when
     BigDecimal actual = taxCalculatorService
