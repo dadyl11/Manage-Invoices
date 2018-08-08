@@ -23,35 +23,40 @@ public class TaxCalculatorController {
 
 
   @GetMapping("/getIncome")
-  public BigDecimal getIncome(@RequestParam(name = "nip", required = true) String nip) throws IOException {
+  public BigDecimal getIncome(@RequestParam(name = "nip", required = true) String nip)
+      throws IOException {
     return taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterSeller,
             taxCalculatorService::incomeToBigDecimal, nip);
   }
 
   @GetMapping("/getTaxDue")
-  public BigDecimal getTaxDue(@RequestParam(name = "nip", required = true) String nip) throws IOException {
+  public BigDecimal getTaxDue(@RequestParam(name = "nip", required = true) String nip)
+      throws IOException {
     return taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterSeller,
             taxCalculatorService::taxToBigDecimal, nip);
   }
 
   @GetMapping("/getTaxIncluded")
-  public BigDecimal getTaxIncluded(@RequestParam(name = "nip", required = true) String nip) throws IOException {
+  public BigDecimal getTaxIncluded(@RequestParam(name = "nip", required = true) String nip)
+      throws IOException {
     return taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
             taxCalculatorService::taxToBigDecimal, nip);
   }
 
   @GetMapping("/getCosts")
-  public BigDecimal getCosts(@RequestParam(name = "nip", required = true) String nip) throws IOException {
+  public BigDecimal getCosts(@RequestParam(name = "nip", required = true) String nip)
+      throws IOException {
     return taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
             taxCalculatorService::incomeToBigDecimal, nip);
   }
 
   @GetMapping("/getProfit")
-  public BigDecimal getProfit(@RequestParam(name = "nip", required = true) String nip) throws IOException {
+  public BigDecimal getProfit(@RequestParam(name = "nip", required = true) String nip)
+      throws IOException {
     return taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterSeller,
             taxCalculatorService::incomeToBigDecimal, nip).subtract(taxCalculatorService
@@ -60,11 +65,16 @@ public class TaxCalculatorController {
   }
 
   @GetMapping("/getVatPayable")
-  public BigDecimal getVatPayable(@RequestParam(name = "nip", required = true) String nip) throws IOException {
+  public BigDecimal getVatPayable(@RequestParam(name = "nip", required = true) String nip)
+      throws IOException {
     return taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterSeller,
             taxCalculatorService::taxToBigDecimal, nip).subtract(taxCalculatorService
             .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
                 taxCalculatorService::taxToBigDecimal, nip));
+  }
+
+  public TaxCalculatorService getTaxCalculatorService() {
+    return taxCalculatorService;
   }
 }

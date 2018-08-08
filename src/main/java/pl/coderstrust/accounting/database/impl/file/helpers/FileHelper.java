@@ -1,28 +1,29 @@
 package pl.coderstrust.accounting.database.impl.file.helpers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 @Service
 public class FileHelper {
 
-  private File dataBaseFile = new File("invoices.json");
-  private File temporaryDataBaseFile = new File("temporaryInvoices.json");
+  private File dataBaseFile;
+  private File temporaryDataBaseFile = new File("invoices.json");
 
   @Autowired
-  public FileHelper() {
+  public FileHelper(@Value("${filePath}") String path) {
+    this.dataBaseFile = new File(path);
   }
 
   public void writeInvoice(String string, File path) {
     try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path, false))) {
-      bufferedWriter.write(string);
+      bufferedWriter.write(string + System.getProperty("line.separator"));
     } catch (IOException exception) {
       exception.printStackTrace();
     }
@@ -58,9 +59,5 @@ public class FileHelper {
 
   public File getTemporaryDataBaseFile() {
     return temporaryDataBaseFile;
-  }
-
-  public void setDataBaseFile(File dataBaseFile) {
-    this.dataBaseFile = dataBaseFile;
   }
 }

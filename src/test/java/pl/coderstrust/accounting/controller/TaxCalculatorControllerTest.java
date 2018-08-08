@@ -13,14 +13,13 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIAD
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -29,7 +28,7 @@ import pl.coderstrust.accounting.model.Invoice;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+//@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class TaxCalculatorControllerTest {
 
   private static final String TAXCALCULATOR_SERVICE_PATH = "/taxcalculator";
@@ -45,6 +44,11 @@ public class TaxCalculatorControllerTest {
 
   @Autowired
   private TaxCalculatorController taxCalculatorController;
+
+  @Before
+  public void beforeMethod() {
+    taxCalculatorController.getTaxCalculatorService().getInvoiceService().clearDatabase();
+  }
 
   @Test
   public void contexLoads() throws Exception {

@@ -45,4 +45,8 @@ public class TaxCalculatorService {
   public BigDecimal incomeToBigDecimal(Invoice invoice) {
     return invoice.getTotalNetValue();
   }
+
+  public InvoiceService getInvoiceService() {
+    return invoiceService;
+  }
 }

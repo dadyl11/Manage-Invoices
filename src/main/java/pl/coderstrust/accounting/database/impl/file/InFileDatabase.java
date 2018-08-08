@@ -18,13 +18,11 @@ import pl.coderstrust.accounting.model.Invoice;
 @Repository
 public class InFileDatabase implements Database {
 
-  @Autowired
   private FileHelper fileHelper;
-  @Autowired
   private InvoiceConverter invoiceConverter;
-  @Autowired
   private IndexHelper indexHelper;
 
+  @Autowired
   public InFileDatabase(FileHelper fileHelper,
       InvoiceConverter invoiceConverter, IndexHelper indexHelper) {
     this.fileHelper = fileHelper;
@@ -73,5 +71,22 @@ public class InFileDatabase implements Database {
     fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList),
         fileHelper.getTemporaryDataBaseFile());
     fileHelper.replaceInvoicesFiles();
+  }
+
+  @Override
+  public void clearDatabase() {
+    fileHelper.getDataBaseFile().delete();
+  }
+
+  public FileHelper getFileHelper() {
+    return fileHelper;
+  }
+
+  public InvoiceConverter getInvoiceConverter() {
+    return invoiceConverter;
+  }
+
+  public IndexHelper getIndexHelper() {
+    return indexHelper;
   }
 }

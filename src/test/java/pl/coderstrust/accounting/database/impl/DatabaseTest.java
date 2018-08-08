@@ -9,21 +9,19 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2
 
 import java.util.List;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
 
-@RunWith(MockitoJUnitRunner.class)
 public abstract class DatabaseTest {
+
 
   protected abstract Database getDatabase();
 
-  private Database database = getDatabase();
 
   @Test
   public void shouldSaveInvoices() throws Exception {
     //given
+    Database database = getDatabase();
 
     //when
     database.saveInvoice(INVOICE_KRAKOW_2018);
@@ -36,6 +34,9 @@ public abstract class DatabaseTest {
 
   @Test
   public void shouldReturnCollectionsOfInvoices() throws Exception {
+
+    Database database = getDatabase();
+
     //when
     database.saveInvoice(INVOICE_KRAKOW_2018);
     database.saveInvoice(INVOICE_GRUDZIADZ_2017);
@@ -50,6 +51,7 @@ public abstract class DatabaseTest {
   @Test
   public void shouldRemoveInvoices() throws Exception {
     //given
+    Database database = getDatabase();
     database.saveInvoice(INVOICE_KRAKOW_2018);
     database.saveInvoice(INVOICE_GRUDZIADZ_2017);
 
@@ -64,6 +66,7 @@ public abstract class DatabaseTest {
   @Test
   public void shouldUpdateInvoice() throws Exception {
     //given
+    Database database = getDatabase();
     int index = database.saveInvoice(INVOICE_GRUDZIADZ_2017);
 
     //when

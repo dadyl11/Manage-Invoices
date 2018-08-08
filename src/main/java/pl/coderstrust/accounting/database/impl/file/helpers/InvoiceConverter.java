@@ -3,9 +3,11 @@ package pl.coderstrust.accounting.database.impl.file.helpers;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,11 @@ public class InvoiceConverter {
   }
 
   public List<Invoice> readJson(String json) throws IOException {
-    return mapper.readValue(json, new TypeReference<List<Invoice>>() {
-    });
+    try {
+      return mapper.readValue(json, new TypeReference<List<Invoice>>() {
+      });
+    } catch (MismatchedInputException exception) {
+      return new ArrayList<>();
+    }
   }
 }

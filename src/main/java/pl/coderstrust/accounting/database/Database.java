@@ -14,4 +14,5 @@ public interface Database {
 
   void removeInvoiceById(int id) throws IOException;
 
+  void clearDatabase();
 }

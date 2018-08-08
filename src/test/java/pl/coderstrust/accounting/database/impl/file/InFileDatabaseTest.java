@@ -1,49 +1,40 @@
 package pl.coderstrust.accounting.database.impl.file;
 
-import static pl.coderstrust.accounting.database.impl.file.helpers.IndexHelper.currentIdFile;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.junit.Before;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.database.impl.DatabaseTest;
-import pl.coderstrust.accounting.database.impl.file.helpers.FileHelper;
-import pl.coderstrust.accounting.database.impl.file.helpers.IndexHelper;
-import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class InFileDatabaseTest extends DatabaseTest {
 
   @Autowired
-  private FileHelper fileHelper;
-  private File dataBaseTestFile = new File("invoicesTest.json");
+  private InFileDatabase inFileDatabase;
 
   @Override
   protected Database getDatabase() {
-    fileHelper = new FileHelper();
-    InvoiceConverter invoiceConverter = new InvoiceConverter();
-    IndexHelper indexHelper = new IndexHelper();
-    return new InFileDatabase(fileHelper, invoiceConverter, indexHelper);
+    return inFileDatabase;
   }
 
   @Before
   public void beforeMethod() throws IOException {
-    fileHelper.setDataBaseFile(dataBaseTestFile);
-    File file = fileHelper.getDataBaseFile();
+    File file = inFileDatabase.getFileHelper().getDataBaseFile();
     if (file.exists()) {
-      file.delete();
-      System.out.println("File deleted");
+      inFileDatabase.clearDatabase();
     }
 
-    File file1 = currentIdFile;
+    File file1 = inFileDatabase.getIndexHelper().getCurrentIdFile();
     if (file1.exists()) {
       file1.delete();
-      System.out.println("File deleted");
     }
 
-    File file2 = file;
-    file2.createNewFile();
-    new FileHelper().writeInvoice("[]", file2);
   }
+
 }

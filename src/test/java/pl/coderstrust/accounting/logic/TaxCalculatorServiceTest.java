@@ -57,7 +57,7 @@ public class TaxCalculatorServiceTest {
   }
 
 
-  //TODO make test, implement REGEX
+  //TODO make Test, implement REGEX
   @Test
   public void shouldReturnIllegalArgumentExceptionWhenNipIsInvalid() {
   }

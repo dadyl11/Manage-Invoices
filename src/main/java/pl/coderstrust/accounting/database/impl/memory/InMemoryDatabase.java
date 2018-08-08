@@ -42,4 +42,9 @@ public class InMemoryDatabase implements Database {
   public void removeInvoiceById(int id) {
     invoices.remove(id);
   }
+
+  @Override
+  public void clearDatabase() {
+    invoices.clear();
+  }
 }
