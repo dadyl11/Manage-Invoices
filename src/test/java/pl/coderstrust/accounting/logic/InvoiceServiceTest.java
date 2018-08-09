@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -92,7 +93,7 @@ public class InvoiceServiceTest {
     List<Invoice> actual = invoiceService.getInvoices();
 
     //then
-    System.out.println(actual.toString()); //dlaczego tu sie nie zmienia na Krakow itp ten Chelmn.?
+    System.out.println(actual.toString());
     verify(databaseMock).updateInvoice(id, INVOICE_KRAKOW_2018);
   }
 
@@ -126,9 +127,17 @@ public class InvoiceServiceTest {
 
     //when
     Optional<Invoice> actual = invoiceService.getInvoiceById(id);
+    Optional<Invoice> expected = Optional.of(INVOICE_BYDGOSZCZ_2018);
 
     //then
-    assertTrue(actual.isPresent()); // TODO what if other was returned? :) add more assertions
+
+    assertTrue(actual.isPresent());
+    assertThat(actual, is(expected));
+    assertThat(actual.get(), is(expected.get()));
+    assertThat(actual.get(), is(INVOICE_BYDGOSZCZ_2018));
+    assertEquals(INVOICE_BYDGOSZCZ_2018, actual.get());
+    assertTrue(INVOICE_BYDGOSZCZ_2018.equals(actual.get()));
+    assertTrue(actual.get().equals(INVOICE_BYDGOSZCZ_2018));
   }
 
   @Test

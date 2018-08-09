@@ -1,6 +1,5 @@
 package pl.coderstrust.accounting.controller;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.junit.Assert.assertNotNull;
@@ -23,7 +22,6 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_RADOMSKO
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.time.LocalDate;
-import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,22 +57,17 @@ public class InvoiceControllerTest {
 
   @Test
   public void shouldCheckSaveInvoiceRequest() throws Exception {
-    String postResponse = mockMvc.perform(
-        post(INVOICE_SERVICE_PATH)
-            .content(convertToJson(INVOICE_KRAKOW_2018))
-            .contentType(JSON_CONTENT_TYPE)
-    )
-        .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+    callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    int secondPostResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
 
-    mockMvc
-        .perform(get(INVOICE_SERVICE_PATH))
+    String savedInvoice = mockMvc
+        .perform(get(INVOICE_SERVICE_PATH + "/" + secondPostResponse))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(1)))
-        .andExpect(jsonPath("$[0].id", is(Integer.valueOf(postResponse))))
-        .andExpect(jsonPath("$[0].identifier", is("1/2018")))
-        .andExpect(jsonPath("$[0].issueDate", is("2018-05-12")))
-        .andReturn().getResponse().getContentAsString(); // jacskon przekonwertowac.
+        .andReturn().getResponse().getContentAsString();
+
+    assertThat(savedInvoice, is(convertToJson(INVOICE_KRAKOW_2018)));
+
   }
 
   @Test
