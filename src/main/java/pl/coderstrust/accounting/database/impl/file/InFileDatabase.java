@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import pl.coderstrust.accounting.database.Database;
@@ -22,7 +21,6 @@ public class InFileDatabase implements Database {
   private InvoiceConverter invoiceConverter;
   private IndexHelper indexHelper;
 
-  @Autowired
   public InFileDatabase(FileHelper fileHelper,
       InvoiceConverter invoiceConverter, IndexHelper indexHelper) {
     this.fileHelper = fileHelper;
@@ -34,59 +32,49 @@ public class InFileDatabase implements Database {
   public int saveInvoice(Invoice invoice) throws IOException {
     int id = indexHelper.generateId();
     invoice.setId(id);
-    List<Invoice> allInvoices = getInvoices();
-    allInvoices.add(invoice);
-    fileHelper.writeInvoice(invoiceConverter.writeJson(allInvoices), fileHelper.getDataBaseFile());
+    fileHelper.writeInvoice(invoiceConverter.writeJson(invoice));
     return id;
   }
 
   @Override
   public List<Invoice> getInvoices() throws IOException {
-    String jsonList = fileHelper.readLines(fileHelper.getDataBaseFile());
-    return invoiceConverter.readJson(jsonList);
+    List<String> jsonList = fileHelper.readLines();
+    List<Invoice> invoiceList = new ArrayList<>();
+    for (String jsonInvoice : jsonList) {
+      invoiceList.add(invoiceConverter.readJson(jsonInvoice));
+    }
+    return invoiceList;
   }
 
   @Override
   public void updateInvoice(int id, Invoice invoice) throws IOException {
-    List<Invoice> invoiceList = new ArrayList<>(getInvoices());
-    for (int i = 0; i < invoiceList.size(); i++) {
-      Invoice inv = invoiceList.get(i);
-      if (inv.getId() == id) {
-        invoiceList.remove(inv);
-        invoice.setId(id);
-        invoiceList.add(invoice);
-      }
+    List<Invoice> invoiceList = getInvoices()
+        .stream()
+        .filter(n -> n.getId() != id)
+        .collect(Collectors.toList());
+    invoice.setId(id);
+    invoiceList.add(invoice);
+    fileHelper.clearDatabaseFile();
+    for (Invoice invoices : invoiceList) {
+      fileHelper.writeInvoice(invoiceConverter.writeJson(invoices));
     }
-    fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList),
-        fileHelper.getTemporaryDataBaseFile());
-    fileHelper.replaceInvoicesFiles();
   }
 
   @Override
   public void removeInvoiceById(int id) throws IOException {
-    List<Invoice> invoiceList = new ArrayList<>(getInvoices());
-    invoiceList = invoiceList.stream()
+    List<Invoice> invoiceList = getInvoices()
+        .stream()
         .filter(invoice -> invoice.getId() != id)
         .collect(Collectors.toList());
-    fileHelper.writeInvoice(invoiceConverter.writeJson(invoiceList),
-        fileHelper.getTemporaryDataBaseFile());
-    fileHelper.replaceInvoicesFiles();
+    fileHelper.clearDatabaseFile();
+    for (Invoice invoice : invoiceList) {
+      fileHelper.writeInvoice(invoiceConverter.writeJson(invoice));
+    }
   }
 
   @Override
   public void clearDatabase() {
-    fileHelper.getDataBaseFile().delete();
-  }
-
-  public FileHelper getFileHelper() {
-    return fileHelper;
-  }
-
-  public InvoiceConverter getInvoiceConverter() {
-    return invoiceConverter;
-  }
-
-  public IndexHelper getIndexHelper() {
-    return indexHelper;
+    fileHelper.clearDatabaseFile();
+    indexHelper.deleteIdFileContent();
   }
 }

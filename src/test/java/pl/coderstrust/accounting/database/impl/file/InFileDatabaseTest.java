@@ -1,7 +1,6 @@
 package pl.coderstrust.accounting.database.impl.file;
 
 
-import java.io.File;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -10,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.database.impl.DatabaseTest;
+import pl.coderstrust.accounting.database.impl.file.helpers.IndexHelper;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -17,6 +17,8 @@ public class InFileDatabaseTest extends DatabaseTest {
 
   @Autowired
   private InFileDatabase inFileDatabase;
+  @Autowired
+  private IndexHelper indexHelper;
 
   @Override
   protected Database getDatabase() {
@@ -25,16 +27,6 @@ public class InFileDatabaseTest extends DatabaseTest {
 
   @Before
   public void beforeMethod() throws IOException {
-    File file = inFileDatabase.getFileHelper().getDataBaseFile();
-    if (file.exists()) {
-      inFileDatabase.clearDatabase();
-    }
-
-    File file1 = inFileDatabase.getIndexHelper().getCurrentIdFile();
-    if (file1.exists()) {
-      file1.delete();
-    }
-
+    inFileDatabase.clearDatabase();
   }
-
 }

@@ -56,8 +56,6 @@ public class TaxCalculatorServiceTest {
     assertThat(actual, is(BigDecimal.ZERO));
   }
 
-
-  //TODO make Test, implement REGEX
   @Test
   public void shouldReturnIllegalArgumentExceptionWhenNipIsInvalid() {
   }

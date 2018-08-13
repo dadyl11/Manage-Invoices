@@ -3,9 +3,12 @@ package pl.coderstrust.accounting.database.impl.file.helpers;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,13 +18,13 @@ public class IndexHelper {
 
   private File currentIdFile;
 
-  @Autowired
   public IndexHelper(@Value("${idFilePath}") String path) {
     currentIdFile = new File(path);
   }
 
   public int generateId() throws IOException {
-    if (currentIdFile.exists()) {
+    Scanner scanner = new Scanner(currentIdFile);
+    if (scanner.hasNextInt()) {
       try (BufferedReader br = new BufferedReader(new FileReader(currentIdFile))) {
         int id = Integer.parseInt(br.readLine());
         saveId(id);
@@ -40,7 +43,11 @@ public class IndexHelper {
     }
   }
 
-  public File getCurrentIdFile() {
-    return currentIdFile;
+  public void deleteIdFileContent() {
+    try (PrintWriter printWriter = new PrintWriter(currentIdFile.getName())) {
+      printWriter.print("");
+    } catch (FileNotFoundException exception) {
+      exception.printStackTrace();
+    }
   }
 }

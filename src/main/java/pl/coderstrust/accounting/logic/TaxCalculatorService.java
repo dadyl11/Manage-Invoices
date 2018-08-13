@@ -46,7 +46,4 @@ public class TaxCalculatorService {
     return invoice.getTotalNetValue();
   }
 
-  public InvoiceService getInvoiceService() {
-    return invoiceService;
-  }
 }

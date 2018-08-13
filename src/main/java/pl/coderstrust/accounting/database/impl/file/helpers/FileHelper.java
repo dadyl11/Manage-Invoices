@@ -1,63 +1,54 @@
 package pl.coderstrust.accounting.database.impl.file.helpers;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FileHelper {
 
-  private File dataBaseFile;
-  private File temporaryDataBaseFile = new File("invoices.json");
+  private File databaseFile;
 
-  @Autowired
   public FileHelper(@Value("${filePath}") String path) {
-    this.dataBaseFile = new File(path);
+    this.databaseFile = new File(path);
   }
 
-  public void writeInvoice(String string, File path) {
-    try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path, false))) {
-      bufferedWriter.write(string + System.getProperty("line.separator"));
+  public void writeInvoice(String string) {
+    try (BufferedWriter bufferedWriter = new BufferedWriter(
+        new FileWriter(databaseFile.getPath(), true))) {
+      bufferedWriter.write(string);
+      bufferedWriter.newLine();
     } catch (IOException exception) {
       exception.printStackTrace();
     }
   }
 
-  public String readLines(File path) {
-    if (!path.exists()) {
-      return "";
+  public List<String> readLines() {
+    if (!databaseFile.exists()) {
+      return new ArrayList<>();
     }
-
-    String invoicesList = "";
-    String currentJson;
-    try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
-      while ((currentJson = bufferedReader.readLine()) != null) {
-        invoicesList = invoicesList + currentJson;
-      }
+    try {
+      return Files.lines(databaseFile.toPath()).collect(Collectors.toList());
     } catch (IOException exception) {
       exception.printStackTrace();
     }
-    return invoicesList;
+    return null;
   }
 
-  public void replaceInvoicesFiles() {
-    File temporaryFile = new File(temporaryDataBaseFile.getPath());
-    File originalDatabaseFile = new File(dataBaseFile.getPath());
-    originalDatabaseFile.delete();
-    temporaryFile.renameTo(dataBaseFile);
-  }
-
-  public File getDataBaseFile() {
-    return dataBaseFile;
-  }
-
-  public File getTemporaryDataBaseFile() {
-    return temporaryDataBaseFile;
+  public void clearDatabaseFile() {
+    try (PrintWriter printWriter = new PrintWriter(databaseFile.getName())) {
+      printWriter.print("");
+    } catch (FileNotFoundException exception) {
+      exception.printStackTrace();
+    }
   }
 }
