@@ -28,7 +28,7 @@ public class TaxCalculatorService {
       Function<Invoice, BigDecimal> taxOrIncomeToBigDecimal, String nip)
       throws IllegalArgumentException, IOException {
     if (!nipValidator.isValid(nip)) {
-      throw new IllegalArgumentException("Nip is incorrect");
+      throw new IllegalArgumentException("Nip does not match specified pattern");
     }
     return invoiceService
         .getInvoices()

@@ -20,13 +20,18 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 import pl.coderstrust.accounting.controller.NipValidator;
 import pl.coderstrust.accounting.model.Invoice;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+//TODO Swap DirtiesContext with cleardatabase() method after merging master with inFilenotdeleting invoices branch
+@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class TaxCalculatorServiceTest {
 
   private String drukpolNip = "5311688030";
@@ -37,23 +42,19 @@ public class TaxCalculatorServiceTest {
   @Rule
   public ExpectedException expectedException = ExpectedException.none();
 
-  @Mock
+  @Autowired
   InvoiceService invoiceService;
 
-  @Mock
-  NipValidator nipValidator;
-
-  @InjectMocks
+  @Autowired
   TaxCalculatorService taxCalculatorService;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
+
   @Test
   public void shouldReturnZeroWhenNoInvoices() throws IOException {
     //given
-    when(invoiceService.getInvoices()).thenReturn(new ArrayList<>());
-    when(nipValidator.isValid(wasbudNip)).thenReturn(true);
 
     //when
     BigDecimal actual = taxCalculatorService
@@ -68,10 +69,9 @@ public class TaxCalculatorServiceTest {
   public void shouldReturnIllegalArgumentExceptionWhenNipIsInvalid() throws IOException {
     //given
     String incorrectNip = "1234567890";
-    when(nipValidator.isValid(incorrectNip)).thenReturn(false);
 
     thrown.expect(IllegalArgumentException.class);
-    thrown.expectMessage("Nip is incorrect");
+    thrown.expectMessage("Nip does not match specified pattern");
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
             taxCalculatorService::taxToBigDecimal, incorrectNip);
@@ -80,9 +80,8 @@ public class TaxCalculatorServiceTest {
   @Test
   public void shouldReturnIncome() throws IOException {
     //given
-    List<Invoice> invoices = Arrays.asList(INVOICE_KRAKOW_2018, INVOICE_RADOMSKO_2018);
-    when(invoiceService.getInvoices()).thenReturn(invoices);
-    when(nipValidator.isValid(drutexNip)).thenReturn(true);
+    invoiceService.saveInvoice(INVOICE_KRAKOW_2018);
+    invoiceService.saveInvoice(INVOICE_RADOMSKO_2018);
 
     //when
     BigDecimal actual = taxCalculatorService
@@ -97,9 +96,8 @@ public class TaxCalculatorServiceTest {
   @Test
   public void shouldReturnCosts() throws IOException {
     //given
-    List<Invoice> invoices = Arrays.asList(INVOICE_KRAKOW_2018, INVOICE_CHELMNO_2016);
-    when(invoiceService.getInvoices()).thenReturn(invoices);
-    when(nipValidator.isValid(transpolNip)).thenReturn(true);
+    invoiceService.saveInvoice(INVOICE_KRAKOW_2018);
+    invoiceService.saveInvoice(INVOICE_CHELMNO_2016);
 
     //when
     BigDecimal actual = taxCalculatorService
@@ -113,10 +111,9 @@ public class TaxCalculatorServiceTest {
 
   @Test
   public void shouldReturnVatDue() throws IOException {
-    //giben
-    List<Invoice> invoices = Arrays.asList(INVOICE_RADOMSKO_2018, INVOICE_GRUDZIADZ_2017);
-    when(invoiceService.getInvoices()).thenReturn(invoices);
-    when(nipValidator.isValid(wasbudNip)).thenReturn(true);
+    //given
+    invoiceService.saveInvoice(INVOICE_RADOMSKO_2018);
+    invoiceService.saveInvoice(INVOICE_GRUDZIADZ_2017);
 
     //when
     BigDecimal actual = taxCalculatorService
@@ -130,10 +127,9 @@ public class TaxCalculatorServiceTest {
   @Test
   public void shouldReturnVatIncluded() throws IOException {
     //given
-    List<Invoice> invoices = Arrays
-        .asList(INVOICE_RADOMSKO_2018, INVOICE_GRUDZIADZ_2017, INVOICE_CHELMNO_2016);
-    when(invoiceService.getInvoices()).thenReturn(invoices);
-    when(nipValidator.isValid(drukpolNip)).thenReturn(true);
+    invoiceService.saveInvoice(INVOICE_RADOMSKO_2018);
+    invoiceService.saveInvoice(INVOICE_GRUDZIADZ_2017);
+    invoiceService.saveInvoice(INVOICE_CHELMNO_2016);
 
     //when
     BigDecimal actual = taxCalculatorService

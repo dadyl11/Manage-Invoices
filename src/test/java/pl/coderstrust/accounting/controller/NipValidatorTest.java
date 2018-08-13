@@ -5,40 +5,28 @@ import static org.junit.Assert.assertThat;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
-import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.rules.SpringClassRule;
-import org.springframework.test.context.junit4.rules.SpringMethodRule;
 
 
 @RunWith(JUnitParamsRunner.class)
-@SpringBootTest
+
 public class NipValidatorTest {
 
-  @ClassRule
-  public static final SpringClassRule SPRING_CLASS_RULE = new SpringClassRule();
-
-  @Rule
-  public final SpringMethodRule springMethodRule = new SpringMethodRule();
+  NipValidator nipValidator = new NipValidator();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  @Autowired
-  NipValidator nipValidator;
-
   @Test
-  @Parameters(method = "wrongNip")
-  public void shouldRejectWrongNip(String nip) {
+  @Parameters(method = "incorrectNip")
+  public void shouldRejectIncorrectNip(String nip) {
     assertThat(nipValidator.isValid(nip), is(false));
   }
 
-  public Object[] wrongNip() {
+  public Object[] incorrectNip() {
     return new String[]{
         "1234567890",
         "",
@@ -50,12 +38,12 @@ public class NipValidatorTest {
   }
 
   @Test
-  @Parameters(method = "rightNip")
-  public void shouldAcceptRightNip(String nip) {
+  @Parameters(method = "correctNip")
+  public void shouldAcceptCorrectNip(String nip) {
     assertThat(nipValidator.isValid(nip), is(true));
   }
 
-  public Object[] rightNip() {
+  public Object[] correctNip() {
     return new String[]{
         "6780038167",
         "8722410183",

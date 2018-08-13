@@ -25,7 +25,7 @@ public class NipValidator {
     for (int i = 0; i < 9; i++) {
       checksum += checksArray[i] * nipAsArray[i];
     }
-    int checksumActual = Integer.parseInt(nip.substring(9));
+    int checksumActual = nipAsArray[9];
     return checksum % 11 == checksumActual;
   }
 }
