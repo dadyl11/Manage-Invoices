@@ -1,9 +1,11 @@
 package pl.coderstrust.accounting.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Service;
+import pl.coderstrust.accounting.model.Company;
 import pl.coderstrust.accounting.model.Invoice;
 import pl.coderstrust.accounting.model.InvoiceEntry;
 
@@ -84,6 +86,15 @@ public class InvoiceValidator {
 
     if (invoice.getEntries().equals(Collections.emptyList())) {
       validationErrors.add("Entries not found");
+    }
+   // Company buyer = invoice.getBuyer();
+//    if (invoice.getBuyer().getDiscount().compareTo(new BigDecimal(1)) > 0) {
+//      validationErrors.add("Bad value of discount");
+//    }
+    //Company seller = invoice.getSeller();
+    //BigDecimal lll = new BigDecimal(1);
+    if (invoice.getSeller().getDiscount().compareTo(BigDecimal.ONE) > 0) {
+      validationErrors.add("Bad value of discount");
     }
 
     for (InvoiceEntry entry : invoice.getEntries()) {

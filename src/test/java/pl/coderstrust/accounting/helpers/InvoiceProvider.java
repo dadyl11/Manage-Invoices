@@ -273,4 +273,14 @@ public class InvoiceProvider {
       CompanyProvider.COMPANY_DRUTEX,
       CompanyProvider.COMPANY_WASBUD,
       ONE_LINK);
+
+  public static final Invoice INVOICE_BAD_DISCOUNT_VALUE = new Invoice(
+      14,
+      "sss999121",
+      LocalDate.of(2018, 06, 13),
+      LocalDate.of(2018, 05, 12),
+      "Berlin",
+      CompanyProvider.COMPANY_DRUTEX,
+      CompanyProvider.COMPANY_DISCOUNT_BIGGER_THAN_1,
+      ONE_LINK);
 }

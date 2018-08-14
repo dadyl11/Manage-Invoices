@@ -85,4 +85,12 @@ public class CompanyProvider {
       "58963",
       "Sosnowiec",
       null);
+
+  public static final Company COMPANY_DISCOUNT_BIGGER_THAN_1 = new Company(
+      "Flexi",
+      "1452369130",
+      "Lasy",
+      "58963",
+      "Sosnowiec",
+      BigDecimal.valueOf(1.3));
 }

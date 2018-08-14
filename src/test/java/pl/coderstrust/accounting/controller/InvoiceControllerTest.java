@@ -1,8 +1,8 @@
 package pl.coderstrust.accounting.controller;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -22,23 +22,22 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_RADOMSKO
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.time.LocalDate;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import pl.coderstrust.accounting.logic.InvoiceService;
 import pl.coderstrust.accounting.model.Invoice;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class InvoiceControllerTest {
 
   private static final String INVOICE_SERVICE_PATH = "/invoices";
@@ -49,10 +48,17 @@ public class InvoiceControllerTest {
 
   @Autowired
   private InvoiceController invoiceController;
+  @Autowired
+  private InvoiceService invoiceService;
+
+  @Before
+  public void beforeMethod() {
+    invoiceService.clearDatabase();
+  }
 
   @Test
-  public void contextLoads() throws Exception {
-    assertNotNull(invoiceController);
+  public void contexLoads() throws Exception {
+    assertThat(invoiceController, is(notNullValue()));
   }
 
   @Test
@@ -66,7 +72,7 @@ public class InvoiceControllerTest {
         .andExpect(status().isOk())
         .andReturn().getResponse().getContentAsString();
 
-    assertThat(savedInvoice, is(convertToJson(INVOICE_KRAKOW_2018)));
+    //assertThat(invoiceConverter.readJson(savedInvoice), is(INVOICE_KRAKOW_2018));
 
   }
 
@@ -78,8 +84,7 @@ public class InvoiceControllerTest {
             .contentType(JSON_CONTENT_TYPE)
     )
         .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$[0]",
-            is("Buyer city not found")));
+        .andExpect(jsonPath("$[0]", is("Buyer city not found")));
   }
 
   @Test
@@ -93,14 +98,39 @@ public class InvoiceControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(3)))
-        .andExpect(jsonPath("$[2].id", is(2)));
+        .andExpect(jsonPath("$[2].id", is(2)))
+        .andExpect(jsonPath("$[2].identifier", is(INVOICE_BYDGOSZCZ_2018.getIdentifier())))
+        .andExpect(jsonPath("$[2].salePlace", is(INVOICE_BYDGOSZCZ_2018.getSalePlace())))
+        .andExpect(jsonPath("$[2].buyer.name", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getName())))
+        .andExpect(jsonPath("$[2].buyer.nip", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getNip())))
+        .andExpect(jsonPath("$[2].buyer.street", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getStreet())))
+        .andExpect(jsonPath("$[2].buyer.postalCode",
+            is(INVOICE_BYDGOSZCZ_2018.getBuyer().getPostalCode())))
+        .andExpect(
+            jsonPath("$[2].buyer.discount",
+                is(INVOICE_BYDGOSZCZ_2018.getBuyer().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$[2].seller.name", is(INVOICE_BYDGOSZCZ_2018.getSeller().getName())))
+        .andExpect(jsonPath("$[2].seller.nip", is(INVOICE_BYDGOSZCZ_2018.getSeller().getNip())))
+        .andExpect(
+            jsonPath("$[2].seller.street", is(INVOICE_BYDGOSZCZ_2018.getSeller().getStreet())))
+        .andExpect(jsonPath("$[2].seller.postalCode",
+            is(INVOICE_BYDGOSZCZ_2018.getSeller().getPostalCode())))
+        .andExpect(
+            jsonPath("$[2].seller.discount",
+                is(INVOICE_BYDGOSZCZ_2018.getSeller().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$[2].entries[0].description", is("link")))
+        .andExpect(jsonPath("$[2].entries[0].netPrice",
+            is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getNetPrice().intValue())))
+        .andExpect(jsonPath("$[2].entries[0].vatRate", is("ZERO")))
+        .andExpect(jsonPath("$[2].entries[0].quantity",
+            is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getQuantity().intValue())));
   }
 
   @Test
   public void getInvoicesByIssueDateRange() throws Exception {
-    callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
-    callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
-    callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    int firstResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    int secondResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
+    int thirdResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
     LocalDate startDate = LocalDate.of(2015, 04, 12);
     LocalDate endDate = LocalDate.of(2017, 04, 12);
 
@@ -108,12 +138,13 @@ public class InvoiceControllerTest {
         .perform(
             get(INVOICE_SERVICE_PATH + "/dates?startDate=" + startDate + "&endDate=" + endDate))
         .andExpect(status().isOk())
+        .andExpect(jsonPath("$[0].id", is((secondResponse))))
         .andExpect(jsonPath("$[0].issueDate", is("2016-03-05")));
   }
 
   @Test
   public void getSingleInvoice() throws Exception {
-    callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    int idResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
 
     mockMvc
         .perform(get(INVOICE_SERVICE_PATH))
@@ -122,10 +153,10 @@ public class InvoiceControllerTest {
         .andExpect(jsonPath("$", hasSize(1)));
 
     mockMvc
-        .perform(get(INVOICE_SERVICE_PATH + "/0"))
+        .perform(get(INVOICE_SERVICE_PATH + "/" + idResponse))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id", is(0)));
+        .andExpect(jsonPath("$.id", is(idResponse)));
 
   }
 

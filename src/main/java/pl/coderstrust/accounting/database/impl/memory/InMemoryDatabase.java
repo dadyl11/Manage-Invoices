@@ -11,7 +11,7 @@ import pl.coderstrust.accounting.model.Invoice;
 @Repository
 public class InMemoryDatabase implements Database {
 
-  private final Map<Integer, Invoice> invoices = new HashMap<>();
+  private Map<Integer, Invoice> invoices = new HashMap<>();
   private int id = 0;
 
   private int getNextId() {
@@ -69,5 +69,6 @@ public class InMemoryDatabase implements Database {
   @Override
   public void clearDatabase() {
     invoices.clear();
+    id = 0;
   }
 }

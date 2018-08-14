@@ -3,6 +3,7 @@ package pl.coderstrust.accounting.controller;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.MockitoAnnotations.initMocks;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BAD_DISCOUNT_VALUE;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_CITY;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_DISCOUNT;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_NAME;
@@ -18,7 +19,6 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_IS
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_SALE_DATE;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_SALE_PLACE;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_SELLER_CITY;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_SELLER_DISCOUNT;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_SELLER_NAME;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_SELLER_NIP;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_SELLER_POSTAL_CODE;
@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import pl.coderstrust.accounting.model.Company;
 import pl.coderstrust.accounting.model.Invoice;
 
 @RunWith(JUnitParamsRunner.class)
@@ -42,6 +43,7 @@ public class InvoiceValidatorTest {
   private InvoiceValidator invoiceValidator;
   @Mock
   private Invoice invoice;
+  private Company company;
 
   @Before
   public void setup() {
@@ -50,7 +52,8 @@ public class InvoiceValidatorTest {
 
   @Parameters(method = "param")
   @Test
-  public void shouldCheckIfProvidedArgumentsPassTest(Invoice invoice, String message) {
+  public void shouldCheckIfReturnedValidationMessageMatchesToIncompleteInvoices(Invoice invoice,
+      String message) {
     //when
     List<String> actualTest = invoiceValidator.validate(invoice);
 
@@ -76,11 +79,11 @@ public class InvoiceValidatorTest {
         new Object[]{INVOICE_BLANK_SELLER_STREET, "Seller street not found"},
         new Object[]{INVOICE_BLANK_SELLER_POSTAL_CODE, "Seller postal code not found"},
         new Object[]{INVOICE_BLANK_SELLER_CITY, "Seller city not found"},
-        new Object[]{INVOICE_BLANK_SELLER_DISCOUNT, "Seller discount not found"},
         new Object[]{INVOICE_BLANK_ENTRY_DESCRIPTION, "Entry description not found"},
         new Object[]{INVOICE_BLANK_ENTRY_NET_PRICE, "Net price for entry not found"},
         new Object[]{INVOICE_BLANK_ENTRY_VAT_RATE, "Vat rate for entry not found"},
         new Object[]{INVOICE_BLANK_ENTRY_QUNTITY, "Quantity for entry not found"},
+        new Object[]{INVOICE_BAD_DISCOUNT_VALUE, "Bad value of discount"},
     };
   }
 }
