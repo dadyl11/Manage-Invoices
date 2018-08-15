@@ -18,37 +18,51 @@ public class FileHelper {
 
   private File databaseFile;
 
+
   public FileHelper(@Value("${filePath}") String path) {
     this.databaseFile = new File(path);
   }
 
   public void writeInvoice(String string) {
-    try (BufferedWriter bufferedWriter = new BufferedWriter(
-        new FileWriter(databaseFile.getPath(), true))) {
+    try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(databaseFile.getPath(), true))) {
       bufferedWriter.write(string);
       bufferedWriter.newLine();
     } catch (IOException exception) {
-      exception.printStackTrace();
+      throw new RuntimeException("Unable to write to a file");
     }
   }
 
-  public List<String> readLines() {
+  public List<String> lines() {
     if (!databaseFile.exists()) {
       return new ArrayList<>();
     }
     try {
       return Files.lines(databaseFile.toPath()).collect(Collectors.toList());
     } catch (IOException exception) {
-      exception.printStackTrace();
+      throw new RuntimeException("Unable to read a file");
     }
-    return null;
   }
+
+  public void replaceFileContent(List<String> invoices) {
+    File tempFile = new File(databaseFile.getName() + "tmp");
+    try {
+      Files.copy(databaseFile.toPath(), tempFile.toPath());
+    } catch (IOException exception) {
+      throw new RuntimeException("cannot copy temporary file content");
+    }
+    clearDatabaseFile();
+    for (String json : invoices) {
+      writeInvoice(json);
+    }
+    tempFile.delete();
+  }
+
 
   public void clearDatabaseFile() {
     try (PrintWriter printWriter = new PrintWriter(databaseFile.getName())) {
       printWriter.print("");
     } catch (FileNotFoundException exception) {
-      exception.printStackTrace();
+      throw new RuntimeException("File was not found");
     }
   }
 }

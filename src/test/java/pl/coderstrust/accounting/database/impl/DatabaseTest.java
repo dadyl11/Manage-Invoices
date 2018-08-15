@@ -34,7 +34,7 @@ public abstract class DatabaseTest {
 
   @Test
   public void shouldReturnCollectionsOfInvoices() throws Exception {
-
+    //given
     Database database = getDatabase();
 
     //when

@@ -1,7 +1,6 @@
 package pl.coderstrust.accounting.database.impl.file;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,51 +29,44 @@ public class InFileDatabase implements Database {
 
   @Override
   public int saveInvoice(Invoice invoice) throws IOException {
-    int id = indexHelper.generateId();
+    int id = indexHelper.getIdAndSaveToFile();
     invoice.setId(id);
-    fileHelper.writeInvoice(invoiceConverter.writeJson(invoice));
+    fileHelper.writeInvoice(invoiceConverter.convertInvoiceToJson(invoice));
     return id;
   }
 
   @Override
-  public List<Invoice> getInvoices() throws IOException {
-    List<String> jsonList = fileHelper.readLines();
-    List<Invoice> invoiceList = new ArrayList<>();
-    for (String jsonInvoice : jsonList) {
-      invoiceList.add(invoiceConverter.readJson(jsonInvoice));
-    }
-    return invoiceList;
+  public List<Invoice> getInvoices() {
+    return fileHelper.lines()
+        .stream()
+        .map(invoiceConverter::convertJsonToInvoice)
+        .collect(Collectors.toList());
   }
 
   @Override
   public void updateInvoice(int id, Invoice invoice) throws IOException {
-    List<Invoice> invoiceList = getInvoices()
-        .stream()
-        .filter(n -> n.getId() != id)
-        .collect(Collectors.toList());
+    List<Invoice> invoiceList = getAllInvoicesExceptWithSpecifiedId(id);
     invoice.setId(id);
     invoiceList.add(invoice);
-    fileHelper.clearDatabaseFile();
-    for (Invoice invoices : invoiceList) {
-      fileHelper.writeInvoice(invoiceConverter.writeJson(invoices));
-    }
+    fileHelper.replaceFileContent(invoiceConverter.convertListOfInvoicesToJsons(invoiceList));
   }
 
   @Override
   public void removeInvoiceById(int id) throws IOException {
-    List<Invoice> invoiceList = getInvoices()
+    List<String> jsonList = invoiceConverter.convertListOfInvoicesToJsons(getAllInvoicesExceptWithSpecifiedId(id));
+    fileHelper.replaceFileContent(jsonList);
+  }
+
+  private List<Invoice> getAllInvoicesExceptWithSpecifiedId(int id) {
+    return getInvoices()
         .stream()
-        .filter(invoice -> invoice.getId() != id)
+        .filter(n -> n.getId() != id)
         .collect(Collectors.toList());
-    fileHelper.clearDatabaseFile();
-    for (Invoice invoice : invoiceList) {
-      fileHelper.writeInvoice(invoiceConverter.writeJson(invoice));
-    }
   }
 
   @Override
   public void clearDatabase() {
     fileHelper.clearDatabaseFile();
-    indexHelper.deleteIdFileContent();
+    indexHelper.clearIdFile();
   }
 }

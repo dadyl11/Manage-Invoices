@@ -17,37 +17,43 @@ import org.springframework.stereotype.Service;
 public class IndexHelper {
 
   private File currentIdFile;
+  private int id;
 
   public IndexHelper(@Value("${idFilePath}") String path) {
     currentIdFile = new File(path);
+    id = generateId();
   }
 
-  public int generateId() throws IOException {
-    Scanner scanner = new Scanner(currentIdFile);
-    if (scanner.hasNextInt()) {
-      try (BufferedReader br = new BufferedReader(new FileReader(currentIdFile))) {
-        int id = Integer.parseInt(br.readLine());
-        saveId(id);
-        return id;
+  public int generateId() {
+    if (currentIdFile.exists()) {
+      try (Scanner scanner = new Scanner(currentIdFile)) {
+        if (scanner.hasNextInt()) {
+          id = scanner.nextInt();
+        }
+      } catch (FileNotFoundException exception) {
+        throw new RuntimeException("idFile not found");
       }
-    } else {
-      saveId(1);
-      return 1;
     }
+    return 1;
   }
 
-  public void saveId(int id) throws IOException {
-    try (BufferedWriter bw = new BufferedWriter(new FileWriter(currentIdFile))) {
-      String stringId = String.valueOf(id + 1);
-      bw.write(stringId);
-    }
+  public int getIdAndSaveToFile() {
+    id++;
+    writeToFile(String.valueOf(id));
+    return id;
   }
 
-  public void deleteIdFileContent() {
+  public void clearIdFile() {
+    writeToFile("");
+    id = 0;
+  }
+
+  public void writeToFile(String string) {
     try (PrintWriter printWriter = new PrintWriter(currentIdFile.getName())) {
-      printWriter.print("");
+      printWriter.print(string);
     } catch (FileNotFoundException exception) {
-      exception.printStackTrace();
+      throw new RuntimeException("idFile not found");
     }
+
   }
 }

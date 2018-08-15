@@ -31,8 +31,6 @@ import pl.coderstrust.accounting.model.Invoice;
 @AutoConfigureMockMvc
 public class TaxCalculatorControllerTest {
 
-  @Autowired
-  private InvoiceService invoiceService;
   private static final String TAXCALCULATOR_SERVICE_PATH = "/taxcalculator";
   private static final String INVOICE_SERVICE_PATH = "/invoices";
   private static final MediaType JSON_CONTENT_TYPE = MediaType.APPLICATION_JSON_UTF8;
@@ -40,6 +38,9 @@ public class TaxCalculatorControllerTest {
   private String wasbudNip = "1458796325";
   private String drutexNip = "1239514823";
   private String transpolNip = "6752339483";
+
+  @Autowired
+  private InvoiceService invoiceService;
 
   @Autowired
   private MockMvc mockMvc;
@@ -67,7 +68,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/getIncome/" + drutexNip))
+        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/Income/" + drutexNip))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(138)))
         .andReturn();
@@ -83,7 +84,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/getTaxDue/" + drutexNip))
+        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/TaxDue/" + drutexNip))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(19.2)))
         .andReturn();
@@ -99,7 +100,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/getTaxIncluded/" + drukpolNip))
+        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/TaxIncluded/" + drukpolNip))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(11.592)))
         .andReturn();
@@ -115,7 +116,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/getCosts/" + wasbudNip))
+        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/Costs/" + wasbudNip))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(70.2)))
         .andReturn();
@@ -131,7 +132,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/getProfit/" + wasbudNip))
+        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/Profit/" + wasbudNip))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(-19.8)))
         .andReturn();
@@ -147,7 +148,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/getVatPayable/" + wasbudNip))
+        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/VatPayable/" + wasbudNip))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(11.592)))
         .andReturn();
