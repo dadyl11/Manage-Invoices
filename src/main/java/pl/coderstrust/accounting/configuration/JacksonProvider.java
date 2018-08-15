@@ -1,4 +1,4 @@
-package pl.coderstrust.accounting.controller;
+package pl.coderstrust.accounting.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

@@ -17,8 +17,7 @@ public class TaxCalculatorController {
   private TaxCalculatorService taxCalculatorService;
 
   @Autowired
-  public TaxCalculatorController(
-      TaxCalculatorService taxCalculatorService) {
+  public TaxCalculatorController(TaxCalculatorService taxCalculatorService) {
   }
 
 

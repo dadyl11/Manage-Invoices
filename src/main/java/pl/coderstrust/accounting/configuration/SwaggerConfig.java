@@ -1,4 +1,4 @@
-package pl.coderstrust.accounting.controller;
+package pl.coderstrust.accounting.configuration;
 
 
 import java.util.Collections;
@@ -20,19 +20,19 @@ public class SwaggerConfig {
   public Docket api() {
     return new Docket(DocumentationType.SWAGGER_2)
         .select()
-        .apis(RequestHandlerSelectors.basePackage("com.example.controller"))
-        .paths(PathSelectors.ant("/foos/*"))
+        .apis(RequestHandlerSelectors.any())
+        .paths(PathSelectors.any())
         .build()
         .apiInfo(apiInfo());
   }
 
   private ApiInfo apiInfo() {
     return new ApiInfo(
-        "My REST API",
-        "Some custom description of API.",
-        "API TOS",
-        "Terms of service",
-        new Contact("John Doe", "www.example.com", "myeaddress@company.com"),
-        "License of API", "API license URL", Collections.emptyList());
+        "Invoices - Project 6 Mietek Mateusz Kamil",
+        "Invoice handling for SME's",
+        "alpha",
+        "",
+        new Contact("Mietek, Kamil, Mateusz", "", "myeaddress@company.com"),
+        "", "", Collections.emptyList());
   }
 }
