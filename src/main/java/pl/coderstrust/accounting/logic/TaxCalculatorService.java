@@ -34,7 +34,7 @@ public class TaxCalculatorService {
         .stream()
         .filter(invoice -> buyerOrSeller.test(invoice, nip))
         .map(taxOrIncomeToBigDecimal)
-        .reduce((sum, item) -> sum.add(item)) // TODO can be replaced with method reference?
+        .reduce(BigDecimal::add) // TODO can be replaced with method reference?
         .orElse(BigDecimal.ZERO);
   }
 

@@ -267,10 +267,10 @@ public class InvoiceProvider {
 
   public static final Invoice INVOICE_RADOMSKO_2018 = new Invoice(
       5,
-      "4/2018",
+      "5/2018",
       LocalDate.of(2018, 06, 13),
       LocalDate.of(2018, 05, 12),
-      "Bydgoszcz",
+      "Radomsko",
       CompanyProvider.COMPANY_DRUTEX,
       CompanyProvider.COMPANY_WASBUD,
       ONE_LINK);
