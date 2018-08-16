@@ -1,6 +1,9 @@
 package pl.coderstrust.accounting.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +22,7 @@ import pl.coderstrust.accounting.model.Invoice;
 
 @RequestMapping("/invoices")
 @RestController
+@Api(value = "/invoices", description = "Operations on invoices")
 public class InvoiceController {
 
   private InvoiceValidator invoiceValidator;
@@ -29,6 +33,10 @@ public class InvoiceController {
     this.invoiceValidator = invoiceValidator;
   }
 
+  @ApiOperation(value = "Saves invoice",
+      notes = "Returns ResponseEntity with id of saved invoice",
+      response = ResponseEntity.class,
+      responseContainer = "")
   @PostMapping
   public ResponseEntity<?> saveInvoice(@RequestBody Invoice invoice) throws IOException {
     List<String> validationResult = invoiceValidator.validate(invoice);
@@ -39,11 +47,20 @@ public class InvoiceController {
     return ResponseEntity.ok(invoice.getId());
   }
 
+
+  @ApiOperation(value = "Gets all invoices",
+      notes = "Returns list of all saved invoices",
+      response = Invoice.class,
+      responseContainer = "List")
   @GetMapping
   public List<Invoice> getInvoices() throws IOException {
     return invoiceService.getInvoices();
   }
 
+  @ApiOperation(value = "Gets all invoices from date range",
+      notes = "Returns list of all saved invoices within specified date range",
+      response = Invoice.class,
+      responseContainer = "List")
   @GetMapping("/dates")
   public List<Invoice> getInvoicesByIssueDateRange(
       @RequestParam(name = "startDate", required = true)
@@ -53,14 +70,22 @@ public class InvoiceController {
     return invoiceService.getInvoicesByIssueDate(startDate, endDate);
   }
 
+  @ApiOperation(value = "Gets single invoice",
+      notes = "Returns Invoice with ID specified",
+      response = ResponseEntity.class,
+      responseContainer = "")
   @GetMapping("/{id}")
-  public ResponseEntity<?> getSingleInvoice(@PathVariable(name = "id", required = true) int id) throws IOException {
-    if (invoiceService.getInvoiceById(id) == null) {
+  public ResponseEntity<Invoice> getSingleInvoice(@PathVariable(name = "id", required = true) int id) throws IOException {
+    if (!invoiceService.getInvoiceById(id).isPresent()) {
       return ResponseEntity.notFound().build();
     }
-    return ResponseEntity.ok(invoiceService.getInvoiceById(id));
+    return ResponseEntity.ok(invoiceService.getInvoiceById(id).get());
   }
 
+  @ApiOperation(value = "updates invoice",
+      notes = "Replaces invoice with specified id by invoice provided ",
+      response = ResponseEntity.class,
+      responseContainer = "")
   @PutMapping("/{id}")
   public ResponseEntity<?> updateInvoice(@PathVariable(name = "id", required = true) int id,
       @RequestBody Invoice invoice) throws IOException {
@@ -75,6 +100,10 @@ public class InvoiceController {
     return ResponseEntity.ok().build();
   }
 
+  @ApiOperation(value = "removes invoice",
+      notes = "Deletes invoice with specified id",
+      response = ResponseEntity.class,
+      responseContainer = "")
   @DeleteMapping("/{id}")
   public ResponseEntity<?> removeInvoiceById(@PathVariable(name = "id", required = true) int id) throws IOException {
     if (invoiceService.getInvoiceById(id) == null) {

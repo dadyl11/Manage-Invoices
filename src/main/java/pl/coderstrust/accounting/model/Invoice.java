@@ -1,7 +1,8 @@
 package pl.coderstrust.accounting.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,14 +11,24 @@ import java.util.Objects;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
+@ApiModel(value = "InvoiceModel", description = "Sample model for the Invoice")
 public class Invoice {
 
+  @ApiModelProperty(value = "id assigned by chosen database", example = "1")
   private int id;
+
+  @ApiModelProperty(value = "identifier provided by client", example = "6/2018")
   private String identifier;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+
+  @ApiModelProperty(value = "Date in YYYY_MM_DD", example = "2018-12-06")
   private LocalDate issueDate;
+
+  @ApiModelProperty(value = "Date in YYYY_MM_DD", example = "2018-12-06")
   private LocalDate saleDate;
+
+  @ApiModelProperty(value = "Location where sale was made", example = "Krakow")
   private String salePlace;
+
   private Company buyer;
   private Company seller;
   private List<InvoiceEntry> entries = new ArrayList<>();

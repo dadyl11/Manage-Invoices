@@ -1,14 +1,24 @@
 package pl.coderstrust.accounting.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@ApiModel(value = "InvoiceEntryModel", description = "Sample model for the Invoice Entry")
 public class InvoiceEntry {
 
+  @ApiModelProperty(value = "Description of entry", example = "Clamp")
   private String description;
+
+  @ApiModelProperty(value = "Bigdecimal, net price", example = "10")
   private BigDecimal netPrice;
+
+  @ApiModelProperty(value = "Vat rate enum", example = "REDUCED_8")
   private VatRate vatRate;
+
+  @ApiModelProperty(value = "quantity", example = "10")
   private BigDecimal quantity;
 
   public InvoiceEntry() {
