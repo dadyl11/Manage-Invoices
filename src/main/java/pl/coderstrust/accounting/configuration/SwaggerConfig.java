@@ -32,7 +32,7 @@ public class SwaggerConfig {
         "Invoice handling for SME's",
         "alpha",
         "",
-        new Contact("Mietek, Kamil, Mateusz", "", "myeaddress@company.com"),
+        new Contact("Mietek, Kamil, Mateusz", "", "mateuszgorski@gmail.com"),
         "", "", Collections.emptyList());
   }
 }
