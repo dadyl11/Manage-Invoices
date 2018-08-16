@@ -43,7 +43,7 @@ public class TaxCalculatorServiceTest {
   public ExpectedException expectedException = ExpectedException.none();
 
   @Autowired
-  InvoiceService invoiceService;
+  private InvoiceService invoiceService;
 
   @Autowired
   TaxCalculatorService taxCalculatorService;

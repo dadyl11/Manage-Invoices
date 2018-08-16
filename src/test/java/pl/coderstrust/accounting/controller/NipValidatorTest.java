@@ -10,12 +10,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-
 @RunWith(JUnitParamsRunner.class)
-
 public class NipValidatorTest {
 
-  NipValidator nipValidator = new NipValidator();
+  private NipValidator nipValidator = new NipValidator();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -33,7 +31,8 @@ public class NipValidatorTest {
         "31783123k",
         "   ",
         "@#$%F",
-        "000000000"
+        "000000000",
+        null
     };
   }
 
@@ -51,15 +50,4 @@ public class NipValidatorTest {
         "6770065406   ",
     };
   }
-
-  @Test
-  public void shouldThrowIllegalArgumentExceptionWhenNipIsNull() {
-    //given
-    thrown.expect(IllegalArgumentException.class);
-    thrown.expectMessage("Nip is null!");
-
-    //when
-    nipValidator.isValid(null);
-  }
-
 }
