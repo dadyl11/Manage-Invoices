@@ -12,7 +12,7 @@ public class CompanyProvider {
       "Grodzka",
       "32008",
       "Krakow",
-      BigDecimal.ZERO);
+      BigDecimal.valueOf(0.0));
 
   public static final Company COMPANY_DRUTEX = new Company(
       "Drutex",

@@ -55,9 +55,9 @@ public class InvoiceService {
   }
 
   public void removeInvoiceById(int id) throws IOException {
-    Optional<Invoice> invoiceFromDatabe = getInvoiceById(id);
+    Optional<Invoice> invoiceFromDatabase = getInvoiceById(id);
 
-    if (!invoiceFromDatabe.isPresent()) {
+    if (!invoiceFromDatabase.isPresent()) {
       throw new IllegalStateException("Invoice with id: " + id + " does not exist");
     }
     database.removeInvoiceById(id);

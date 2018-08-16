@@ -63,21 +63,34 @@ public class InvoiceControllerTest {
 
   @Test
   public void shouldCheckSaveInvoiceRequest() throws Exception {
-    callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
-    int secondPostResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    int firstResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    int secondResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
 
     String savedInvoice = mockMvc
-        .perform(get(INVOICE_SERVICE_PATH + "/" + secondPostResponse))
-        .andDo(print())
+        .perform(get(INVOICE_SERVICE_PATH + "/" + secondResponse))
         .andExpect(status().isOk())
+        .andExpect(jsonPath("$.id", is(secondResponse)))
+        .andExpect(jsonPath("$.identifier", is(INVOICE_BYDGOSZCZ_2018.getIdentifier())))
+        .andExpect(jsonPath("$.salePlace", is(INVOICE_BYDGOSZCZ_2018.getSalePlace())))
+        .andExpect(jsonPath("$.buyer.name", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getName())))
+        .andExpect(jsonPath("$.buyer.nip", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getNip())))
+        .andExpect(jsonPath("$.buyer.street", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getStreet())))
+        .andExpect(jsonPath("$.buyer.postalCode", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getPostalCode())))
+        .andExpect(jsonPath("$.buyer.discount", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$.seller.name", is(INVOICE_BYDGOSZCZ_2018.getSeller().getName())))
+        .andExpect(jsonPath("$.seller.nip", is(INVOICE_BYDGOSZCZ_2018.getSeller().getNip())))
+        .andExpect(jsonPath("$.seller.street", is(INVOICE_BYDGOSZCZ_2018.getSeller().getStreet())))
+        .andExpect(jsonPath("$.seller.postalCode", is(INVOICE_BYDGOSZCZ_2018.getSeller().getPostalCode())))
+        .andExpect(jsonPath("$.seller.discount", is(INVOICE_BYDGOSZCZ_2018.getSeller().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$.entries[0].description", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getDescription())))
+        .andExpect(jsonPath("$.entries[0].netPrice", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getNetPrice().intValue())))
+        .andExpect(jsonPath("$.entries[0].vatRate", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getVatRate().toString())))
+        .andExpect(jsonPath("$.entries[0].quantity", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getQuantity().intValue())))
         .andReturn().getResponse().getContentAsString();
-
-    //assertThat(invoiceConverter.readJson(savedInvoice), is(INVOICE_KRAKOW_2018));
-
   }
 
   @Test
-  public void shouldReturnErrorCausedByIncompletedInvoiceFie() throws Exception {
+  public void shouldReturnErrorMessageCorrespondingToIncorrectInvoiceField() throws Exception {
     mockMvc.perform(
         post(INVOICE_SERVICE_PATH)
             .content(convertToJson(INVOICE_BLANK_BUYER_CITY))
@@ -89,41 +102,32 @@ public class InvoiceControllerTest {
 
   @Test
   public void getInvoices() throws Exception {
-    callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
-    callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
-    callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    int firstResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    int secondResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
+    int thirdResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
 
     mockMvc
         .perform(get(INVOICE_SERVICE_PATH))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(3)))
-        .andExpect(jsonPath("$[2].id", is(2)))
+        .andExpect(jsonPath("$[2].id", is(thirdResponse)))
         .andExpect(jsonPath("$[2].identifier", is(INVOICE_BYDGOSZCZ_2018.getIdentifier())))
         .andExpect(jsonPath("$[2].salePlace", is(INVOICE_BYDGOSZCZ_2018.getSalePlace())))
         .andExpect(jsonPath("$[2].buyer.name", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getName())))
         .andExpect(jsonPath("$[2].buyer.nip", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getNip())))
         .andExpect(jsonPath("$[2].buyer.street", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getStreet())))
-        .andExpect(jsonPath("$[2].buyer.postalCode",
-            is(INVOICE_BYDGOSZCZ_2018.getBuyer().getPostalCode())))
-        .andExpect(
-            jsonPath("$[2].buyer.discount",
-                is(INVOICE_BYDGOSZCZ_2018.getBuyer().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$[2].buyer.postalCode", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getPostalCode())))
+        .andExpect(jsonPath("$[2].buyer.discount", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getDiscount().doubleValue())))
         .andExpect(jsonPath("$[2].seller.name", is(INVOICE_BYDGOSZCZ_2018.getSeller().getName())))
         .andExpect(jsonPath("$[2].seller.nip", is(INVOICE_BYDGOSZCZ_2018.getSeller().getNip())))
-        .andExpect(
-            jsonPath("$[2].seller.street", is(INVOICE_BYDGOSZCZ_2018.getSeller().getStreet())))
-        .andExpect(jsonPath("$[2].seller.postalCode",
-            is(INVOICE_BYDGOSZCZ_2018.getSeller().getPostalCode())))
-        .andExpect(
-            jsonPath("$[2].seller.discount",
-                is(INVOICE_BYDGOSZCZ_2018.getSeller().getDiscount().doubleValue())))
-        .andExpect(jsonPath("$[2].entries[0].description", is("link")))
-        .andExpect(jsonPath("$[2].entries[0].netPrice",
-            is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getNetPrice().intValue())))
-        .andExpect(jsonPath("$[2].entries[0].vatRate", is("ZERO")))
-        .andExpect(jsonPath("$[2].entries[0].quantity",
-            is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getQuantity().intValue())));
+        .andExpect(jsonPath("$[2].seller.street", is(INVOICE_BYDGOSZCZ_2018.getSeller().getStreet())))
+        .andExpect(jsonPath("$[2].seller.postalCode", is(INVOICE_BYDGOSZCZ_2018.getSeller().getPostalCode())))
+        .andExpect(jsonPath("$[2].seller.discount", is(INVOICE_BYDGOSZCZ_2018.getSeller().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$[2].entries[0].description", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getDescription())))
+        .andExpect(jsonPath("$[2].entries[0].netPrice", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getNetPrice().intValue())))
+        .andExpect(jsonPath("$[2].entries[0].vatRate", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getVatRate().toString())))
+        .andExpect(jsonPath("$[2].entries[0].quantity", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getQuantity().intValue())));
   }
 
   @Test
@@ -133,13 +137,29 @@ public class InvoiceControllerTest {
     int thirdResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
     LocalDate startDate = LocalDate.of(2015, 04, 12);
     LocalDate endDate = LocalDate.of(2017, 04, 12);
-
+    String url = String.format("/dates?startDate=%1$s&endDate=%2$s", startDate, endDate);
     mockMvc
         .perform(
-            get(INVOICE_SERVICE_PATH + "/dates?startDate=" + startDate + "&endDate=" + endDate))
+            get(INVOICE_SERVICE_PATH + url))
         .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(1)))
         .andExpect(jsonPath("$[0].id", is((secondResponse))))
-        .andExpect(jsonPath("$[0].issueDate", is("2016-03-05")));
+        .andExpect(jsonPath("$[0].identifier", is(INVOICE_CHELMNO_2016.getIdentifier())))
+        .andExpect(jsonPath("$[0].salePlace", is(INVOICE_CHELMNO_2016.getSalePlace())))
+        .andExpect(jsonPath("$[0].buyer.name", is(INVOICE_CHELMNO_2016.getBuyer().getName())))
+        .andExpect(jsonPath("$[0].buyer.nip", is(INVOICE_CHELMNO_2016.getBuyer().getNip())))
+        .andExpect(jsonPath("$[0].buyer.street", is(INVOICE_CHELMNO_2016.getBuyer().getStreet())))
+        .andExpect(jsonPath("$[0].buyer.postalCode", is(INVOICE_CHELMNO_2016.getBuyer().getPostalCode())))
+        .andExpect(jsonPath("$[0].buyer.discount", is(INVOICE_CHELMNO_2016.getBuyer().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$[0].seller.name", is(INVOICE_CHELMNO_2016.getSeller().getName())))
+        .andExpect(jsonPath("$[0].seller.nip", is(INVOICE_CHELMNO_2016.getSeller().getNip())))
+        .andExpect(jsonPath("$[0].seller.street", is(INVOICE_CHELMNO_2016.getSeller().getStreet())))
+        .andExpect(jsonPath("$[0].seller.postalCode", is(INVOICE_CHELMNO_2016.getSeller().getPostalCode())))
+        .andExpect(jsonPath("$[0].seller.discount", is(INVOICE_CHELMNO_2016.getSeller().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$[0].entries[0].description", is(INVOICE_CHELMNO_2016.getEntries().get(0).getDescription())))
+        .andExpect(jsonPath("$[0].entries[0].netPrice", is(INVOICE_CHELMNO_2016.getEntries().get(0).getNetPrice().intValue())))
+        .andExpect(jsonPath("$[0].entries[0].vatRate", is(INVOICE_CHELMNO_2016.getEntries().get(0).getVatRate().toString())))
+        .andExpect(jsonPath("$[0].entries[0].quantity", is(INVOICE_CHELMNO_2016.getEntries().get(0).getQuantity().intValue())));
   }
 
   @Test
@@ -147,17 +167,25 @@ public class InvoiceControllerTest {
     int idResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
 
     mockMvc
-        .perform(get(INVOICE_SERVICE_PATH))
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(1)));
-
-    mockMvc
         .perform(get(INVOICE_SERVICE_PATH + "/" + idResponse))
-        .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.id", is(idResponse)));
-
+        .andExpect(jsonPath("$.id", is(idResponse)))
+        .andExpect(jsonPath("$.identifier", is(INVOICE_KRAKOW_2018.getIdentifier())))
+        .andExpect(jsonPath("$.salePlace", is(INVOICE_KRAKOW_2018.getSalePlace())))
+        .andExpect(jsonPath("$.buyer.name", is(INVOICE_KRAKOW_2018.getBuyer().getName())))
+        .andExpect(jsonPath("$.buyer.nip", is(INVOICE_KRAKOW_2018.getBuyer().getNip())))
+        .andExpect(jsonPath("$.buyer.street", is(INVOICE_KRAKOW_2018.getBuyer().getStreet())))
+        .andExpect(jsonPath("$.buyer.postalCode", is(INVOICE_KRAKOW_2018.getBuyer().getPostalCode())))
+        .andExpect(jsonPath("$.buyer.discount", is(INVOICE_KRAKOW_2018.getBuyer().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$.seller.name", is(INVOICE_KRAKOW_2018.getSeller().getName())))
+        .andExpect(jsonPath("$.seller.nip", is(INVOICE_KRAKOW_2018.getSeller().getNip())))
+        .andExpect(jsonPath("$.seller.street", is(INVOICE_KRAKOW_2018.getSeller().getStreet())))
+        .andExpect(jsonPath("$.seller.postalCode", is(INVOICE_KRAKOW_2018.getSeller().getPostalCode())))
+        .andExpect(jsonPath("$.seller.discount", is(INVOICE_KRAKOW_2018.getSeller().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$.entries[0].description", is(INVOICE_KRAKOW_2018.getEntries().get(0).getDescription())))
+        .andExpect(jsonPath("$.entries[0].netPrice", is(INVOICE_KRAKOW_2018.getEntries().get(0).getNetPrice().intValue())))
+        .andExpect(jsonPath("$.entries[0].vatRate", is(INVOICE_KRAKOW_2018.getEntries().get(0).getVatRate().toString())))
+        .andExpect(jsonPath("$.entries[0].quantity", is(INVOICE_KRAKOW_2018.getEntries().get(0).getQuantity().intValue())));
   }
 
   @Test
@@ -174,16 +202,29 @@ public class InvoiceControllerTest {
         .perform(put(INVOICE_SERVICE_PATH + "/" + invoiceId)
             .contentType(JSON_CONTENT_TYPE)
             .content(convertToJson(INVOICE_BYDGOSZCZ_2018)))
-        .andDo(print())
         .andExpect(status().isOk());
 
     mockMvc
         .perform(get(INVOICE_SERVICE_PATH + "/" + invoiceId))
         .andExpect(status().isOk())
         .andExpect(content().contentType(JSON_CONTENT_TYPE))
-        .andExpect(jsonPath("$.id", is(0)))
-        .andExpect(jsonPath("$.identifier", is("4/2018")));
-    //.andExpect(jsonPath("$.buyer", is(equalTo(convertToJson(COMPANY_WASBUD)))));
+        .andExpect(jsonPath("$.id", is(invoiceId)))
+        .andExpect(jsonPath("$.identifier", is(INVOICE_BYDGOSZCZ_2018.getIdentifier())))
+        .andExpect(jsonPath("$.salePlace", is(INVOICE_BYDGOSZCZ_2018.getSalePlace())))
+        .andExpect(jsonPath("$.buyer.name", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getName())))
+        .andExpect(jsonPath("$.buyer.nip", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getNip())))
+        .andExpect(jsonPath("$.buyer.street", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getStreet())))
+        .andExpect(jsonPath("$.buyer.postalCode", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getPostalCode())))
+        .andExpect(jsonPath("$.buyer.discount", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$.seller.name", is(INVOICE_BYDGOSZCZ_2018.getSeller().getName())))
+        .andExpect(jsonPath("$.seller.nip", is(INVOICE_BYDGOSZCZ_2018.getSeller().getNip())))
+        .andExpect(jsonPath("$.seller.street", is(INVOICE_BYDGOSZCZ_2018.getSeller().getStreet())))
+        .andExpect(jsonPath("$.seller.postalCode", is(INVOICE_BYDGOSZCZ_2018.getSeller().getPostalCode())))
+        .andExpect(jsonPath("$.seller.discount", is(INVOICE_BYDGOSZCZ_2018.getSeller().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$.entries[0].description", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getDescription())))
+        .andExpect(jsonPath("$.entries[0].netPrice", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getNetPrice().intValue())))
+        .andExpect(jsonPath("$.entries[0].vatRate", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getVatRate().toString())))
+        .andExpect(jsonPath("$.entries[0].quantity", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getQuantity().intValue())));
   }
 
   @Test
@@ -192,7 +233,6 @@ public class InvoiceControllerTest {
         .perform(put(INVOICE_SERVICE_PATH + "/0")
             .content(convertToJson(INVOICE_CHELMNO_2016))
             .contentType(JSON_CONTENT_TYPE))
-        .andDo(print())
         .andExpect(status().isNotFound());
   }
 
@@ -205,7 +245,6 @@ public class InvoiceControllerTest {
         .perform(put(INVOICE_SERVICE_PATH + "/" + invoiceId)
             .contentType(JSON_CONTENT_TYPE)
             .content(convertToJson(INVOICE_BLANK_IDENTIFIER)))
-        .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$[0]",
             is("Identifier not found")));
@@ -213,18 +252,16 @@ public class InvoiceControllerTest {
 
   @Test
   public void removeInvoiceById() throws Exception {
-    callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
-    callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
-    callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    int firstResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    int secondResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
+    int thirdResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
 
     mockMvc
-        .perform(delete(INVOICE_SERVICE_PATH + "/1"))
-        .andDo(print())
+        .perform(delete(INVOICE_SERVICE_PATH + "/" + firstResponse))
         .andExpect(status().isOk());
 
     mockMvc
         .perform(delete(INVOICE_SERVICE_PATH + "/5"))
-        .andDo(print())
         .andExpect(status().isNotFound());
 
     mockMvc

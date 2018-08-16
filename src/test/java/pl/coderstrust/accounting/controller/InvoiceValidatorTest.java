@@ -52,7 +52,7 @@ public class InvoiceValidatorTest {
 
   @Parameters(method = "param")
   @Test
-  public void shouldCheckIfReturnedValidationMessageMatchesToIncompleteInvoices(Invoice invoice,
+  public void shouldCheckIfReturnedValidationMessageCorrespondsToIncompleteInvoices(Invoice invoice,
       String message) {
     //when
     List<String> actualTest = invoiceValidator.validate(invoice);
