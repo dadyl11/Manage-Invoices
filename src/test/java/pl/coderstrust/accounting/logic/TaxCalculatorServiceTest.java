@@ -66,7 +66,7 @@ public class TaxCalculatorServiceTest {
     // TODO use Invoice object not hardcoded nip
 
     //then
-    assertThat(actual, is(BigDecimal.valueOf(138)));
+    assertThat(actual, is(BigDecimal.valueOf(138.0)));
   }
 
   @Test
@@ -81,7 +81,7 @@ public class TaxCalculatorServiceTest {
             taxCalculatorService::incomeToBigDecimal, transpolNip);
 
     //then
-    assertThat(actual, is(BigDecimal.valueOf(138)));
+    assertThat(actual, is(BigDecimal.valueOf(138.0)));
   }
 
   @Test

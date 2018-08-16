@@ -73,7 +73,6 @@ public class InvoiceValidatorTest {
         new Object[]{INVOICE_BLANK_BUYER_STREET, "Buyer street not found"},
         new Object[]{INVOICE_BLANK_BUYER_POSTAL_CODE, "Buyer postal code not found"},
         new Object[]{INVOICE_BLANK_BUYER_CITY, "Buyer city not found"},
-        new Object[]{INVOICE_BLANK_BUYER_DISCOUNT, "Buyer discount not found"},
         new Object[]{INVOICE_BLANK_SELLER_NAME, "Seller name not found"},
         new Object[]{INVOICE_BLANK_SELLER_NIP, "Seller nip not found"},
         new Object[]{INVOICE_BLANK_SELLER_STREET, "Seller street not found"},
