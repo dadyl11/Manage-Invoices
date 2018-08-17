@@ -2,7 +2,6 @@ package pl.coderstrust.accounting.logic;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.when;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_2016;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
@@ -10,44 +9,31 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_RADOMSKO
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import pl.coderstrust.accounting.model.Invoice;
+import pl.coderstrust.accounting.controller.NipValidator;
+import pl.coderstrust.accounting.database.impl.memory.InMemoryDatabase;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
 public class TaxCalculatorServiceTest {
 
-  private String drukpolNip = "1452369135";
-  private String wasbudNip = "1458796325";
-  private String drutexNip = "1239514823";
-  private String transpolNip = "6752339483";
+  // TODO do not hardcode values - use constants from InvoiceTestProvider
+  private String drukpolNip = "5311688030";
+  private String wasbudNip = "6271206366";
+  private String drutexNip = "8421622720";
+  private String transpolNip = "5621760000";
 
   @Rule
-  public ExpectedException expectedException = ExpectedException.none();
+  public ExpectedException thrown = ExpectedException.none();
 
-  @Mock
-  InvoiceService invoiceService;
-
-  @InjectMocks
-  TaxCalculatorService taxCalculatorService;
+  private InvoiceService invoiceService = new InvoiceService(new InMemoryDatabase());
+  private TaxCalculatorService taxCalculatorService = new TaxCalculatorService(invoiceService, new NipValidator());
 
   @Test
   public void shouldReturnZeroWhenNoInvoices() throws IOException {
     //given
-    when(invoiceService.getInvoices()).thenReturn(new ArrayList<>());
 
     //when
-
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
             taxCalculatorService::taxToBigDecimal, wasbudNip);
@@ -56,53 +42,57 @@ public class TaxCalculatorServiceTest {
     assertThat(actual, is(BigDecimal.ZERO));
   }
 
-
-  //TODO make test, implement REGEX
   @Test
-  public void shouldReturnIllegalArgumentExceptionWhenNipIsInvalid() {
+  public void shouldReturnIllegalArgumentExceptionWhenNipIsInvalid() throws IOException {
+    //given
+    String incorrectNip = "1234567890";
+
+    thrown.expect(IllegalArgumentException.class);
+    thrown.expectMessage("Nip does not match specified pattern");
+
+    // TODO // when // then missing
+    BigDecimal actual = taxCalculatorService
+        .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
+            taxCalculatorService::taxToBigDecimal, incorrectNip);
   }
 
   @Test
   public void shouldReturnIncome() throws IOException {
-    //when
-    List<Invoice> invoices = Arrays.asList(INVOICE_KRAKOW_2018, INVOICE_RADOMSKO_2018);
-    when(invoiceService.getInvoices()).thenReturn(invoices);
-
     //given
+    invoiceService.saveInvoice(INVOICE_KRAKOW_2018);
+    invoiceService.saveInvoice(INVOICE_RADOMSKO_2018);
 
+    //when
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterSeller,
             taxCalculatorService::incomeToBigDecimal, drutexNip);
 
     //then
-    assertThat(actual, is(BigDecimal.valueOf(138)));
+    assertThat(actual, is(BigDecimal.valueOf(138.0)));
   }
-
 
   @Test
   public void shouldReturnCosts() throws IOException {
-    //when
-    List<Invoice> invoices = Arrays.asList(INVOICE_KRAKOW_2018, INVOICE_CHELMNO_2016);
-    when(invoiceService.getInvoices()).thenReturn(invoices);
-
     //given
+    invoiceService.saveInvoice(INVOICE_KRAKOW_2018);
+    invoiceService.saveInvoice(INVOICE_CHELMNO_2016);
 
+    //when
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
             taxCalculatorService::incomeToBigDecimal, transpolNip);
 
     //then
-    assertThat(actual, is(BigDecimal.valueOf(138)));
+    assertThat(actual, is(BigDecimal.valueOf(138.0)));
   }
-
 
   @Test
   public void shouldReturnVatDue() throws IOException {
-    //when
-    List<Invoice> invoices = Arrays.asList(INVOICE_RADOMSKO_2018, INVOICE_GRUDZIADZ_2017);
-    when(invoiceService.getInvoices()).thenReturn(invoices);
-
     //given
+    invoiceService.saveInvoice(INVOICE_RADOMSKO_2018);
+    invoiceService.saveInvoice(INVOICE_GRUDZIADZ_2017);
+
+    //when
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterSeller,
             taxCalculatorService::taxToBigDecimal, wasbudNip);
@@ -113,18 +103,17 @@ public class TaxCalculatorServiceTest {
 
   @Test
   public void shouldReturnVatIncluded() throws IOException {
-    //when
-    List<Invoice> invoices = Arrays
-        .asList(INVOICE_RADOMSKO_2018, INVOICE_GRUDZIADZ_2017, INVOICE_CHELMNO_2016);
-    when(invoiceService.getInvoices()).thenReturn(invoices);
-
     //given
+    invoiceService.saveInvoice(INVOICE_RADOMSKO_2018);
+    invoiceService.saveInvoice(INVOICE_GRUDZIADZ_2017);
+    invoiceService.saveInvoice(INVOICE_CHELMNO_2016);
 
+    // when
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
             taxCalculatorService::taxToBigDecimal, drukpolNip);
 
-    //then
+    // then
     assertThat(actual, is(BigDecimal.valueOf(25.032)));
   }
 }

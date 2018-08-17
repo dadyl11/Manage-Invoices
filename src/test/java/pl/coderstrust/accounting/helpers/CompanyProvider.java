@@ -5,17 +5,18 @@ import pl.coderstrust.accounting.model.Company;
 
 public class CompanyProvider {
 
+  // TODO use Builder instead of constructor - with so many argument it's hard to know what is what.
   public static final Company COMPANY_TRANSPOL = new Company(
       "Transpol",
-      "6752339483",
+      "5621760000",
       "Grodzka",
       "32008",
       "Krakow",
-      BigDecimal.ZERO);
+      BigDecimal.valueOf(0.0));
 
   public static final Company COMPANY_DRUTEX = new Company(
       "Drutex",
-      "1239514823",
+      "8421622720",
       "Rybna",
       "31158",
       "Rybnik",
@@ -23,7 +24,7 @@ public class CompanyProvider {
 
   public static final Company COMPANY_WASBUD = new Company(
       "WasBud",
-      "1458796325",
+      "6271206366",
       "Targowa",
       "15689",
       "warszawa",
@@ -31,7 +32,7 @@ public class CompanyProvider {
 
   public static final Company COMPANY_DRUKPOL = new Company(
       "DrukPol",
-      "1452369135",
+      "5311688030",
       "Bolesnej Meki Panskiej",
       "58963",
       "Sosnowiec",
@@ -84,4 +85,12 @@ public class CompanyProvider {
       "58963",
       "Sosnowiec",
       null);
+
+  public static final Company COMPANY_DISCOUNT_BIGGER_THAN_1 = new Company(
+      "Flexi",
+      "1452369130",
+      "Lasy",
+      "58963",
+      "Sosnowiec",
+      BigDecimal.valueOf(1.3));
 }

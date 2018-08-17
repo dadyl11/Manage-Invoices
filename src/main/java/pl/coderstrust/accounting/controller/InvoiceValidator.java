@@ -1,5 +1,6 @@
 package pl.coderstrust.accounting.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,10 +11,11 @@ import pl.coderstrust.accounting.model.InvoiceEntry;
 @Service
 public class InvoiceValidator {
 
+  // TODO why do you need this declaration? :)
   public InvoiceValidator() {
   }
 
-  public List<String> validate(Invoice invoice) {
+  List<String> validate(Invoice invoice) {
     List<String> validationErrors = new ArrayList<>();
 
     if (invoice.getIdentifier() == null || invoice.getIdentifier().trim().equals("")) {
@@ -32,6 +34,7 @@ public class InvoiceValidator {
       validationErrors.add("Sale place not found");
     }
 
+    // TODO please split this class into multiple validators - e.g. Company validator and InvoiceEntry Valiator
     if (invoice.getBuyer().getName() == null || invoice.getBuyer().getName().equals("")) {
       validationErrors.add("Buyer name not found");
     }
@@ -39,6 +42,8 @@ public class InvoiceValidator {
     if (invoice.getBuyer().getNip() == null || invoice.getBuyer().getNip().equals("")) {
       validationErrors.add("Buyer nip not found");
     }
+
+    // TODO why don't you validate NIP correctness
 
     if (invoice.getBuyer().getStreet() == null || invoice.getBuyer().getStreet().equals("")) {
       validationErrors.add("Buyer street not found");
@@ -53,8 +58,8 @@ public class InvoiceValidator {
       validationErrors.add("Buyer city not found");
     }
 
-    if (invoice.getBuyer().getDiscount() == null) {
-      validationErrors.add("Buyer discount not found");
+    if (invoice.getBuyer().getDiscount().compareTo(BigDecimal.ONE) > 0) {
+      validationErrors.add("Bad value of discount");
     }
 
     if (invoice.getSeller().getName() == null || invoice.getSeller().getName().equals("")) {
@@ -64,6 +69,7 @@ public class InvoiceValidator {
     if (invoice.getSeller().getNip() == null || invoice.getSeller().getNip().equals("")) {
       validationErrors.add("Seller nip not found");
     }
+    // TODO why don't you validate NIP correctness
 
     if (invoice.getSeller().getStreet() == null || invoice.getSeller().getStreet().equals("")) {
       validationErrors.add("Seller street not found");
@@ -78,8 +84,8 @@ public class InvoiceValidator {
       validationErrors.add("Seller city not found");
     }
 
-    if (invoice.getSeller().getDiscount() == null) {
-      validationErrors.add("Seller discount not found");
+    if (invoice.getSeller().getDiscount().compareTo(BigDecimal.ONE) > 0) {
+      validationErrors.add("Bad value of discount"); // TODO bad can be behavior, value can be incorrect :)
     }
 
     if (invoice.getEntries().equals(Collections.emptyList())) {

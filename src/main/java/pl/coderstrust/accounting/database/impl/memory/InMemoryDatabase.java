@@ -11,7 +11,7 @@ import pl.coderstrust.accounting.model.Invoice;
 @Repository
 public class InMemoryDatabase implements Database {
 
-  private final Map<Integer, Invoice> invoices = new HashMap<>();
+  private Map<Integer, Invoice> invoices = new HashMap<>();
   private int id = 0;
 
   private int getNextId() {
@@ -20,9 +20,21 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public int saveInvoice(Invoice invoice) {
-    invoice.setId(getNextId());
-    invoices.put(invoice.getId(), invoice);
-    return invoice.getId();
+    //invoice.setId(getNextId()); // TODO you cannot modify object you received - good example is Invoice provider -
+    // with each test you are changing the invoice so other tests are failing... There is also other aspect of that
+    // security - you keep in your collection the same object someone has reference too and he can manipulate this object :)
+    // Please correct workaround below to do deep copy (not shallow one as now) - best do copy constructor in class
+    Invoice internalInvoice = new Invoice();
+    internalInvoice.setId(getNextId());
+    internalInvoice.setBuyer(invoice.getBuyer());
+    internalInvoice.setSeller(invoice.getSeller());
+    internalInvoice.setIdentifier(invoice.getIdentifier());
+    internalInvoice.setIssueDate(invoice.getIssueDate());
+    internalInvoice.setEntries(invoice.getEntries());
+    internalInvoice.setSaleDate(invoice.getSaleDate());
+    internalInvoice.setSalePlace(invoice.getSalePlace());
+    invoices.put(internalInvoice.getId(), internalInvoice);
+    return internalInvoice.getId();
   }
 
   @Override
@@ -32,12 +44,31 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public void updateInvoice(int id, Invoice invoice) {
-    invoice.setId(id);
-    invoices.put(id, invoice);
+    //invoice.setId(id); // TODO you cannot modify object you received - good example is Invoice provider -
+    // with each test you are changing the invoice so other tests are failing... There is also other aspect of that
+    // security - you keep in your collection the same object someone has reference too and he can manipulate this object :)
+    // Please correct workaround below to do deep copy (not shallow one as now) - best do copy constructor in class
+
+    Invoice internalInvoice = new Invoice();
+    internalInvoice.setId(id);
+    internalInvoice.setBuyer(invoice.getBuyer());
+    internalInvoice.setSeller(invoice.getSeller());
+    internalInvoice.setIdentifier(invoice.getIdentifier());
+    internalInvoice.setIssueDate(invoice.getIssueDate());
+    internalInvoice.setEntries(invoice.getEntries());
+    internalInvoice.setSaleDate(invoice.getSaleDate());
+    internalInvoice.setSalePlace(invoice.getSalePlace());
+    invoices.put(id, internalInvoice);
   }
 
   @Override
   public void removeInvoiceById(int id) {
     invoices.remove(id);
+  }
+
+  @Override
+  public void clearDatabase() {
+    invoices.clear();
+    id = 0;
   }
 }

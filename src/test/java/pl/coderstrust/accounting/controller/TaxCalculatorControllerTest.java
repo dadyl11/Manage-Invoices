@@ -7,38 +7,39 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static pl.coderstrust.accounting.controller.JacksonProvider.getObjectMapper;
+import static pl.coderstrust.accounting.configuration.JacksonProvider.getObjectMapper;
+import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_DRUKPOL;
+import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_DRUTEX;
+import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_WASBUD;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BYDGOSZCZ_2018;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import pl.coderstrust.accounting.logic.InvoiceService;
 import pl.coderstrust.accounting.model.Invoice;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 public class TaxCalculatorControllerTest {
 
-  private static final String TAXCALCULATOR_SERVICE_PATH = "/taxcalculator";
+  private static final String TAX_CALCULATOR_SERVICE_PATH = "/taxcalculator";
   private static final String INVOICE_SERVICE_PATH = "/invoices";
   private static final MediaType JSON_CONTENT_TYPE = MediaType.APPLICATION_JSON_UTF8;
-  private String drukpolNip = "1452369135";
-  private String wasbudNip = "1458796325";
-  private String drutexNip = "1239514823";
-  private String transpolNip = "6752339483";
+
+  @Autowired
+  private InvoiceService invoiceService;
 
   @Autowired
   private MockMvc mockMvc;
@@ -46,11 +47,15 @@ public class TaxCalculatorControllerTest {
   @Autowired
   private TaxCalculatorController taxCalculatorController;
 
+  @Before
+  public void beforeMethod() {
+    invoiceService.clearDatabase();
+  }
+
   @Test
   public void contexLoads() throws Exception {
     assertThat(taxCalculatorController, is(notNullValue()));
   }
-
 
   @Test
   public void shouldGetIncome() throws Exception {
@@ -61,9 +66,9 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/getIncome?nip=" + drutexNip))
+        .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/Income/" + COMPANY_DRUTEX.getNip()))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", is(138)))
+        .andExpect(jsonPath("$", is(138.0)))
         .andReturn();
   }
 
@@ -77,7 +82,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/getTaxDue?nip=" + drutexNip))
+        .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/TaxDue/" + COMPANY_DRUTEX.getNip()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(19.2)))
         .andReturn();
@@ -93,7 +98,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/getTaxIncluded?nip=" + drukpolNip))
+        .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/TaxIncluded/" + COMPANY_DRUKPOL.getNip()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(11.592)))
         .andReturn();
@@ -109,7 +114,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/getCosts?nip=" + wasbudNip))
+        .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/Costs/" + COMPANY_WASBUD.getNip()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(70.2)))
         .andReturn();
@@ -125,7 +130,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/getProfit?nip=" + wasbudNip))
+        .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/Profit/" + COMPANY_WASBUD.getNip()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(-19.8)))
         .andReturn();
@@ -141,13 +146,14 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/getVatPayable?nip=" + wasbudNip))
+        .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/VatPayable/" + COMPANY_WASBUD.getNip()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(11.592)))
         .andReturn();
   }
 
-
+  // TODO return value is never used - maybe you can simplify the method
+  // TODO duplicate with InvoiceControllerTest - maybe you can move it to some kind of helper? :)
   private int callRestServiceToAddInvoiceAndReturnId(Invoice invoice) throws Exception {
     String response =
         mockMvc
@@ -166,6 +172,6 @@ public class TaxCalculatorControllerTest {
     } catch (JsonProcessingException exception) {
       exception.printStackTrace();
     }
-    return null;
+    return null; // TODO maybe "" ? :)
   }
 }

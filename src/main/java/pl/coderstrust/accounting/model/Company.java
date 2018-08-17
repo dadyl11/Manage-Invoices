@@ -1,18 +1,34 @@
 package pl.coderstrust.accounting.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Repository // TODO what?? Why do you mark POJO as repository?
+@ApiModel(value = "Company", description = "Model for the Company")
 public class Company {
 
+  @ApiModelProperty(value = "Name of the Company", example = "Poldim SA")
   private String name;
+
+  @ApiModelProperty(value = "Tax identification number", example = "9930105608")
   private String nip;
+
+  @ApiModelProperty(value = "Adress, street", example = "Zakladowa")
   private String street;
+
+  @ApiModelProperty(value = "Adress, postal code", example = "31-200")
   private String postalCode;
+
+  @ApiModelProperty(value = "Adress, city", example = "Krakow")
   private String city;
+
+  @ApiModelProperty(value = "BigDecimal, discount", example = "0.1")
   private BigDecimal discount;
 
   public Company() {
@@ -108,5 +124,11 @@ public class Company {
         .append(city)
         .append(discount)
         .toHashCode();
+  }
+
+  @Override
+  public String toString() {
+    return ReflectionToStringBuilder.toString(this,
+        ToStringStyle.MULTI_LINE_STYLE, true, true);
   }
 }

@@ -1,54 +1,68 @@
 package pl.coderstrust.accounting.database.impl.file.helpers;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+@Service
 public class FileHelper {
 
-  private File dataBaseFile = new File("invoices.json");
-  private File temporaryDataBaseFile = new File("temporaryInvoices.json");
+  private File databaseFile;
 
-  public void writeInvoice(String string, File path) {
-    try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path, false))) {
+  public FileHelper(@Value("${filePath}") String path) { // TODO you don't inject from property file - ${} missing :)
+    this.databaseFile = new File(path);
+  }
+
+  public void writeInvoice(String string) {
+    try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(databaseFile.getPath(), true))) {
       bufferedWriter.write(string);
+      bufferedWriter.newLine();
     } catch (IOException exception) {
-      exception.printStackTrace();
+      throw new RuntimeException("Unable to write to a file"); // TODO ALWAYS when catching exception and throwing new one you should be
+      // exception chaining - just pass first exception as argument to second one.
     }
   }
 
-  public String readLines(File path) {
-    if (!path.exists()) {
-      return "";
+  public List<String> lines() { // TODO not good name - maybe readLines() ? or getLines() ?
+    if (!databaseFile.exists()) {
+      return new ArrayList<>();
     }
-
-    String invoicesList = "";
-    String currentJson;
-    try (BufferedReader bufferedReader = new BufferedReader(new FileReader(path))) {
-      while ((currentJson = bufferedReader.readLine()) != null) {
-        invoicesList = invoicesList + currentJson;
-      }
+    try {
+      return Files.lines(databaseFile.toPath()).collect(Collectors.toList());
     } catch (IOException exception) {
-      exception.printStackTrace();
+      throw new RuntimeException("Unable to read a file"); // TODO - as above, please correct everywhere.
     }
-    return invoicesList;
   }
 
-  public void replaceInvoicesFiles() {
-    File temporaryFile = new File(temporaryDataBaseFile.getPath());
-    File originalDatabaseFile = new File(dataBaseFile.getPath());
-    originalDatabaseFile.delete();
-    temporaryFile.renameTo(dataBaseFile);
+  public void replaceFileContent(List<String> invoices) {
+    File tempFile = new File(databaseFile.getName() + ".tmp");
+    try {
+      Files.copy(databaseFile.toPath(), tempFile.toPath());
+    } catch (IOException exception) {
+      throw new RuntimeException("cannot copy temporary file content");
+    }
+    clearDatabaseFile();
+    for (String json : invoices) {
+      writeInvoice(json);
+    }
+    tempFile.delete(); // TODO why do you ignore result of delete() ? :)
   }
 
-  public File getDataBaseFile() {
-    return dataBaseFile;
-  }
 
-  public File getTemporaryDataBaseFile() {
-    return temporaryDataBaseFile;
+  public void clearDatabaseFile() {
+    try (PrintWriter printWriter = new PrintWriter(databaseFile.getName())) {
+      printWriter.print("");
+    } catch (FileNotFoundException exception) {
+      throw new RuntimeException("File was not found");
+    }
   }
 }

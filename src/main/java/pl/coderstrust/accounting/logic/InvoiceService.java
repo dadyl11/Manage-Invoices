@@ -18,9 +18,9 @@ public class InvoiceService {
     this.database = database;
   }
 
-  public int saveInvoice(Invoice invoice) throws IOException {
+  public int saveInvoice(Invoice invoice) throws IOException { // TODO those exceptions are not needed now :)
     if (invoice == null) {
-      throw new IllegalArgumentException("invoice cannot be null");
+      throw new IllegalArgumentException("Invoice cannot be null");
     }
     return database.saveInvoice(invoice);
   }
@@ -36,7 +36,8 @@ public class InvoiceService {
         .findAny();
   }
 
-  public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate) throws IOException {
+  public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate)
+      throws IOException {
     return database.getInvoices()
         .stream()
         .filter(n -> n.getIssueDate().isAfter(startDate))
@@ -45,15 +46,26 @@ public class InvoiceService {
   }
 
   public void updateInvoice(int id, Invoice invoice) throws IOException {
-    Optional<Invoice> inoiceFromDatabe = getInvoiceById(id);
+    Optional<Invoice> invoiceFromDatabase = getInvoiceById(id);
 
-    if (!inoiceFromDatabe.isPresent()) {
+    if (!invoiceFromDatabase.isPresent()) {
       throw new IllegalStateException("Invoice with id: " + id + " does not exist");
     }
+
     database.updateInvoice(id, invoice);
   }
 
   public void removeInvoiceById(int id) throws IOException {
+    Optional<Invoice> invoiceFromDatabase = getInvoiceById(id);
+
+    if (!invoiceFromDatabase.isPresent()) {
+      throw new IllegalStateException("Invoice with id: " + id + " does not exist");
+    }
+
     database.removeInvoiceById(id);
+  }
+
+  public void clearDatabase() {
+    database.clearDatabase();
   }
 }

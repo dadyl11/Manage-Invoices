@@ -1,29 +1,43 @@
 package pl.coderstrust.accounting.database.impl.file.helpers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.model.Invoice;
 
+@Service
 public class InvoiceConverter {
 
   private ObjectMapper mapper;
 
-  public InvoiceConverter() {
-    this.mapper = new ObjectMapper();
-    mapper.registerModule(new JavaTimeModule());
-    mapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+  @Autowired
+  public InvoiceConverter(ObjectMapper mapper) {
+    this.mapper = mapper;
   }
 
-  public String writeJson(List<Invoice> list) throws IOException {
-    return mapper.writeValueAsString(list);
+  public String convertInvoiceToJson(Invoice invoice) {
+    try {
+      return mapper.writeValueAsString(invoice);
+    } catch (JsonProcessingException exception) {
+      throw new RuntimeException("cannot convert to Json"); // TODO exception chaining
+    }
   }
 
-  public List<Invoice> readJson(String json) throws IOException {
-    return mapper.readValue(json, new TypeReference<List<Invoice>>() {
-    });
+  public Invoice convertJsonToInvoice(String json) {
+    try {
+      return mapper.readValue(json, Invoice.class);
+    } catch (IOException exception) {
+      throw new RuntimeException("cannot convert from Json"); // TODO exception chaining
+    }
+  }
+
+  public List<String> convertListOfInvoicesToJsons(List<Invoice> invoices) { // TODO toListOfStrings
+    return invoices.stream()
+        .map(this::convertInvoiceToJson)
+        .collect(Collectors.toList());
   }
 }
