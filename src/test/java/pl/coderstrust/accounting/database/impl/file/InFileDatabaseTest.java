@@ -3,7 +3,7 @@ package pl.coderstrust.accounting.database.impl.file;
 
 import java.io.IOException;
 import org.junit.Before;
-import pl.coderstrust.accounting.controller.JacksonProvider;
+import pl.coderstrust.accounting.configuration.JacksonProvider;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.database.impl.DatabaseTest;
 import pl.coderstrust.accounting.database.impl.file.helpers.FileHelper;
