@@ -21,7 +21,7 @@ public class InvoiceTest {
   public void shouldCalculateNetValue() {
     //when
     BigDecimal actual = INVOICE_GRUDZIADZ_2017.getTotalNetValue();
-    BigDecimal expected = BigDecimal.valueOf(50.4);
+    BigDecimal expected = BigDecimal.valueOf(50.4).setScale(2, BigDecimal.ROUND_HALF_UP);
 
     //then
     assertThat(actual, is(expected));

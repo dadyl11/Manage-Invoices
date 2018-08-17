@@ -4,10 +4,12 @@ import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.core.Is.is;
 
+import com.jayway.restassured.http.ContentType;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
+import restassured.Data;
 
-public class ConnectionDatesDeleteTest {
+public class ConnectionDatesDeleteTest implements Data {
 
   @Test
   public void whenRequestGetInvoicesThen200() {
@@ -52,12 +54,11 @@ public class ConnectionDatesDeleteTest {
     given().when().get("http://localhost:8080/taxcalculator/getProfit?nip=").then().statusCode(200);
   }
 
-//  todo why code 400 not 404???
-
   @Test
-  public void whenRequestPutInvoiceWithBadID_Then400() {
-    given().pathParam("id", 1000).when().put("http://localhost:8080/invoices/{id}")
-        .then().statusCode(400);
+  public void whenRequestPutInvoiceWithCorrectID_Then200() {
+    given().contentType(ContentType.JSON).body(invoiceKrakow).pathParam("id", 2)
+        .when().put("http://localhost:8080/invoices/{id}")
+        .then().statusCode(200);
   }
 
   @Test

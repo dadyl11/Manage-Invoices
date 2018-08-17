@@ -39,7 +39,7 @@ public class TaxCalculatorServiceTest {
             taxCalculatorService::taxToBigDecimal, wasbudNip);
 
     //then
-    assertThat(actual, is(BigDecimal.ZERO));
+    assertThat(actual, is(BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_UP)));
   }
 
   @Test
@@ -98,7 +98,7 @@ public class TaxCalculatorServiceTest {
             taxCalculatorService::taxToBigDecimal, wasbudNip);
 
     //then
-    assertThat(actual, is(BigDecimal.valueOf(11.592)));
+    assertThat(actual, is(BigDecimal.valueOf(11.592).setScale(2, BigDecimal.ROUND_HALF_UP)));
   }
 
   @Test
@@ -113,7 +113,7 @@ public class TaxCalculatorServiceTest {
         .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
             taxCalculatorService::taxToBigDecimal, drukpolNip);
 
-    // then
-    assertThat(actual, is(BigDecimal.valueOf(25.032)));
+    //then
+    assertThat(actual, is(BigDecimal.valueOf(25.032).setScale(2, BigDecimal.ROUND_HALF_UP)));
   }
 }

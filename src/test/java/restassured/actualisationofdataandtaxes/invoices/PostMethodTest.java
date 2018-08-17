@@ -1,18 +1,13 @@
-package restassured.actualisationOfDataAndTax.invoices;
+package restassured.actualisationofdataandtaxes.invoices;
 
 import static com.jayway.restassured.RestAssured.given;
-import static com.jayway.restassured.config.JsonConfig.jsonConfig;
-import static com.jayway.restassured.config.RestAssuredConfig.newConfig;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.core.Is.is;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
-import com.jayway.restassured.path.json.config.JsonPathConfig.NumberReturnType;
-import java.math.BigDecimal;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pl.coderstrust.accounting.controller.JacksonProvider;
@@ -25,23 +20,23 @@ public class PostMethodTest implements Data {
 
     given().contentType(ContentType.JSON)
         .body(JacksonProvider.getObjectMapper().writeValueAsString(
-            invoiceRA)).when().post(invoicesUrl);
+            invoiceRadomsko)).post(invoicesUrl);
 
     given().contentType(ContentType.JSON)
         .body(JacksonProvider.getObjectMapper().writeValueAsString(
-            invoiceBY)).when().post(invoicesUrl);
+            invoiceBydgoszcz)).post(invoicesUrl);
 
     given().contentType(ContentType.JSON)
         .body(JacksonProvider.getObjectMapper().writeValueAsString(
-            invoiceKR)).when().post(invoicesUrl);
+            invoiceKrakow)).post(invoicesUrl);
 
     given().contentType(ContentType.JSON)
         .body(JacksonProvider.getObjectMapper().writeValueAsString(
-            invoiceGR)).when().post(invoicesUrl);
+            invoiceGudziadz)).post(invoicesUrl);
 
     given().contentType(ContentType.JSON)
         .body(JacksonProvider.getObjectMapper().writeValueAsString(
-            invoiceCH)).when().post(invoicesUrl);
+            invoiceChelmno)).post(invoicesUrl);
   }
 
   @Test
@@ -55,73 +50,71 @@ public class PostMethodTest implements Data {
   @Test
   public void verifyIfContainsNipAndSalePlace() {
     given().when().get(invoicesUrl).then()
-        .body(containsString(invoiceCH.getBuyer().getNip()))
-        .body(containsString(invoiceBY.getSalePlace()));
+        .body(containsString(invoiceChelmno.getBuyer().getNip()))
+        .body(containsString(invoiceBydgoszcz.getSalePlace()));
   }
 
   @Test
   public void verifyIdentifiers() {
     given().contentType(ContentType.JSON).when().get(invoicesUrl).then()
-        .body("identifier", hasItems(invoiceKR.getIdentifier(), invoiceCH.getIdentifier(),
-            invoiceGR.getIdentifier(), invoiceBY.getIdentifier(), invoiceRA.getIdentifier()));
+        .body("identifier", hasItems(invoiceKrakow.getIdentifier(), invoiceChelmno.getIdentifier(),
+            invoiceGudziadz.getIdentifier(), invoiceBydgoszcz.getIdentifier(),
+            invoiceRadomsko.getIdentifier()));
   }
 
   @Test
   public void verifySalePlace() {
     given().when().get(invoicesUrl).then()
-        .body("salePlace", hasItem(invoiceGR.getSalePlace()));
+        .body("salePlace", hasItem(invoiceGudziadz.getSalePlace()));
   }
 
   @Test
   public void verifySalePlaces() {
     given().when().get(invoicesUrl).then()
         .body("salePlace",
-            hasItems(invoiceGR.getSalePlace(), invoiceBY.getSalePlace(), invoiceRA.getSalePlace(),
-                invoiceCH.getSalePlace(), invoiceKR.getSalePlace()));
+            hasItems(invoiceGudziadz.getSalePlace(), invoiceBydgoszcz.getSalePlace(),
+                invoiceRadomsko.getSalePlace(), invoiceChelmno.getSalePlace(),
+                invoiceKrakow.getSalePlace()));
   }
 
   @Test
   public void verifyAllFields() {
 
-    RestAssured.config =
-        newConfig().jsonConfig(jsonConfig().numberReturnType(NumberReturnType.BIG_DECIMAL));
+    int id = invoiceKrakow.getId();
+    String identifier = invoiceKrakow.getIdentifier();
+    String issueDate = invoiceKrakow.getIssueDate().toString();
+    String saleDate = invoiceKrakow.getSaleDate().toString();
+    String salePlace = invoiceKrakow.getSalePlace();
 
-    int id = invoiceKR.getId();
-    String identifier = invoiceKR.getIdentifier();
-    System.out.println(identifier);
-    String issueDate = invoiceKR.getIssueDate().toString();
-    String saleDate = invoiceKR.getSaleDate().toString();
-    String salePlace = invoiceKR.getSalePlace();
+    String buyerName = invoiceKrakow.getBuyer().getName();
+    String buyerNip = invoiceKrakow.getBuyer().getNip();
+    String buyerStreet = invoiceKrakow.getBuyer().getStreet();
+    String buyerPostalCode = invoiceKrakow.getBuyer().getPostalCode();
+    String buyerCity = invoiceKrakow.getBuyer().getCity();
+    String buyerDiscount = invoiceKrakow.getBuyer().getDiscount().toString();
 
-    String buyerName = invoiceKR.getBuyer().getName();
-    String buyerNip = invoiceKR.getBuyer().getNip();
-    String buyerStreet = invoiceKR.getBuyer().getStreet();
-    String buyerPostalCode = invoiceKR.getBuyer().getPostalCode();
-    String buyerCity = invoiceKR.getBuyer().getCity();
-    BigDecimal buyerDiscount = invoiceKR.getBuyer().getDiscount();
+    String sellerName = invoiceKrakow.getSeller().getName();
+    String sellerNip = invoiceKrakow.getSeller().getNip();
+    String sellerStreet = invoiceKrakow.getSeller().getStreet();
+    String sellerPostalCode = invoiceKrakow.getSeller().getPostalCode();
+    String sellerCity = invoiceKrakow.getSeller().getCity();
+    String sellerDiscount = invoiceKrakow.getSeller().getDiscount().toString();
 
-    String sellerName = invoiceKR.getSeller().getName();
-    String sellerNip = invoiceKR.getSeller().getNip();
-    String sellerStreet = invoiceKR.getSeller().getStreet();
-    String sellerPostalCode = invoiceKR.getSeller().getPostalCode();
-    String sellerCity = invoiceKR.getSeller().getCity();
-    BigDecimal sellerDiscount = invoiceKR.getSeller().getDiscount();
+    String description0 = invoiceKrakow.getEntries().get(0).getDescription();
+    String description1 = invoiceKrakow.getEntries().get(1).getDescription();
+    String description2 = invoiceKrakow.getEntries().get(2).getDescription();
 
-    String description0 = invoiceKR.getEntries().get(0).getDescription();
-    String description1 = invoiceKR.getEntries().get(1).getDescription();
-    String description2 = invoiceKR.getEntries().get(2).getDescription();
+    String netPrice0 = invoiceKrakow.getEntries().get(0).getNetPrice().toString();
+    String netPrice1 = invoiceKrakow.getEntries().get(1).getNetPrice().toString();
+    String netPrice2 = invoiceKrakow.getEntries().get(2).getNetPrice().toString();
 
-    BigDecimal netPrice0 = invoiceKR.getEntries().get(0).getNetPrice();
-    BigDecimal netPrice1 = invoiceKR.getEntries().get(1).getNetPrice();
-    BigDecimal netPrice2 = invoiceKR.getEntries().get(2).getNetPrice();
+    String vatRate0 = invoiceKrakow.getEntries().get(0).getVatRate().toString();
+    String vatRate1 = invoiceKrakow.getEntries().get(1).getVatRate().toString();
+    String vatRate2 = invoiceKrakow.getEntries().get(2).getVatRate().toString();
 
-    String vatRate0 = invoiceKR.getEntries().get(0).getVatRate().toString();
-    String vatRate1 = invoiceKR.getEntries().get(1).getVatRate().toString();
-    String vatRate2 = invoiceKR.getEntries().get(2).getVatRate().toString();
-
-    BigDecimal quantity0 = invoiceKR.getEntries().get(0).getQuantity();
-    BigDecimal quantity1 = invoiceKR.getEntries().get(1).getQuantity();
-    BigDecimal quantity2 = invoiceKR.getEntries().get(2).getQuantity();
+    String quantity0 = invoiceKrakow.getEntries().get(0).getQuantity().toString();
+    String quantity1 = invoiceKrakow.getEntries().get(1).getQuantity().toString();
+    String quantity2 = invoiceKrakow.getEntries().get(2).getQuantity().toString();
 
     given().when().get(invoicesUrl).then()
 

@@ -135,7 +135,6 @@ public class Invoice {
     return Objects.hash(getId());
   }
 
-
   @JsonIgnore
   public BigDecimal getTotalNetValue() {
     BigDecimal netValue = BigDecimal.ZERO;

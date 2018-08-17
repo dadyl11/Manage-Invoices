@@ -12,7 +12,7 @@ public class CompanyProvider {
       "Grodzka",
       "32008",
       "Krakow",
-      BigDecimal.valueOf(0.0));
+      BigDecimal.valueOf(0).setScale(2, BigDecimal.ROUND_HALF_UP));
 
   public static final Company COMPANY_DRUTEX = new Company(
       "Drutex",
@@ -20,7 +20,7 @@ public class CompanyProvider {
       "Rybna",
       "31158",
       "Rybnik",
-      BigDecimal.valueOf(0.2));
+      BigDecimal.valueOf(0.2).setScale(2, BigDecimal.ROUND_HALF_UP));
 
   public static final Company COMPANY_WASBUD = new Company(
       "WasBud",
@@ -28,7 +28,7 @@ public class CompanyProvider {
       "Targowa",
       "15689",
       "warszawa",
-      BigDecimal.valueOf(0.1));
+      BigDecimal.valueOf(0.1).setScale(2, BigDecimal.ROUND_HALF_UP));
 
   public static final Company COMPANY_DRUKPOL = new Company(
       "DrukPol",
@@ -36,7 +36,7 @@ public class CompanyProvider {
       "Bolesnej Meki Panskiej",
       "58963",
       "Sosnowiec",
-      BigDecimal.valueOf(0.3));
+      BigDecimal.valueOf(0.3).setScale(2, BigDecimal.ROUND_HALF_UP));
 
   public static final Company COMPANY_BLANK_NAME = new Company(
       "",

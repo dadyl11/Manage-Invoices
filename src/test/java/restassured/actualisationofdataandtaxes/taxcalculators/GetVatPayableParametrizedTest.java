@@ -1,7 +1,7 @@
-package restassured.actualisationOfDataAndTax.taxcalculators;
+package restassured.actualisationofdataandtaxes.taxcalculators;
 
 import static com.jayway.restassured.RestAssured.given;
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.CoreMatchers.containsString;
 
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -17,21 +17,21 @@ public class GetVatPayableParametrizedTest implements Data {
   @Test
   @Parameters(method = "dataForTesting")
   public void verifyVatPayableByNip(String path, String expectedTaxDue) {
-    given().when().get(path).then().body(is(expectedTaxDue));
+    given().when().get(path).then().body(containsString(expectedTaxDue));
   }
 
   private Object[] dataForTesting() {
     return new Object[]{
-        new Object[]{path + nipCHse, "13.44000"},
-        new Object[]{path + nipBYse, "19.20000"},
-        new Object[]{path + nipKRse, "19.20000"},
-        new Object[]{path + nipGRse, "11.59200"},
-        new Object[]{path + nipRAse, "11.59200"},
+        new Object[]{path + nipCHse, "13.44"},
+        new Object[]{path + nipBYse, "19.20"},
+        new Object[]{path + nipKRse, "19.20"},
+        new Object[]{path + nipGRse, "11.59"},
+        new Object[]{path + nipRAse, "11.59"},
         new Object[]{path + nipCHba, "0"},
-        new Object[]{path + nipBYba, "11.59200"},
-        new Object[]{path + nipKRba, "13.44000"},
+        new Object[]{path + nipBYba, "11.59"},
+        new Object[]{path + nipKRba, "13.44"},
         new Object[]{path + nipGRba, "0"},
-        new Object[]{path + nipRAba, "19.20000"}
+        new Object[]{path + nipRAba, "19.20"}
     };
   }
 }

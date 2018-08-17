@@ -5,22 +5,22 @@ import pl.coderstrust.accounting.model.Invoice;
 
 public interface Data {
 
-  Invoice invoiceKR = InvoiceProvider.INVOICE_KRAKOW_2018;
-  Invoice invoiceBY = InvoiceProvider.INVOICE_BYDGOSZCZ_2018;
-  Invoice invoiceRA = InvoiceProvider.INVOICE_RADOMSKO_2018;
-  Invoice invoiceGR = InvoiceProvider.INVOICE_GRUDZIADZ_2017;
-  Invoice invoiceCH = InvoiceProvider.INVOICE_CHELMNO_2016;
+  Invoice invoiceKrakow = InvoiceProvider.INVOICE_KRAKOW_2018;
+  Invoice invoiceBydgoszcz = InvoiceProvider.INVOICE_BYDGOSZCZ_2018;
+  Invoice invoiceRadomsko = InvoiceProvider.INVOICE_RADOMSKO_2018;
+  Invoice invoiceGudziadz = InvoiceProvider.INVOICE_GRUDZIADZ_2017;
+  Invoice invoiceChelmno = InvoiceProvider.INVOICE_CHELMNO_2016;
 
-  String nipCHse = invoiceCH.getSeller().getNip();
-  String nipBYse = invoiceBY.getSeller().getNip();
-  String nipKRse = invoiceKR.getSeller().getNip();
-  String nipGRse = invoiceGR.getSeller().getNip();
-  String nipRAse = invoiceRA.getSeller().getNip();
-  String nipCHba = invoiceCH.getBuyer().getNip();
-  String nipBYba = invoiceBY.getBuyer().getNip();
-  String nipKRba = invoiceKR.getBuyer().getNip();
-  String nipGRba = invoiceGR.getBuyer().getNip();
-  String nipRAba = invoiceRA.getBuyer().getNip();
+  String nipCHse = invoiceChelmno.getSeller().getNip();
+  String nipBYse = invoiceBydgoszcz.getSeller().getNip();
+  String nipKRse = invoiceKrakow.getSeller().getNip();
+  String nipGRse = invoiceGudziadz.getSeller().getNip();
+  String nipRAse = invoiceRadomsko.getSeller().getNip();
+  String nipCHba = invoiceChelmno.getBuyer().getNip();
+  String nipBYba = invoiceBydgoszcz.getBuyer().getNip();
+  String nipKRba = invoiceKrakow.getBuyer().getNip();
+  String nipGRba = invoiceGudziadz.getBuyer().getNip();
+  String nipRAba = invoiceRadomsko.getBuyer().getNip();
 
   String invoicesUrl = "/invoices";
 }
