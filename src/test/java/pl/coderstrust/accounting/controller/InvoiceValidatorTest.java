@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BAD_DISCOUNT_VALUE;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_CITY;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_DISCOUNT;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_NAME;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_NIP;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_POSTAL_CODE;

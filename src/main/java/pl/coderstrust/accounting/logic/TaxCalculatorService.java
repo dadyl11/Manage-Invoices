@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.controller.NipValidator;
@@ -12,7 +11,7 @@ import pl.coderstrust.accounting.model.Invoice;
 
 @Service
 public class TaxCalculatorService {
-  
+
   private InvoiceService invoiceService;
   private NipValidator nipValidator;
 

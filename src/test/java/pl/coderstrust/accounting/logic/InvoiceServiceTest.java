@@ -121,7 +121,7 @@ public class InvoiceServiceTest {
     invoices.add(INVOICE_CHELMNO_2016);
     invoices.add(INVOICE_GRUDZIADZ_2017);
 
-    int id = INVOICE_CHELMNO_2016.getId();
+    int id = INVOICE_BYDGOSZCZ_2018.getId();
 
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
@@ -132,7 +132,6 @@ public class InvoiceServiceTest {
     //then
 
     assertTrue(actual.isPresent());
-    assertThat(actual, is(expected));
     assertThat(actual.get(), is(expected.get()));
     assertThat(actual.get(), is(INVOICE_BYDGOSZCZ_2018));
     assertEquals(INVOICE_BYDGOSZCZ_2018, actual.get());

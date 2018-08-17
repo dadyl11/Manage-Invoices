@@ -69,8 +69,4 @@ public class InFileDatabase implements Database {
     indexHelper.clearIdFile();
   }
 
-  @Override
-  public void clearDatabase() {
-    fileHelper.getDataBaseFile().delete();
-  }
 }
