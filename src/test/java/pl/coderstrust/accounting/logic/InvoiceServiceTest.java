@@ -52,6 +52,7 @@ public class InvoiceServiceTest {
     invoices.add(INVOICE_BYDGOSZCZ_2018);
     invoices.add(INVOICE_CHELMNO_2016);
     invoices.add(INVOICE_GRUDZIADZ_2017);
+
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
@@ -72,10 +73,11 @@ public class InvoiceServiceTest {
     invoices.add(INVOICE_BYDGOSZCZ_2018);
     invoices.add(INVOICE_CHELMNO_2016);
     invoices.add(INVOICE_GRUDZIADZ_2017);
-    int id = 3;
+
+    int id = INVOICE_CHELMNO_2016.getId();
     when(databaseMock.getInvoices()).thenReturn(invoices);
+
     //when
-    invoiceService.getInvoiceById(id);
     invoiceService.updateInvoice(id, INVOICE_KRAKOW_2018);
 
     //then
@@ -101,7 +103,9 @@ public class InvoiceServiceTest {
     invoices.add(INVOICE_BYDGOSZCZ_2018);
     invoices.add(INVOICE_CHELMNO_2016);
     invoices.add(INVOICE_GRUDZIADZ_2017);
-    int id = 3;
+
+    int id = INVOICE_CHELMNO_2016.getId();
+
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
@@ -119,11 +123,13 @@ public class InvoiceServiceTest {
     invoices.add(INVOICE_KRAKOW_2018);
     invoices.add(INVOICE_BYDGOSZCZ_2018);
     invoices.add(INVOICE_GRUDZIADZ_2017);
+
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
-    List<Invoice> actual = invoiceService
-        .getInvoicesByIssueDate(LocalDate.of(2018, 04, 12), LocalDate.of(2018, 06, 25));
+    LocalDate fromDate = LocalDate.of(2018, 4, 12);
+    LocalDate toDate = LocalDate.of(2018, 6, 25);
+    List<Invoice> actual = invoiceService.getInvoicesByIssueDate(fromDate, toDate);
 
     //then
     assertThat(actual, hasItems(INVOICE_KRAKOW_2018, INVOICE_BYDGOSZCZ_2018));
@@ -136,13 +142,19 @@ public class InvoiceServiceTest {
     invoices.add(INVOICE_KRAKOW_2018);
     invoices.add(INVOICE_BYDGOSZCZ_2018);
     invoices.add(INVOICE_GRUDZIADZ_2017);
+
+    System.out.println("??????" + INVOICE_GRUDZIADZ_2017);
+
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
-    List<Invoice> actual = invoiceService
-        .getInvoicesByIssueDate(LocalDate.of(2018, 04, 12), LocalDate.of(2018, 06, 25));
+    LocalDate fromDate = LocalDate.of(2018, 4, 12);
+    LocalDate toDate = LocalDate.of(2018, 6, 25);
+    List<Invoice> actual = invoiceService.getInvoicesByIssueDate(fromDate, toDate);
 
     //then
+
+    System.out.println("!!!!!!!! " + actual);
     assertThat(actual, not(hasItem(INVOICE_GRUDZIADZ_2017)));
   }
 }

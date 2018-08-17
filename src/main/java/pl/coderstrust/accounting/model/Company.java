@@ -3,6 +3,8 @@ package pl.coderstrust.accounting.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.stereotype.Repository;
@@ -122,5 +124,11 @@ public class Company {
         .append(city)
         .append(discount)
         .toHashCode();
+  }
+
+  @Override
+  public String toString() {
+    return ReflectionToStringBuilder.toString(this,
+        ToStringStyle.MULTI_LINE_STYLE, true, true);
   }
 }

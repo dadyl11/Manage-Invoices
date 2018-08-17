@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
 import java.util.Objects;
+import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 @ApiModel(value = "InvoiceEntryModel", description = "Sample model for the Invoice Entry")
 public class InvoiceEntry {
@@ -84,5 +86,11 @@ public class InvoiceEntry {
   @JsonIgnore
   public BigDecimal getNetValue() {
     return getNetPrice().multiply(getQuantity());
+  }
+
+  @Override
+  public String toString() {
+    return ReflectionToStringBuilder.toString(this,
+        ToStringStyle.MULTI_LINE_STYLE, true, true);
   }
 }
