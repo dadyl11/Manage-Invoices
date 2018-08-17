@@ -32,11 +32,11 @@ public class InvoiceController {
     this.invoiceValidator = invoiceValidator;
   }
 
-  @ApiOperation(value = "Saves invoice",
+  @ApiOperation(value = "Saves invoice", // TODO please extract interface and move swagger annotations to it
       notes = "Returns ResponseEntity with id of saved invoice",
       response = ResponseEntity.class,
       responseContainer = "")
-  @PostMapping
+  @PostMapping // TODO RequestMapping etc can be moved too, RequestBody etc must stay in this class
   public ResponseEntity<?> saveInvoice(@RequestBody Invoice invoice) throws IOException {
     List<String> validationResult = invoiceValidator.validate(invoice);
     if (!validationResult.isEmpty()) {
@@ -46,14 +46,13 @@ public class InvoiceController {
     return ResponseEntity.ok(invoice.getId());
   }
 
-
   @ApiOperation(value = "Gets all invoices",
       notes = "Returns list of all saved invoices",
       response = Invoice.class,
       responseContainer = "List")
   @GetMapping
   public List<Invoice> getInvoices() throws IOException {
-    return invoiceService.getInvoices();
+    return invoiceService.getInvoices(); // TODO it's not good practice to throw exception from controller - user should receive nice errors only
   }
 
   @ApiOperation(value = "Gets all invoices from date range",
@@ -78,7 +77,7 @@ public class InvoiceController {
     if (!invoiceService.getInvoiceById(id).isPresent()) {
       return ResponseEntity.notFound().build();
     }
-    return ResponseEntity.ok(invoiceService.getInvoiceById(id).get());
+    return ResponseEntity.ok(invoiceService.getInvoiceById(id).get()); // TODO don't call getInvoiceById twice!
   }
 
   @ApiOperation(value = "updates invoice",

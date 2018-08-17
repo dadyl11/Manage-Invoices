@@ -9,8 +9,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.stereotype.Repository;
 
-@Repository
-@ApiModel(value = "CompanyModel", description = "Sample model for the Company")
+@Repository // TODO what?? Why do you mark POJO as repository?
+@ApiModel(value = "Company", description = "Model for the Company")
 public class Company {
 
   @ApiModelProperty(value = "Name of the Company", example = "Poldim SA")
@@ -28,7 +28,7 @@ public class Company {
   @ApiModelProperty(value = "Adress, city", example = "Krakow")
   private String city;
 
-  @ApiModelProperty(value = "BigDecimal, discount", example = "0")
+  @ApiModelProperty(value = "BigDecimal, discount", example = "0.1")
   private BigDecimal discount;
 
   public Company() {

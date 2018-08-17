@@ -13,22 +13,22 @@ public class IndexHelper {
   private File currentIdFile;
   private int id;
 
-  public IndexHelper(@Value("${idFilePath}") String path) {
+  public IndexHelper(@Value("${idFilePath}") String path) { // TODO you don't inject from property file - ${} missing :)
     currentIdFile = new File(path);
     id = generateId();
   }
 
-  public int generateId() {
+  private int generateId() {
     if (currentIdFile.exists()) {
       try (Scanner scanner = new Scanner(currentIdFile)) {
         if (scanner.hasNextInt()) {
           id = scanner.nextInt();
         }
       } catch (FileNotFoundException exception) {
-        throw new RuntimeException("idFile not found");
+        throw new RuntimeException("idFile not found"); // TODO - exception chaining
       }
     }
-    return 1;
+    return 1; // TODO shouldn't you create file in such case ?
   }
 
   public int getIdAndSaveToFile() {
@@ -38,15 +38,15 @@ public class IndexHelper {
   }
 
   public void clearIdFile() {
-    writeToFile("");
+    writeToFile(""); // TODO I would like it more if we write to file initial value instead of empty string - e.g. 1
     id = 0;
   }
 
-  public void writeToFile(String string) {
+  void writeToFile(String string) { // TODO why not private?
     try (PrintWriter printWriter = new PrintWriter(currentIdFile.getName())) {
       printWriter.print(string);
     } catch (FileNotFoundException exception) {
-      throw new RuntimeException("idFile not found");
+      throw new RuntimeException("idFile not found"); // TODO exception chaining
     }
 
   }

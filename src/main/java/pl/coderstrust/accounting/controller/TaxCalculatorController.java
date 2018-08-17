@@ -27,10 +27,10 @@ public class TaxCalculatorController {
       notes = "Returns invoice value where company specified is the seller",
       response = BigDecimal.class,
       responseContainer = "")
-  @GetMapping("/Income/{nip}")
+  @GetMapping("/Income/{nip}") // TODO why Income is uppercase - in taxcalculator you don't use camelCase here you use... be consistent...
   public BigDecimal getIncome(@PathVariable(name = "nip", required = true) String nip) throws IOException {
     return taxCalculatorService
-        .getValueFromInvoices(taxCalculatorService::biFilterSeller,
+        .getValueFromInvoices(taxCalculatorService::biFilterSeller, // TODO biFilterSeller is hard to understand - can you rename it?
             taxCalculatorService::incomeToBigDecimal, nip);
   }
 
@@ -40,9 +40,8 @@ public class TaxCalculatorController {
       responseContainer = "")
   @GetMapping("/TaxDue/{nip}")
   public BigDecimal getTaxDue(@PathVariable(name = "nip", required = true) String nip) throws IOException {
-    return taxCalculatorService
-        .getValueFromInvoices(taxCalculatorService::biFilterSeller,
-            taxCalculatorService::taxToBigDecimal, nip);
+    return taxCalculatorService // TODO throwing exceptions from controller is not a good idea - user will get ugly error
+        .getValueFromInvoices(taxCalculatorService::biFilterSeller, taxCalculatorService::taxToBigDecimal, nip);
   }
 
   @ApiOperation(value = "Gets tax included",
@@ -52,8 +51,7 @@ public class TaxCalculatorController {
   @GetMapping("/TaxIncluded/{nip}")
   public BigDecimal getTaxIncluded(@PathVariable(name = "nip", required = true) String nip) throws IOException {
     return taxCalculatorService
-        .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
-            taxCalculatorService::taxToBigDecimal, nip);
+        .getValueFromInvoices(taxCalculatorService::biFilterBuyer, taxCalculatorService::taxToBigDecimal, nip);
   }
 
   @ApiOperation(value = "Gets costs by company",
@@ -63,8 +61,7 @@ public class TaxCalculatorController {
   @GetMapping("/Costs/{nip}")
   public BigDecimal getCosts(@PathVariable(name = "nip", required = true) String nip) throws IOException {
     return taxCalculatorService
-        .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
-            taxCalculatorService::incomeToBigDecimal, nip);
+        .getValueFromInvoices(taxCalculatorService::biFilterBuyer, taxCalculatorService::incomeToBigDecimal, nip);
   }
 
   @ApiOperation(value = "Gets profit = income - costs",
@@ -73,7 +70,7 @@ public class TaxCalculatorController {
       responseContainer = "")
   @GetMapping("/Profit/{nip}")
   public BigDecimal getProfit(@PathVariable(name = "nip", required = true) String nip) throws IOException {
-    return taxCalculatorService
+    return taxCalculatorService // TODO would be better to move it to service and here call method getProfit()
         .getValueFromInvoices(taxCalculatorService::biFilterSeller,
             taxCalculatorService::incomeToBigDecimal, nip).subtract(taxCalculatorService
             .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
@@ -83,10 +80,10 @@ public class TaxCalculatorController {
   @ApiOperation(value = "Gets tax payable",
       notes = "Substracts tax included from tax due for specified company",
       response = BigDecimal.class,
-      responseContainer = "")
+      responseContainer = "") // TODO if response container is empty then remove this value - it's not needed
   @GetMapping("/VatPayable/{nip}")
   public BigDecimal getVatPayable(@PathVariable(name = "nip", required = true) String nip) throws IOException {
-    return taxCalculatorService
+    return taxCalculatorService // / TODO would be better to move it to service and here call method getVatToPay()
         .getValueFromInvoices(taxCalculatorService::biFilterSeller,
             taxCalculatorService::taxToBigDecimal, nip).subtract(taxCalculatorService
             .getValueFromInvoices(taxCalculatorService::biFilterBuyer,

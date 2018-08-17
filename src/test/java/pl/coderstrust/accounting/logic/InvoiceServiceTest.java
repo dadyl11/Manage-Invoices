@@ -210,7 +210,7 @@ public class InvoiceServiceTest {
     //given
     Invoice invoice = null;
     expectedEx.expect(IllegalArgumentException.class);
-    expectedEx.expectMessage("invoice cannot be null");
+    expectedEx.expectMessage("Invoice cannot be null");
 
     //when
     invoiceService.saveInvoice(invoice);

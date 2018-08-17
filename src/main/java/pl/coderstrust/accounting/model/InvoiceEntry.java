@@ -14,10 +14,11 @@ public class InvoiceEntry {
   @ApiModelProperty(value = "Description of entry", example = "Clamp")
   private String description;
 
-  @ApiModelProperty(value = "Bigdecimal, net price", example = "10")
+  @ApiModelProperty(value = "Bigdecimal, net price", example = "10.86")
   private BigDecimal netPrice;
 
-  @ApiModelProperty(value = "Vat rate enum", example = "REDUCED_8")
+  @ApiModelProperty(value = "Vat rate enum", example = "REDUCED_8") // TODO would be good to change code so user specify 7, 23 etc - enum values are
+  // private to application
   private VatRate vatRate;
 
   @ApiModelProperty(value = "quantity", example = "10")
@@ -69,7 +70,7 @@ public class InvoiceEntry {
   @Override
   public boolean equals(Object object) {
     if (this == object) {
-      return true;
+      return true; // TODO only description matters? are 2 invoice entries with same desc and diffrent price equal???
     }
     if (object == null || getClass() != object.getClass()) {
       return false;
@@ -84,7 +85,7 @@ public class InvoiceEntry {
   }
 
   @JsonIgnore
-  public BigDecimal getNetValue() {
+  BigDecimal getNetValue() {
     return getNetPrice().multiply(getQuantity());
   }
 

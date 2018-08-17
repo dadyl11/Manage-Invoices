@@ -23,7 +23,7 @@ public class InvoiceConverter {
     try {
       return mapper.writeValueAsString(invoice);
     } catch (JsonProcessingException exception) {
-      throw new RuntimeException("cannot convert to Json");
+      throw new RuntimeException("cannot convert to Json"); // TODO exception chaining
     }
   }
 
@@ -31,11 +31,11 @@ public class InvoiceConverter {
     try {
       return mapper.readValue(json, Invoice.class);
     } catch (IOException exception) {
-      throw new RuntimeException("cannot convert from Json");
+      throw new RuntimeException("cannot convert from Json"); // TODO exception chaining
     }
   }
 
-  public List<String> convertListOfInvoicesToJsons(List<Invoice> invoices) {
+  public List<String> convertListOfInvoicesToJsons(List<Invoice> invoices) { // TODO toListOfStrings
     return invoices.stream()
         .map(this::convertInvoiceToJson)
         .collect(Collectors.toList());

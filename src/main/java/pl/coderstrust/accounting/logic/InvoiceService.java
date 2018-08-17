@@ -18,9 +18,9 @@ public class InvoiceService {
     this.database = database;
   }
 
-  public int saveInvoice(Invoice invoice) throws IOException {
+  public int saveInvoice(Invoice invoice) throws IOException { // TODO those exceptions are not needed now :)
     if (invoice == null) {
-      throw new IllegalArgumentException("invoice cannot be null");
+      throw new IllegalArgumentException("Invoice cannot be null");
     }
     return database.saveInvoice(invoice);
   }
@@ -51,6 +51,7 @@ public class InvoiceService {
     if (!invoiceFromDatabase.isPresent()) {
       throw new IllegalStateException("Invoice with id: " + id + " does not exist");
     }
+
     database.updateInvoice(id, invoice);
   }
 
@@ -60,6 +61,7 @@ public class InvoiceService {
     if (!invoiceFromDatabase.isPresent()) {
       throw new IllegalStateException("Invoice with id: " + id + " does not exist");
     }
+
     database.removeInvoiceById(id);
   }
 

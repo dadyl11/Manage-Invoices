@@ -113,7 +113,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.12</version>
+      <version>4.12</version> <!-- TODO let's switch to JUnit5 -->
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -123,7 +123,7 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.mockito</groupId>
+      <groupId>org.mockito</groupId> <!-- you should use mockito core -->
       <artifactId>mockito-all</artifactId>
       <version>1.10.19</version>
       <scope>test</scope>
@@ -134,7 +134,7 @@
       <version>2.0.0.0</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
+    <dependency> <!-- if we use pojo tester then we should increase coverage to 80% (branch) -->
       <groupId>pl.pojo</groupId>
       <artifactId>pojo-tester</artifactId>
       <version>0.7.6</version>
@@ -148,7 +148,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.datatype</groupId>
       <artifactId>jackson-datatype-jsr310</artifactId>
-      <version>2.9.6</version>
+      <version>2.9.6</version> <!-- TODO it's good practice to extract version to variable -->
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>

@@ -18,8 +18,7 @@ public class FileHelper {
 
   private File databaseFile;
 
-
-  public FileHelper(@Value("${filePath}") String path) {
+  public FileHelper(@Value("${filePath}") String path) { // TODO you don't inject from property file - ${} missing :)
     this.databaseFile = new File(path);
   }
 
@@ -28,23 +27,24 @@ public class FileHelper {
       bufferedWriter.write(string);
       bufferedWriter.newLine();
     } catch (IOException exception) {
-      throw new RuntimeException("Unable to write to a file");
+      throw new RuntimeException("Unable to write to a file"); // TODO ALWAYS when catching exception and throwing new one you should be
+      // exception chaining - just pass first exception as argument to second one.
     }
   }
 
-  public List<String> lines() {
+  public List<String> lines() { // TODO not good name - maybe readLines() ? or getLines() ?
     if (!databaseFile.exists()) {
       return new ArrayList<>();
     }
     try {
       return Files.lines(databaseFile.toPath()).collect(Collectors.toList());
     } catch (IOException exception) {
-      throw new RuntimeException("Unable to read a file");
+      throw new RuntimeException("Unable to read a file"); // TODO - as above, please correct everywhere.
     }
   }
 
   public void replaceFileContent(List<String> invoices) {
-    File tempFile = new File(databaseFile.getName() + "tmp");
+    File tempFile = new File(databaseFile.getName() + ".tmp");
     try {
       Files.copy(databaseFile.toPath(), tempFile.toPath());
     } catch (IOException exception) {
@@ -54,7 +54,7 @@ public class FileHelper {
     for (String json : invoices) {
       writeInvoice(json);
     }
-    tempFile.delete();
+    tempFile.delete(); // TODO why do you ignore result of delete() ? :)
   }
 
 
