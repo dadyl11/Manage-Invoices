@@ -1,7 +1,6 @@
 package pl.coderstrust.accounting.database.impl.file;
 
 
-import java.io.IOException;
 import org.junit.Before;
 import pl.coderstrust.accounting.configuration.JacksonProvider;
 import pl.coderstrust.accounting.database.Database;
@@ -13,9 +12,9 @@ import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 
 public class InFileDatabaseTest extends DatabaseTest {
 
-
   private FileHelper fileHelper = new FileHelper("invoicesTest.json");
   private IndexHelper indexHelper = new IndexHelper("currentIdFileTest.json");
+
   private InvoiceConverter invoiceConverter = new InvoiceConverter(JacksonProvider.getObjectMapper());
   private InFileDatabase inFileDatabase = new InFileDatabase(fileHelper, invoiceConverter, indexHelper);
 
@@ -25,7 +24,7 @@ public class InFileDatabaseTest extends DatabaseTest {
   }
 
   @Before
-  public void beforeMethod() throws IOException {
+  public void beforeMethod() {
     inFileDatabase.clearDatabase();
   }
 }

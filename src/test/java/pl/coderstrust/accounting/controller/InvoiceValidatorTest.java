@@ -40,9 +40,11 @@ public class InvoiceValidatorTest {
 
   @InjectMocks
   private InvoiceValidator invoiceValidator;
+
   @Mock
-  private Invoice invoice;
-  private Company company;
+  private Invoice invoice; // TODO not used
+
+  private Company company; // TODO not used
 
   @Before
   public void setup() {
@@ -51,8 +53,7 @@ public class InvoiceValidatorTest {
 
   @Parameters(method = "param")
   @Test
-  public void shouldCheckIfReturnedValidationMessageCorrespondsToIncompleteInvoices(Invoice invoice,
-      String message) {
+  public void shouldCheckIfReturnedValidationMessageCorrespondsToIncompleteInvoices(Invoice invoice, String message) {
     //when
     List<String> actualTest = invoiceValidator.validate(invoice);
 

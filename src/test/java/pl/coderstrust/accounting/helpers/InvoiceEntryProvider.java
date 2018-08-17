@@ -7,6 +7,7 @@ import java.util.List;
 import pl.coderstrust.accounting.model.InvoiceEntry;
 import pl.coderstrust.accounting.model.VatRate;
 
+// TODO use Builder instead of constructor - with so many argument it's hard to know what is what.
 public class InvoiceEntryProvider {
 
   public static final InvoiceEntry SPAN = new InvoiceEntry(

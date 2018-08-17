@@ -17,6 +17,7 @@ import pl.coderstrust.accounting.database.impl.memory.InMemoryDatabase;
 
 public class TaxCalculatorServiceTest {
 
+  // TODO do not hardcode values - use constants from InvoiceTestProvider
   private String drukpolNip = "5311688030";
   private String wasbudNip = "6271206366";
   private String drutexNip = "8421622720";
@@ -48,6 +49,8 @@ public class TaxCalculatorServiceTest {
 
     thrown.expect(IllegalArgumentException.class);
     thrown.expectMessage("Nip does not match specified pattern");
+
+    // TODO // when // then missing
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterBuyer,
             taxCalculatorService::taxToBigDecimal, incorrectNip);
@@ -63,7 +66,6 @@ public class TaxCalculatorServiceTest {
     BigDecimal actual = taxCalculatorService
         .getValueFromInvoices(taxCalculatorService::biFilterSeller,
             taxCalculatorService::incomeToBigDecimal, drutexNip);
-    // TODO use Invoice object not hardcoded nip
 
     //then
     assertThat(actual, is(BigDecimal.valueOf(138.0)));

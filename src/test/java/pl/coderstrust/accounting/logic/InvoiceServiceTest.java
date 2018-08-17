@@ -52,7 +52,7 @@ public class InvoiceServiceTest {
     int id = invoiceService.saveInvoice(INVOICE_KRAKOW_2018);
 
     //then
-    assertNotNull(id);
+    assertNotNull(id); // TODO can int be null? :)
     assertThat(id, is(equalTo(INVOICE_KRAKOW_2018.getId())));
     verify(databaseMock).saveInvoice(INVOICE_KRAKOW_2018);
   }
@@ -93,7 +93,7 @@ public class InvoiceServiceTest {
     List<Invoice> actual = invoiceService.getInvoices();
 
     //then
-    System.out.println(actual.toString());
+    System.out.println(actual.toString()); // TODO - is that needed? :)
     verify(databaseMock).updateInvoice(id, INVOICE_KRAKOW_2018);
   }
 
@@ -103,7 +103,9 @@ public class InvoiceServiceTest {
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_KRAKOW_2018);
     invoices.add(INVOICE_GRUDZIADZ_2017);
+
     int id = INVOICE_GRUDZIADZ_2017.getId();
+
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
@@ -127,16 +129,15 @@ public class InvoiceServiceTest {
 
     //when
     Optional<Invoice> actual = invoiceService.getInvoiceById(id);
-    Optional<Invoice> expected = Optional.of(INVOICE_BYDGOSZCZ_2018);
+    Optional<Invoice> expected = Optional.of(INVOICE_BYDGOSZCZ_2018); // TODO no need to wrap into Optional
 
     //then
-
     assertTrue(actual.isPresent());
-    assertThat(actual.get(), is(expected.get()));
+    assertThat(actual.get(), is(expected.get())); // TODO you should get actual once and assign to variable, not get() it multiple times
     assertThat(actual.get(), is(INVOICE_BYDGOSZCZ_2018));
-    assertEquals(INVOICE_BYDGOSZCZ_2018, actual.get());
-    assertTrue(INVOICE_BYDGOSZCZ_2018.equals(actual.get()));
-    assertTrue(actual.get().equals(INVOICE_BYDGOSZCZ_2018));
+    assertEquals(INVOICE_BYDGOSZCZ_2018, actual.get()); // TODO why do you need those duplicate assertions?
+    assertTrue(INVOICE_BYDGOSZCZ_2018.equals(actual.get())); // TODO why do you need those duplicate assertions?
+    assertTrue(actual.get().equals(INVOICE_BYDGOSZCZ_2018)); // TODO why do you need those duplicate assertions? It's not playground
   }
 
   @Test
@@ -158,15 +159,13 @@ public class InvoiceServiceTest {
     assertThat(actual, hasItems(INVOICE_KRAKOW_2018, INVOICE_BYDGOSZCZ_2018));
   }
 
-  @Test
+  @Test // TODO this and test above are almost identical why don't you simply add one more assertion above?
   public void shouldNotReturnInvoicesWithIssueDateOutOfTheRange() throws IOException {
     //given
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_KRAKOW_2018);
     invoices.add(INVOICE_BYDGOSZCZ_2018);
     invoices.add(INVOICE_GRUDZIADZ_2017);
-
-    System.out.println("??????" + INVOICE_GRUDZIADZ_2017);
 
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
@@ -176,8 +175,6 @@ public class InvoiceServiceTest {
     List<Invoice> actual = invoiceService.getInvoicesByIssueDate(fromDate, toDate);
 
     //then
-
-    System.out.println("!!!!!!!! " + actual);
     assertThat(actual, not(hasItem(INVOICE_GRUDZIADZ_2017)));
   }
 

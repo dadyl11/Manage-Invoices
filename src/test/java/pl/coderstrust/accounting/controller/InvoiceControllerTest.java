@@ -48,6 +48,7 @@ public class InvoiceControllerTest {
 
   @Autowired
   private InvoiceController invoiceController;
+
   @Autowired
   private InvoiceService invoiceService;
 
@@ -57,13 +58,13 @@ public class InvoiceControllerTest {
   }
 
   @Test
-  public void contexLoads() throws Exception {
+  public void contexLoads() {
     assertThat(invoiceController, is(notNullValue()));
   }
 
   @Test
   public void shouldCheckSaveInvoiceRequest() throws Exception {
-    int firstResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    int firstResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018); // TODO if not needed why do you add?
     int secondResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
 
     String savedInvoice = mockMvc
@@ -102,15 +103,15 @@ public class InvoiceControllerTest {
 
   @Test
   public void getInvoices() throws Exception {
-    int firstResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
-    int secondResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
+    int firstResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018); // TODO if not needed why do you add?
+    int secondResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016); // TODO if not needed why do you add?
     int thirdResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
 
     mockMvc
         .perform(get(INVOICE_SERVICE_PATH))
         .andDo(print())
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(3)))
+        .andExpect(jsonPath("$", hasSize(3))) // TODO add assertions to all 3 :) HINT - you can use helper method with parameter
         .andExpect(jsonPath("$[2].id", is(thirdResponse)))
         .andExpect(jsonPath("$[2].identifier", is(INVOICE_BYDGOSZCZ_2018.getIdentifier())))
         .andExpect(jsonPath("$[2].salePlace", is(INVOICE_BYDGOSZCZ_2018.getSalePlace())))
@@ -132,17 +133,21 @@ public class InvoiceControllerTest {
 
   @Test
   public void getInvoicesByIssueDateRange() throws Exception {
-    int firstResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    int firstResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018); // TODO if not needed why do you assign to varialble?
     int secondResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
-    int thirdResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
-    LocalDate startDate = LocalDate.of(2015, 04, 12);
-    LocalDate endDate = LocalDate.of(2017, 04, 12);
-    String url = String.format("/dates?startDate=%1$s&endDate=%2$s", startDate, endDate);
+    int thirdResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018); // TODO if not needed why do you assign to varialble?
+
+    LocalDate startDate = LocalDate.of(2015, 4, 12);
+    LocalDate endDate = LocalDate.of(2017, 4, 12);
+
+    String url = String.format("/dates?startDate=%1$s&endDate=%2$s", startDate, endDate); // TODO what is "$s" doing?
+
     mockMvc
         .perform(
             get(INVOICE_SERVICE_PATH + url))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(1)))
+        .andExpect(jsonPath("$", hasSize(1))) // TODO those assertions are duplicates in each test -
+        // write helper method taking id and Invoice to assert
         .andExpect(jsonPath("$[0].id", is((secondResponse))))
         .andExpect(jsonPath("$[0].identifier", is(INVOICE_CHELMNO_2016.getIdentifier())))
         .andExpect(jsonPath("$[0].salePlace", is(INVOICE_CHELMNO_2016.getSalePlace())))
@@ -166,7 +171,7 @@ public class InvoiceControllerTest {
   public void getSingleInvoice() throws Exception {
     int idResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
 
-    mockMvc
+    mockMvc // TODO as above - use helper method to do assertions
         .perform(get(INVOICE_SERVICE_PATH + "/" + idResponse))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.id", is(idResponse)))
@@ -198,13 +203,14 @@ public class InvoiceControllerTest {
   @Test
   public void updateInvoice() throws Exception {
     int invoiceId = callRestServiceToAddInvoiceAndReturnId(INVOICE_RADOMSKO_2018);
+
     mockMvc
         .perform(put(INVOICE_SERVICE_PATH + "/" + invoiceId)
             .contentType(JSON_CONTENT_TYPE)
             .content(convertToJson(INVOICE_BYDGOSZCZ_2018)))
         .andExpect(status().isOk());
 
-    mockMvc
+    mockMvc // TODO as above - use helper method to do assertions
         .perform(get(INVOICE_SERVICE_PATH + "/" + invoiceId))
         .andExpect(status().isOk())
         .andExpect(content().contentType(JSON_CONTENT_TYPE))
@@ -228,17 +234,16 @@ public class InvoiceControllerTest {
   }
 
   @Test
-  public void shouldReturnErrorCausedByNotExistingIdToUpdate() throws Exception {
+  public void shouldReturnErrorCausedByNotExistingIdPassedToUpdate() throws Exception {
     mockMvc
         .perform(put(INVOICE_SERVICE_PATH + "/0")
             .content(convertToJson(INVOICE_CHELMNO_2016))
             .contentType(JSON_CONTENT_TYPE))
         .andExpect(status().isNotFound());
-  }
+  } // TODO - no such test for delete? :)
 
-  @Test
+  @Test // TODO test name says that error is because update method is not valid - is that true? :)
   public void shouldReturnErrorCausedByNotValidInvoiceUpdateMethod() throws Exception {
-
     int invoiceId = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
 
     mockMvc
@@ -246,22 +251,21 @@ public class InvoiceControllerTest {
             .contentType(JSON_CONTENT_TYPE)
             .content(convertToJson(INVOICE_BLANK_IDENTIFIER)))
         .andExpect(status().isBadRequest())
-        .andExpect(jsonPath("$[0]",
-            is("Identifier not found")));
+        .andExpect(jsonPath("$[0]", is("Identifier not found")));
   }
 
   @Test
   public void removeInvoiceById() throws Exception {
     int firstResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
-    int secondResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
-    int thirdResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    int secondResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016); // TODO why do you assign to variable if not used?
+    int thirdResponse = callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018); // TODO why do you assign to variable if not used?
 
     mockMvc
         .perform(delete(INVOICE_SERVICE_PATH + "/" + firstResponse))
         .andExpect(status().isOk());
 
     mockMvc
-        .perform(delete(INVOICE_SERVICE_PATH + "/5"))
+        .perform(delete(INVOICE_SERVICE_PATH + "/5")) // TODO that should be separate test
         .andExpect(status().isNotFound());
 
     mockMvc
@@ -270,14 +274,13 @@ public class InvoiceControllerTest {
   }
 
   private int callRestServiceToAddInvoiceAndReturnId(Invoice invoice) throws Exception {
-    String response =
-        mockMvc
-            .perform(post(INVOICE_SERVICE_PATH)
-                .content(convertToJson(invoice))
-                .contentType(JSON_CONTENT_TYPE))
-            .andExpect(status().isOk())
-            .andReturn()
-            .getResponse().getContentAsString();
+    String response = mockMvc
+        .perform(post(INVOICE_SERVICE_PATH)
+            .content(convertToJson(invoice))
+            .contentType(JSON_CONTENT_TYPE))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse().getContentAsString();
     return Integer.valueOf(response);
   }
 
@@ -287,6 +290,6 @@ public class InvoiceControllerTest {
     } catch (JsonProcessingException exception) {
       exception.printStackTrace();
     }
-    return null;
+    return "";
   }
 }

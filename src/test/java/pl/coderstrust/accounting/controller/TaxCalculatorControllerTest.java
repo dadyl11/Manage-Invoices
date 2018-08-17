@@ -34,7 +34,7 @@ import pl.coderstrust.accounting.model.Invoice;
 @AutoConfigureMockMvc
 public class TaxCalculatorControllerTest {
 
-  private static final String TAXCALCULATOR_SERVICE_PATH = "/taxcalculator";
+  private static final String TAX_CALCULATOR_SERVICE_PATH = "/taxcalculator";
   private static final String INVOICE_SERVICE_PATH = "/invoices";
   private static final MediaType JSON_CONTENT_TYPE = MediaType.APPLICATION_JSON_UTF8;
 
@@ -57,7 +57,6 @@ public class TaxCalculatorControllerTest {
     assertThat(taxCalculatorController, is(notNullValue()));
   }
 
-
   @Test
   public void shouldGetIncome() throws Exception {
     //given
@@ -67,7 +66,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/Income/" + COMPANY_DRUTEX.getNip()))
+        .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/Income/" + COMPANY_DRUTEX.getNip()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(138.0)))
         .andReturn();
@@ -83,7 +82,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/TaxDue/" + COMPANY_DRUTEX.getNip()))
+        .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/TaxDue/" + COMPANY_DRUTEX.getNip()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(19.2)))
         .andReturn();
@@ -99,7 +98,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/TaxIncluded/" + COMPANY_DRUKPOL.getNip()))
+        .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/TaxIncluded/" + COMPANY_DRUKPOL.getNip()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(11.592)))
         .andReturn();
@@ -115,7 +114,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/Costs/" + COMPANY_WASBUD.getNip()))
+        .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/Costs/" + COMPANY_WASBUD.getNip()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(70.2)))
         .andReturn();
@@ -131,7 +130,7 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/Profit/" + COMPANY_WASBUD.getNip()))
+        .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/Profit/" + COMPANY_WASBUD.getNip()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(-19.8)))
         .andReturn();
@@ -147,13 +146,14 @@ public class TaxCalculatorControllerTest {
 
     //then
     MvcResult result = mockMvc
-        .perform(get(TAXCALCULATOR_SERVICE_PATH + "/VatPayable/" + COMPANY_WASBUD.getNip()))
+        .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/VatPayable/" + COMPANY_WASBUD.getNip()))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", is(11.592)))
         .andReturn();
   }
 
-
+  // TODO return value is never used - maybe you can simplify the method
+  // TODO duplicate with InvoiceControllerTest - maybe you can move it to some kind of helper? :)
   private int callRestServiceToAddInvoiceAndReturnId(Invoice invoice) throws Exception {
     String response =
         mockMvc
@@ -172,6 +172,6 @@ public class TaxCalculatorControllerTest {
     } catch (JsonProcessingException exception) {
       exception.printStackTrace();
     }
-    return null;
+    return null; // TODO maybe "" ? :)
   }
 }

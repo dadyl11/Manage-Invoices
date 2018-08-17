@@ -5,6 +5,7 @@ import pl.coderstrust.accounting.model.Company;
 
 public class CompanyProvider {
 
+  // TODO use Builder instead of constructor - with so many argument it's hard to know what is what.
   public static final Company COMPANY_TRANSPOL = new Company(
       "Transpol",
       "5621760000",

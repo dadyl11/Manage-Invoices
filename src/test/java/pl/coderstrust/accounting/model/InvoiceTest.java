@@ -34,11 +34,10 @@ public class InvoiceTest {
     List<InvoiceEntry> actual = INVOICE_CHELMNO_2016.getEntries();
 
     //then
+    assertThat(actual.size(), is(3));
     assertThat(actual, hasItem(SPAN));
     assertThat(actual, hasItem(CLAMP));
     assertThat(actual, hasItem(SUPPORT));
-    assertThat(actual.size(), is(3));
-
   }
 
   @Test

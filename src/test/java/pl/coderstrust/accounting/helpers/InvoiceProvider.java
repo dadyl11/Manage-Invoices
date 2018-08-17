@@ -24,10 +24,11 @@ public class InvoiceProvider {
       CompanyProvider.COMPANY_DRUTEX,
       SPAN_CLAMP_SUPPORT);
 
+  // TODO I don't like your naming convention - is the city the most important aspect of each invoice? Do you know by sale place what is inside?
   public static final Invoice INVOICE_GRUDZIADZ_2017 = new Invoice(
       2,
       "2/2018",
-      LocalDate.of(2017, 3, 3), // TODO 03 is octal not decimal - should be 3 :)
+      LocalDate.of(2017, 3, 3),
       LocalDate.of(2017, 3, 2),
       "Grudziadz",
       CompanyProvider.COMPANY_DRUKPOL,
@@ -38,7 +39,7 @@ public class InvoiceProvider {
       3,
       "3/2018",
       LocalDate.of(2016, 03, 05), // TODO please use more various dates
-      LocalDate.of(2016, 02, 04),
+      LocalDate.of(2016, 02, 04), // TODO 03 is octal not decimal - should be 3 :)
       "Chelmno",
       CompanyProvider.COMPANY_DRUKPOL,
       CompanyProvider.COMPANY_TRANSPOL,
