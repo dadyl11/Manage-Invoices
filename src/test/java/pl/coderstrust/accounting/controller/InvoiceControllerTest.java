@@ -99,7 +99,7 @@ public class InvoiceControllerTest {
 
     invoiceAssertion.assertInvoiceFromList(firstResponse, INVOICE_KRAKOW_2018, "0");
     invoiceAssertion.assertInvoiceFromList(secondResponse, INVOICE_CHELMNO_2016, "1");
-    invoiceAssertion.assertInvoiceFromList(secondResponse, INVOICE_BYDGOSZCZ_2018, "2");
+    invoiceAssertion.assertInvoiceFromList(thirdResponse, INVOICE_BYDGOSZCZ_2018, "2");
   }
 
   @Test
@@ -138,7 +138,7 @@ public class InvoiceControllerTest {
   }
 
   @Test
-  public void updateInvoice() throws Exception {
+  public void updateInvoiceById() throws Exception {
     int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_RADOMSKO_2018);
 
     mockMvc
