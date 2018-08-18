@@ -18,18 +18,18 @@ public class InvoiceService {
     this.database = database;
   }
 
-  public int saveInvoice(Invoice invoice) throws IOException { // TODO those exceptions are not needed now :)
+  public int saveInvoice(Invoice invoice) {
     if (invoice == null) {
       throw new IllegalArgumentException("Invoice cannot be null");
     }
     return database.saveInvoice(invoice);
   }
 
-  public List<Invoice> getInvoices() throws IOException {
+  public List<Invoice> getInvoices() {
     return database.getInvoices();
   }
 
-  public Optional<Invoice> getInvoiceById(int id) throws IOException {
+  public Optional<Invoice> getInvoiceById(int id) {
     return database.getInvoices()
         .stream()
         .filter(invoice -> invoice.getId() == id)
