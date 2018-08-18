@@ -26,7 +26,7 @@ public class InFileDatabase implements Database {
   }
 
   @Override
-  public int saveInvoice(Invoice invoice)  {
+  public int saveInvoice(Invoice invoice) {
     int id = indexHelper.getIdAndSaveToFile();
     invoice.setId(id); // TODO you should not modify objects you receive
     fileHelper.writeInvoice(invoiceConverter.convertInvoiceToJson(invoice));
@@ -42,7 +42,7 @@ public class InFileDatabase implements Database {
   }
 
   @Override
-  public void updateInvoiceById(int id, Invoice invoice)  {
+  public void updateInvoiceById(int id, Invoice invoice) {
     List<Invoice> invoiceList = getAllInvoicesExceptWithSpecifiedId(id);
     invoice.setId(id); // TODO you should not modify received object
     invoiceList.add(invoice);
@@ -50,7 +50,7 @@ public class InFileDatabase implements Database {
   }
 
   @Override
-  public void removeInvoiceById(int id)  {
+  public void removeInvoiceById(int id) {
     // TODO this method and this above are almist identical but organised different way e.g. invoiceList should be variable here
     List<String> jsonList = invoiceConverter.convertListOfInvoicesToJsons(getAllInvoicesExceptWithSpecifiedId(id));
     fileHelper.replaceFileContent(jsonList);
