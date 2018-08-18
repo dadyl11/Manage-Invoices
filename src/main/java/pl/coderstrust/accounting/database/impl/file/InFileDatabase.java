@@ -42,7 +42,7 @@ public class InFileDatabase implements Database {
   }
 
   @Override
-  public void updateInvoice(int id, Invoice invoice) throws IOException {
+  public void updateInvoiceById(int id, Invoice invoice) throws IOException {
     List<Invoice> invoiceList = getAllInvoicesExceptWithSpecifiedId(id);
     invoice.setId(id); // TODO you should not modify received object
     invoiceList.add(invoice);

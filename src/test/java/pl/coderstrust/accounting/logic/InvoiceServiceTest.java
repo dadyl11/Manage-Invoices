@@ -94,7 +94,7 @@ public class InvoiceServiceTest {
 
     //then
     System.out.println(actual.toString()); // TODO - is that needed? :)
-    verify(databaseMock).updateInvoice(id, INVOICE_KRAKOW_2018);
+    verify(databaseMock).updateInvoiceById(id, INVOICE_KRAKOW_2018);
   }
 
   @Test

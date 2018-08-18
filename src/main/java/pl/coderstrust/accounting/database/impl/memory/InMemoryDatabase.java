@@ -43,7 +43,7 @@ public class InMemoryDatabase implements Database {
   }
 
   @Override
-  public void updateInvoice(int id, Invoice invoice) {
+  public void updateInvoiceById(int id, Invoice invoice) {
     //invoice.setId(id); // TODO you cannot modify object you received - good example is Invoice provider -
     // with each test you are changing the invoice so other tests are failing... There is also other aspect of that
     // security - you keep in your collection the same object someone has reference too and he can manipulate this object :)

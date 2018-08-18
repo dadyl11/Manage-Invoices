@@ -6,13 +6,13 @@ import pl.coderstrust.accounting.model.Invoice;
 
 public interface Database {
 
-  int saveInvoice(Invoice invoice) throws IOException; // TODO can use do something with this exception?
+  int saveInvoice(Invoice invoice);
 
-  List<Invoice> getInvoices() throws IOException;
+  List<Invoice> getInvoices();
 
-  void updateInvoice(int id, Invoice invoice) throws IOException;
+  void updateInvoiceById(int id, Invoice invoice);
 
-  void removeInvoiceById(int id) throws IOException; // TODO you remove byId but update without id - be consistent please :)
+  void removeInvoiceById(int id);
 
   void clearDatabase();
 }

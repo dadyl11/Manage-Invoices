@@ -81,7 +81,7 @@ public abstract class DatabaseTest {
     int index = database.saveInvoice(INVOICE_GRUDZIADZ_2017);
 
     //when
-    database.updateInvoice(index, INVOICE_BYDGOSZCZ_2018);
+    database.updateInvoiceById(index, INVOICE_BYDGOSZCZ_2018);
 
     //then
     assertThat(database.getInvoices().size(), is(1));
