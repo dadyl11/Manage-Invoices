@@ -7,56 +7,69 @@ import java.util.List;
 import pl.coderstrust.accounting.model.InvoiceEntry;
 import pl.coderstrust.accounting.model.VatRate;
 
-// TODO use Builder instead of constructor - with so many argument it's hard to know what is what.
+
 public class InvoiceEntryProvider {
 
-  public static final InvoiceEntry SPAN = new InvoiceEntry(
-      "span",
-      BigDecimal.valueOf(10),
-      VatRate.NORMAL,
-      BigDecimal.valueOf(6));
+  public static final InvoiceEntry SPAN = new InvoiceEntry.InvoiceEntryBuilder()
+      .description("span")
+      .netPrice(BigDecimal.valueOf(10))
+      .vatRate(VatRate.NORMAL)
+      .quantity(BigDecimal.valueOf(6))
+      .build();
 
-  public static final InvoiceEntry CLAMP = new InvoiceEntry(
-      "clamp",
-      BigDecimal.valueOf(6),
-      VatRate.NORMAL,
-      BigDecimal.valueOf(2));
 
-  public static final InvoiceEntry SUPPORT = new InvoiceEntry(
-      "support",
-      BigDecimal.valueOf(11),
-      VatRate.REDUCED_4,
-      BigDecimal.valueOf(6));
+  public static final InvoiceEntry CLAMP = new InvoiceEntry.InvoiceEntryBuilder()
+      .description("clamp")
+      .netPrice(BigDecimal.valueOf(6))
+      .vatRate(VatRate.NORMAL)
+      .quantity(BigDecimal.valueOf(2))
+      .build();
 
-  public static final InvoiceEntry LINK = new InvoiceEntry(
-      "link",
-      BigDecimal.valueOf(13),
-      VatRate.ZERO,
-      BigDecimal.valueOf(6));
 
-  public static final InvoiceEntry BLANK_DESCRIPTION = new InvoiceEntry(
-      "",
-      BigDecimal.valueOf(13),
-      VatRate.ZERO,
-      BigDecimal.valueOf(6));
+  public static final InvoiceEntry SUPPORT = new InvoiceEntry.InvoiceEntryBuilder()
+      .description("support")
+      .netPrice(BigDecimal.valueOf(11))
+      .vatRate(VatRate.REDUCED_4)
+      .quantity(BigDecimal.valueOf(6))
+      .build();
 
-  public static final InvoiceEntry NULL_NET_PRICE = new InvoiceEntry(
-      "link",
-      null,
-      VatRate.ZERO,
-      BigDecimal.valueOf(6));
 
-  public static final InvoiceEntry NULL_VAT_RATE = new InvoiceEntry(
-      "link",
-      BigDecimal.valueOf(13),
-      null,
-      BigDecimal.valueOf(6));
+  public static final InvoiceEntry LINK = new InvoiceEntry.InvoiceEntryBuilder()
+      .description("link")
+      .netPrice(BigDecimal.valueOf(13))
+      .vatRate(VatRate.REDUCED_4)
+      .quantity(BigDecimal.valueOf(6))
+      .build();
 
-  public static final InvoiceEntry NULL_QUANTITY = new InvoiceEntry(
-      "link",
-      BigDecimal.valueOf(13),
-      VatRate.ZERO,
-      null);
+
+  public static final InvoiceEntry BLANK_DESCRIPTION = new InvoiceEntry.InvoiceEntryBuilder()
+      .description("")
+      .netPrice(BigDecimal.valueOf(13))
+      .vatRate(VatRate.NORMAL)
+      .quantity(BigDecimal.valueOf(6))
+      .build();
+
+
+  public static final InvoiceEntry NULL_NET_PRICE = new InvoiceEntry.InvoiceEntryBuilder()
+      .description("")
+      .netPrice(null)
+      .vatRate(VatRate.NORMAL)
+      .quantity(BigDecimal.valueOf(6))
+      .build();
+
+  public static final InvoiceEntry NULL_VAT_RATE = new InvoiceEntry.InvoiceEntryBuilder()
+      .description("")
+      .netPrice(BigDecimal.valueOf(13))
+      .vatRate(null)
+      .quantity(BigDecimal.valueOf(6))
+      .build();
+
+  public static final InvoiceEntry NULL_QUANTITY = new InvoiceEntry.InvoiceEntryBuilder()
+      .description("")
+      .netPrice(BigDecimal.valueOf(13))
+      .vatRate(VatRate.NORMAL)
+      .quantity(null)
+      .build();
 
   public static final List<InvoiceEntry> SPAN_CLAMP = new ArrayList<>(Arrays.asList(SPAN, CLAMP));
 

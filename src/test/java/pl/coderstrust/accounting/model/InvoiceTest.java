@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.CLAMP;
+import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.EMPTY;
+import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.ONE_LINK;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SUPPORT;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_2016;
@@ -11,8 +13,10 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIAD
 import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import org.junit.Test;
+import pl.coderstrust.accounting.helpers.CompanyProvider;
 import pl.pojo.tester.api.assertion.Method;
 
 public class InvoiceTest {
@@ -43,7 +47,15 @@ public class InvoiceTest {
   @Test
   public void addEntryToList() {
     //given
-    Invoice invoice = new Invoice();
+    Invoice invoice = new Invoice.Invoicebuilder()
+        .identifier("1/2018")
+        .issueDate(LocalDate.of(2018, 7, 7))
+        .saleDate(LocalDate.of(2018, 7, 7))
+        .salePlace("Lodz")
+        .buyer(CompanyProvider.COMPANY_DRUTEX)
+        .seller(CompanyProvider.COMPANY_BLANK_STREET)
+        .entries(EMPTY)
+        .build();
 
     //when
     invoice.addInvoiceEntry(CLAMP);

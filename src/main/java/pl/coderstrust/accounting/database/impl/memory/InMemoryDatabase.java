@@ -1,5 +1,6 @@
 package pl.coderstrust.accounting.database.impl.memory;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,19 +21,20 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public int saveInvoice(Invoice invoice) {
-    //invoice.setId(getNextId()); // TODO you cannot modify object you received - good example is Invoice provider -
-    // with each test you are changing the invoice so other tests are failing... There is also other aspect of that
-    // security - you keep in your collection the same object someone has reference too and he can manipulate this object :)
-    // Please correct workaround below to do deep copy (not shallow one as now) - best do copy constructor in class
-    Invoice internalInvoice = new Invoice();
+    invoice.setId(getNextId()); // TODO you cannot modify object you received - good example is Invoice provider -
+//    with each test you are changing the invoice so other tests are failing... There is also other aspect of that
+//    security - you keep in your collection the same object someone has reference too and he can manipulate this object :)
+//    Please correct workaround below to do deep copy (not shallow one as now) - best do copy constructor in class
+    Invoice internalInvoice = new Invoice.Invoicebuilder()
+        .identifier(invoice.getIdentifier())
+        .issueDate(invoice.getIssueDate())
+        .saleDate(invoice.getSaleDate())
+        .salePlace(invoice.getSalePlace())
+        .buyer(invoice.getBuyer())
+        .seller(invoice.getSeller())
+        .entries(invoice.getEntries())
+        .build();
     internalInvoice.setId(getNextId());
-    internalInvoice.setBuyer(invoice.getBuyer());
-    internalInvoice.setSeller(invoice.getSeller());
-    internalInvoice.setIdentifier(invoice.getIdentifier());
-    internalInvoice.setIssueDate(invoice.getIssueDate());
-    internalInvoice.setEntries(invoice.getEntries());
-    internalInvoice.setSaleDate(invoice.getSaleDate());
-    internalInvoice.setSalePlace(invoice.getSalePlace());
     invoices.put(internalInvoice.getId(), internalInvoice);
     return internalInvoice.getId();
   }
@@ -49,15 +51,15 @@ public class InMemoryDatabase implements Database {
     // security - you keep in your collection the same object someone has reference too and he can manipulate this object :)
     // Please correct workaround below to do deep copy (not shallow one as now) - best do copy constructor in class
 
-    Invoice internalInvoice = new Invoice();
-    internalInvoice.setId(id);
-    internalInvoice.setBuyer(invoice.getBuyer());
-    internalInvoice.setSeller(invoice.getSeller());
-    internalInvoice.setIdentifier(invoice.getIdentifier());
-    internalInvoice.setIssueDate(invoice.getIssueDate());
-    internalInvoice.setEntries(invoice.getEntries());
-    internalInvoice.setSaleDate(invoice.getSaleDate());
-    internalInvoice.setSalePlace(invoice.getSalePlace());
+    Invoice internalInvoice = new Invoice.Invoicebuilder()
+        .identifier(invoice.getIdentifier())
+        .issueDate(invoice.getIssueDate())
+        .saleDate(invoice.getSaleDate())
+        .salePlace(invoice.getSalePlace())
+        .buyer(invoice.getBuyer())
+        .seller(invoice.getSeller())
+        .entries(invoice.getEntries())
+        .build();
     invoices.put(id, internalInvoice);
   }
 
@@ -70,5 +72,9 @@ public class InMemoryDatabase implements Database {
   public void clearDatabase() {
     invoices.clear();
     id = 0;
+  }
+
+  public static void main(String[] args) {
+
   }
 }
