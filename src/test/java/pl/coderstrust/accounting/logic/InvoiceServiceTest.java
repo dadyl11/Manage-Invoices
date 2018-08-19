@@ -6,8 +6,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,7 +42,7 @@ public class InvoiceServiceTest {
   private InvoiceService invoiceService;
 
   @Test
-  public void shouldSaveInvoice() throws Exception {
+  public void shouldSaveInvoice() {
     //given
     when(databaseMock.saveInvoice(INVOICE_KRAKOW_2018)).thenReturn(INVOICE_KRAKOW_2018.getId());
 
@@ -52,13 +50,12 @@ public class InvoiceServiceTest {
     int id = invoiceService.saveInvoice(INVOICE_KRAKOW_2018);
 
     //then
-    assertNotNull(id); // TODO can int be null? :)
     assertThat(id, is(equalTo(INVOICE_KRAKOW_2018.getId())));
     verify(databaseMock).saveInvoice(INVOICE_KRAKOW_2018);
   }
 
   @Test
-  public void shouldGetCollectionOfInvoices() throws Exception {
+  public void shouldGetCollectionOfInvoices() {
     //given
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_BYDGOSZCZ_2018);
@@ -79,7 +76,7 @@ public class InvoiceServiceTest {
   }
 
   @Test
-  public void shouldUpdateInvoice() throws Exception {
+  public void shouldUpdateInvoice() {
     //given
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_CHELMNO_2016);
@@ -90,15 +87,13 @@ public class InvoiceServiceTest {
 
     //when
     invoiceService.updateInvoice(id, INVOICE_KRAKOW_2018);
-    List<Invoice> actual = invoiceService.getInvoices();
 
     //then
-    System.out.println(actual.toString()); // TODO - is that needed? :)
     verify(databaseMock).updateInvoiceById(id, INVOICE_KRAKOW_2018);
   }
 
   @Test
-  public void shouldRemoveInvoiceById() throws Exception {
+  public void shouldRemoveInvoiceById() {
     //given
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_KRAKOW_2018);
@@ -116,7 +111,7 @@ public class InvoiceServiceTest {
   }
 
   @Test
-  public void shouldReturnInvoiceById() throws IOException {
+  public void shouldReturnInvoiceById() {
     //given
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_BYDGOSZCZ_2018);
@@ -129,19 +124,15 @@ public class InvoiceServiceTest {
 
     //when
     Optional<Invoice> actual = invoiceService.getInvoiceById(id);
-    Optional<Invoice> expected = Optional.of(INVOICE_BYDGOSZCZ_2018); // TODO no need to wrap into Optional
+    Invoice expected = INVOICE_BYDGOSZCZ_2018;
 
     //then
     assertTrue(actual.isPresent());
-    assertThat(actual.get(), is(expected.get())); // TODO you should get actual once and assign to variable, not get() it multiple times
-    assertThat(actual.get(), is(INVOICE_BYDGOSZCZ_2018));
-    assertEquals(INVOICE_BYDGOSZCZ_2018, actual.get()); // TODO why do you need those duplicate assertions?
-    assertTrue(INVOICE_BYDGOSZCZ_2018.equals(actual.get())); // TODO why do you need those duplicate assertions?
-    assertTrue(actual.get().equals(INVOICE_BYDGOSZCZ_2018)); // TODO why do you need those duplicate assertions? It's not playground
+    assertThat(actual.get(), is(expected));
   }
 
   @Test
-  public void shouldReturnInvoicesByIssueDate() throws IOException {
+  public void shouldReturnInvoicesByIssueDate() {
     //given
     List<Invoice> invoices = new ArrayList<>();
     invoices.add(INVOICE_KRAKOW_2018);
@@ -157,30 +148,11 @@ public class InvoiceServiceTest {
 
     //then
     assertThat(actual, hasItems(INVOICE_KRAKOW_2018, INVOICE_BYDGOSZCZ_2018));
-  }
-
-  @Test // TODO this and test above are almost identical why don't you simply add one more assertion above?
-  public void shouldNotReturnInvoicesWithIssueDateOutOfTheRange() throws IOException {
-    //given
-    List<Invoice> invoices = new ArrayList<>();
-    invoices.add(INVOICE_KRAKOW_2018);
-    invoices.add(INVOICE_BYDGOSZCZ_2018);
-    invoices.add(INVOICE_GRUDZIADZ_2017);
-
-    when(databaseMock.getInvoices()).thenReturn(invoices);
-
-    //when
-    LocalDate fromDate = LocalDate.of(2018, 4, 12);
-    LocalDate toDate = LocalDate.of(2018, 6, 25);
-    List<Invoice> actual = invoiceService.getInvoicesByIssueDate(fromDate, toDate);
-
-    //then
     assertThat(actual, not(hasItem(INVOICE_GRUDZIADZ_2017)));
   }
 
   @Test
-  public void shouldThrowExceptionCausedByMissingInvoiceWithProvidedIdForUpdate()
-      throws IOException {
+  public void shouldThrowExceptionCausedByMissingInvoiceWithProvidedIdForUpdate() {
     //given
     int id = 0;
     expectedEx.expect(IllegalStateException.class);
@@ -191,8 +163,7 @@ public class InvoiceServiceTest {
   }
 
   @Test
-  public void shouldThrowExceptionCausedByMissingInvoiceWithProvidedIdToRemove()
-      throws IOException {
+  public void shouldThrowExceptionCausedByMissingInvoiceWithProvidedIdToRemove() {
     //given
     int id = 0;
     expectedEx.expect(IllegalStateException.class);
@@ -203,7 +174,7 @@ public class InvoiceServiceTest {
   }
 
   @Test
-  public void shouldThrowExceptionCausedByNullInvoice() throws IOException {
+  public void shouldThrowExceptionCausedByNullInvoice() {
     //given
     Invoice invoice = null;
     expectedEx.expect(IllegalArgumentException.class);
