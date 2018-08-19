@@ -68,7 +68,6 @@ public class InvoiceControllerTest {
 
   @Test
   public void shouldCheckSaveInvoiceRequest() throws Exception {
-    // TODO if not needed why do you add?
     int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
 
     invoiceAssertion.assertSingleInvoice(idResponse, INVOICE_BYDGOSZCZ_2018);
@@ -87,15 +86,12 @@ public class InvoiceControllerTest {
 
   @Test
   public void getInvoices() throws Exception {
-    int firstResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018); // TODO if not needed why do you add?
-    int secondResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016); // TODO if not needed why do you add?
+    int firstResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    int secondResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
     int thirdResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
 
     mockMvc
-        .perform(get(INVOICE_SERVICE_PATH))
-        .andDo(print())
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(3))); // TODO add assertions to all 3 :) HINT - you can use helper method with parameter
+        .perform(get(INVOICE_SERVICE_PATH)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(3)));
 
     invoiceAssertion.assertInvoiceFromList(firstResponse, INVOICE_KRAKOW_2018, "0");
     invoiceAssertion.assertInvoiceFromList(secondResponse, INVOICE_CHELMNO_2016, "1");
@@ -104,21 +100,18 @@ public class InvoiceControllerTest {
 
   @Test
   public void getInvoicesByIssueDateRange() throws Exception {
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018); // TODO if not needed why do you assign to varialble?
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
     int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018); // TODO if not needed why do you assign to varialble?
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
 
     LocalDate startDate = LocalDate.of(2015, 4, 12);
     LocalDate endDate = LocalDate.of(2017, 4, 12);
 
     String url = String
-        .format("/dates?startDate=%1$s&endDate=%2$s", startDate, endDate); // TODO what is "$s" doing? - without this symbols it doesn't work
+        .format("/dates?startDate=%1$s&endDate=%2$s", startDate, endDate); // TODO what is "$s" doing?
 
     mockMvc
-        .perform(get(INVOICE_SERVICE_PATH + url))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(1))); // TODO those assertions are duplicates in each test -
-    // write helper method taking id and Invoice to assert
+        .perform(get(INVOICE_SERVICE_PATH + url)).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1)));
     invoiceAssertion.assertSingleInvoice(idResponse, INVOICE_CHELMNO_2016);
   }
 
@@ -158,9 +151,9 @@ public class InvoiceControllerTest {
             .content(restHelper.convertToJson(INVOICE_CHELMNO_2016))
             .contentType(JSON_CONTENT_TYPE))
         .andExpect(status().isNotFound());
-  } // TODO - no such test for delete? :)
+  }
 
-  @Test // TODO test name says that error is because update method is not valid - is that true? :)
+  @Test
   public void shouldReturnErrorCausedByNotValidInvoiceIdentifier() throws Exception {
     int invoiceId = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
 
@@ -175,8 +168,8 @@ public class InvoiceControllerTest {
   @Test
   public void removeInvoiceById() throws Exception {
     int firstResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
-    int secondResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016); // TODO why do you assign to variable if not used?
-    int thirdResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018); // TODO why do you assign to variable if not used?
+    int secondResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
+    int thirdResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
 
     mockMvc
         .perform(delete(INVOICE_SERVICE_PATH + "/" + firstResponse))
