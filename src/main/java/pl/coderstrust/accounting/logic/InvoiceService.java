@@ -36,8 +36,7 @@ public class InvoiceService {
         .findAny();
   }
 
-  public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate)
-      throws IOException {
+  public List<Invoice> getInvoicesByIssueDate(LocalDate startDate, LocalDate endDate) {
     return database.getInvoices()
         .stream()
         .filter(n -> n.getIssueDate().isAfter(startDate))
@@ -45,17 +44,17 @@ public class InvoiceService {
         .collect(Collectors.toList());
   }
 
-  public void updateInvoice(int id, Invoice invoice) throws IOException {
+  public void updateInvoice(int id, Invoice invoice) {
     Optional<Invoice> invoiceFromDatabase = getInvoiceById(id);
 
     if (!invoiceFromDatabase.isPresent()) {
       throw new IllegalStateException("Invoice with id: " + id + " does not exist");
     }
 
-    database.updateInvoice(id, invoice);
+    database.updateInvoiceById(id, invoice);
   }
 
-  public void removeInvoiceById(int id) throws IOException {
+  public void removeInvoiceById(int id) {
     Optional<Invoice> invoiceFromDatabase = getInvoiceById(id);
 
     if (!invoiceFromDatabase.isPresent()) {

@@ -10,9 +10,11 @@ public interface Database {
 
   List<Invoice> getInvoices();
 
-  void updateInvoice(int id, Invoice invoice);
 
-  void removeInvoiceById(int id); // TODO you remove byId but update without id - be consistent please :)
+  void updateInvoiceById(int id, Invoice invoice);
+
+  void removeInvoiceById(int id);
+
 
   void clearDatabase();
 }
