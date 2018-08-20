@@ -17,7 +17,7 @@ import pl.coderstrust.accounting.model.Invoice;
 @RequestMapping("/invoices")
 @RestController
 @Api(value = "/invoices", description = "Operations on invoices")
-public class InvoiceController implements InvoiceInterface {
+public class InvoiceController implements InvoiceAPI {
 
   private InvoiceValidator invoiceValidator;
   private InvoiceService invoiceService;
@@ -60,8 +60,7 @@ public class InvoiceController implements InvoiceInterface {
   }
 
 
-  public ResponseEntity<?> updateInvoice(@PathVariable(name = "id", required = true) int id,
-      @RequestBody Invoice invoice) {
+  public ResponseEntity<?> updateInvoice(@PathVariable(name = "id", required = true) int id, @RequestBody Invoice invoice) {
     if (!invoiceService.getInvoiceById(id).isPresent()) {
       return ResponseEntity.notFound().build();
     }

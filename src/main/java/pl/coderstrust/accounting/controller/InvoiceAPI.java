@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import pl.coderstrust.accounting.model.Invoice;
 
-public interface InvoiceInterface {
+public interface InvoiceAPI {
 
   @ApiOperation(value = "Saves invoice",
       notes = "Returns ResponseEntity with id of saved invoice",
