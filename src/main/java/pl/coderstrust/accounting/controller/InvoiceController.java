@@ -17,7 +17,7 @@ import pl.coderstrust.accounting.model.Invoice;
 @RequestMapping("/invoices")
 @RestController
 @Api(value = "/invoices", description = "Operations on invoices")
-public class InvoiceController implements InvoiceAPI {
+public class InvoiceController implements InvoiceApi {
 
   private InvoiceValidator invoiceValidator;
   private InvoiceService invoiceService;
