@@ -10,7 +10,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jayway.restassured.http.ContentType;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import pl.coderstrust.accounting.controller.JacksonProvider;
+import pl.coderstrust.accounting.configuration.JacksonProvider;
 import restassured.Data;
 
 public class PostMethodTest implements Data {

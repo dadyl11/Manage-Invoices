@@ -13,7 +13,7 @@ public class ConnectionDatesDeleteTest implements Data {
 
   @Test
   public void whenRequestGetInvoicesThen200() {
-    given().when().get("http://localhost:8080/invoices/").then().statusCode(200);
+    given().when().get("http://localhost:8080/invoices").then().statusCode(200);
   }
 
   @Test

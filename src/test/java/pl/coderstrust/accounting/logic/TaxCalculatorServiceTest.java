@@ -27,7 +27,8 @@ public class TaxCalculatorServiceTest {
   public ExpectedException thrown = ExpectedException.none();
 
   private InvoiceService invoiceService = new InvoiceService(new InMemoryDatabase());
-  private TaxCalculatorService taxCalculatorService = new TaxCalculatorService(invoiceService, new NipValidator());
+  private TaxCalculatorService taxCalculatorService = new TaxCalculatorService(invoiceService,
+      new NipValidator());
 
   @Test
   public void shouldReturnZeroWhenNoInvoices() throws IOException {
@@ -68,7 +69,7 @@ public class TaxCalculatorServiceTest {
             taxCalculatorService::incomeToBigDecimal, drutexNip);
 
     //then
-    assertThat(actual, is(BigDecimal.valueOf(138.0)));
+    assertThat(actual, is(BigDecimal.valueOf(138.0).setScale(2, BigDecimal.ROUND_HALF_UP)));
   }
 
   @Test
@@ -83,7 +84,7 @@ public class TaxCalculatorServiceTest {
             taxCalculatorService::incomeToBigDecimal, transpolNip);
 
     //then
-    assertThat(actual, is(BigDecimal.valueOf(138.0)));
+    assertThat(actual, is(BigDecimal.valueOf(138.0).setScale(2, BigDecimal.ROUND_HALF_UP)));
   }
 
   @Test
