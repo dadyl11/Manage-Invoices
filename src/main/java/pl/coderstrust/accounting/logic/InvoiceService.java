@@ -29,7 +29,6 @@ public class InvoiceService {
     return database.getInvoices();
   }
 
-
   public Optional<Invoice> getInvoiceById(int id) {
     return database.getInvoices()
         .stream()

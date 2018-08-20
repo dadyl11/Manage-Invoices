@@ -10,9 +10,11 @@ public interface Database {
 
   List<Invoice> getInvoices();
 
+
   void updateInvoiceById(int id, Invoice invoice);
 
   void removeInvoiceById(int id);
+
 
   void clearDatabase();
 }

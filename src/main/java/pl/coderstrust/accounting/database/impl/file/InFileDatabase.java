@@ -27,6 +27,7 @@ public class InFileDatabase implements Database {
 
   @Override
   public int saveInvoice(Invoice invoice) {
+
     int id = indexHelper.getIdAndSaveToFile();
     invoice.setId(id); // TODO you should not modify objects you receive
     fileHelper.writeInvoice(invoiceConverter.convertInvoiceToJson(invoice));
@@ -43,6 +44,7 @@ public class InFileDatabase implements Database {
 
   @Override
   public void updateInvoiceById(int id, Invoice invoice) {
+
     List<Invoice> invoiceList = getAllInvoicesExceptWithSpecifiedId(id);
     invoice.setId(id); // TODO you should not modify received object
     invoiceList.add(invoice);
