@@ -20,12 +20,16 @@ public class RestHelper {
   @Autowired
   private MockMvc mockMvc;
 
-  public void callRestServiceToAddInvoiceAndReturnId(Invoice invoice) throws Exception {
-    mockMvc
-        .perform(post(INVOICE_SERVICE_PATH)
-            .content(convertToJson(invoice))
-            .contentType(JSON_CONTENT_TYPE))
-        .andExpect(status().isOk());
+  public int callRestServiceToAddInvoiceAndReturnId(Invoice invoice) throws Exception {
+    String response =
+        mockMvc
+            .perform(post(INVOICE_SERVICE_PATH)
+                .content(convertToJson(invoice))
+                .contentType(JSON_CONTENT_TYPE))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse().getContentAsString();
+    return Integer.parseInt(response);
   }
 
   public String convertToJson(Object object) {
