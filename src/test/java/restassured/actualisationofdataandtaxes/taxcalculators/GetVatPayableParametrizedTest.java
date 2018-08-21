@@ -12,7 +12,7 @@ import restassured.Data;
 @RunWith(JUnitParamsRunner.class)
 public class GetVatPayableParametrizedTest implements Data {
 
-  String path = "/taxcalculator/getTaxDue?nip=";
+  String path = taxCalculatorUrl+"/VatPayable/";
 
   @Test
   @Parameters(method = "dataForTesting")
@@ -22,14 +22,14 @@ public class GetVatPayableParametrizedTest implements Data {
 
   private Object[] dataForTesting() {
     return new Object[]{
-        new Object[]{path + nipCHse, "13.44"},
+        new Object[]{path + nipCHse, "-5.76"},
         new Object[]{path + nipBYse, "19.20"},
         new Object[]{path + nipKRse, "19.20"},
         new Object[]{path + nipGRse, "11.59"},
         new Object[]{path + nipRAse, "11.59"},
         new Object[]{path + nipCHba, "0"},
         new Object[]{path + nipBYba, "11.59"},
-        new Object[]{path + nipKRba, "13.44"},
+        new Object[]{path + nipKRba, "-5.76"},
         new Object[]{path + nipGRba, "0"},
         new Object[]{path + nipRAba, "19.20"}
     };

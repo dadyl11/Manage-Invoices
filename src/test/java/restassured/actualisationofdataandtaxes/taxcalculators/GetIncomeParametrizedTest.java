@@ -13,7 +13,7 @@ import restassured.Data;
 @RunWith(JUnitParamsRunner.class)
 public class GetIncomeParametrizedTest implements Data {
 
-  String path = "/taxcalculator/getIncome?nip=";
+  String path = taxCalculatorUrl+"/Income/";
 
   @Test
   @Parameters(method = "dataForTesting")

@@ -44,7 +44,7 @@ public class PostMethodTest implements Data {
 
     given().when().get(invoicesUrl).then()
         .body(containsString("4/2018"))
-        .body(containsString("1239514823"));
+        .body(containsString("8421622720"));
   }
 
   @Test

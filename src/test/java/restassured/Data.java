@@ -22,5 +22,6 @@ public interface Data {
   String nipGRba = invoiceGudziadz.getBuyer().getNip();
   String nipRAba = invoiceRadomsko.getBuyer().getNip();
 
-  String invoicesUrl = "/invoices";
+  String invoicesUrl = "http://localhost:8888/invoices";
+  String taxCalculatorUrl = "http://localhost:8888/taxcalculator";
 }

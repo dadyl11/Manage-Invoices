@@ -35,7 +35,7 @@ public class TaxCalculatorService {
         .filter(invoice -> buyerOrSeller.test(invoice, nip))
         .map(taxOrIncomeToBigDecimal)
         .reduce(BigDecimal::add) // TODO can be replaced with method reference?
-        .orElse(BigDecimal.ZERO);
+        .orElse(BigDecimal.ZERO).setScale(2, BigDecimal.ROUND_HALF_UP);
   }
 
   // TODO as above - those methods should be private - you can make it easier for user

@@ -112,23 +112,23 @@ public class InvoiceControllerTest {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$", hasSize(3))) // TODO add assertions to all 3 :) HINT - you can use helper method with parameter
-        .andExpect(jsonPath("$[2].id", is(thirdResponse)))
+        .andExpect(jsonPath("$[2].id", is(2)))
         .andExpect(jsonPath("$[2].identifier", is(INVOICE_BYDGOSZCZ_2018.getIdentifier())))
         .andExpect(jsonPath("$[2].salePlace", is(INVOICE_BYDGOSZCZ_2018.getSalePlace())))
         .andExpect(jsonPath("$[2].buyer.name", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getName())))
         .andExpect(jsonPath("$[2].buyer.nip", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getNip())))
         .andExpect(jsonPath("$[2].buyer.street", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getStreet())))
         .andExpect(jsonPath("$[2].buyer.postalCode", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getPostalCode())))
-        .andExpect(jsonPath("$[2].buyer.discount", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$[2].buyer.discount", is(INVOICE_BYDGOSZCZ_2018.getBuyer().getDiscount().toString())))
         .andExpect(jsonPath("$[2].seller.name", is(INVOICE_BYDGOSZCZ_2018.getSeller().getName())))
         .andExpect(jsonPath("$[2].seller.nip", is(INVOICE_BYDGOSZCZ_2018.getSeller().getNip())))
         .andExpect(jsonPath("$[2].seller.street", is(INVOICE_BYDGOSZCZ_2018.getSeller().getStreet())))
         .andExpect(jsonPath("$[2].seller.postalCode", is(INVOICE_BYDGOSZCZ_2018.getSeller().getPostalCode())))
-        .andExpect(jsonPath("$[2].seller.discount", is(INVOICE_BYDGOSZCZ_2018.getSeller().getDiscount().doubleValue())))
+        .andExpect(jsonPath("$[2].seller.discount", is(INVOICE_BYDGOSZCZ_2018.getSeller().getDiscount().toString())))
         .andExpect(jsonPath("$[2].entries[0].description", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getDescription())))
-        .andExpect(jsonPath("$[2].entries[0].netPrice", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getNetPrice().intValue())))
+        .andExpect(jsonPath("$[2].entries[0].netPrice", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getNetPrice().toString())))
         .andExpect(jsonPath("$[2].entries[0].vatRate", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getVatRate().toString())))
-        .andExpect(jsonPath("$[2].entries[0].quantity", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getQuantity().intValue())));
+        .andExpect(jsonPath("$[2].entries[0].quantity", is(INVOICE_BYDGOSZCZ_2018.getEntries().get(0).getQuantity().toString())));
   }
 
   @Test

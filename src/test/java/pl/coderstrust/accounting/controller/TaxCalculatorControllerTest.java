@@ -68,7 +68,7 @@ public class TaxCalculatorControllerTest {
     MvcResult result = mockMvc
         .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/Income/" + COMPANY_DRUTEX.getNip()))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", is(138.0)))
+        .andExpect(jsonPath("$", is("138.00")))
         .andReturn();
   }
 

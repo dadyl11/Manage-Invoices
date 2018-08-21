@@ -73,9 +73,10 @@ public class InvoiceServiceTest {
     //then
     verify(databaseMock).getInvoices();
     assertThat(actual, is(invoices));
-    assertThat(actual, hasItem(INVOICE_BYDGOSZCZ_2018));
-    assertThat(actual, hasItem(INVOICE_CHELMNO_2016));
-    assertThat(actual, hasItem(INVOICE_GRUDZIADZ_2017));
+//    assertThat(actual, hasItem(INVOICE_BYDGOSZCZ_2018));
+//    assertThat(actual, hasItem(INVOICE_CHELMNO_2016));
+//    assertThat(actual, hasItem(INVOICE_GRUDZIADZ_2017));
+    assertThat(actual, hasItems(INVOICE_BYDGOSZCZ_2018, INVOICE_CHELMNO_2016, INVOICE_GRUDZIADZ_2017));
   }
 
   @Test
@@ -90,10 +91,10 @@ public class InvoiceServiceTest {
 
     //when
     invoiceService.updateInvoice(id, INVOICE_KRAKOW_2018);
-    List<Invoice> actual = invoiceService.getInvoices();
+//    List<Invoice> actual = invoiceService.getInvoices();
 
     //then
-    System.out.println(actual.toString()); // TODO - is that needed? :)
+//    System.out.println(actual.toString()); // TODO - is that needed? :)
     verify(databaseMock).updateInvoice(id, INVOICE_KRAKOW_2018);
   }
 
