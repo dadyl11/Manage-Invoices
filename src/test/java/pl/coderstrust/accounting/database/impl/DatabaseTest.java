@@ -63,11 +63,11 @@ public abstract class DatabaseTest {
     database.saveInvoice(INVOICE_GRUDZIADZ_2017);
 
     //when
-    database.removeInvoiceById(INVOICE_KRAKOW_2018.getId());
+    database.removeInvoiceById(1);
 
     //then
     assertThat(database.getInvoices().size(), is(1));
-    //assertThat(database.getInvoices().get(0), is(INVOICE_GRUDZIADZ_2017));
+    assertThat(database.getInvoices().get(0), is(INVOICE_GRUDZIADZ_2017));
     // TODO assertion not passing because of id - you need to rethink how it's handled - you cannot modify objects in provider
     // alternatively you can modify it but than fields cannot be static and you need to replace it with methods returning
     // new object each time.

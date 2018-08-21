@@ -69,7 +69,7 @@ public class TaxCalculatorServiceTest {
     BigDecimal actual = taxCalculatorService.getTaxDue(COMPANY_WASBUD.getNip());
 
     //then
-    assertThat(actual, is(BigDecimal.valueOf(11.592)));
+    assertThat(actual, is(BigDecimal.valueOf(14.088)));
   }
 
   @Test

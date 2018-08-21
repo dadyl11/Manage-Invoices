@@ -81,7 +81,7 @@ public class TaxCalculatorControllerTest {
     MvcResult result = mockMvc
         .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/TaxDue/" + COMPANY_DRUTEX.getNip()))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", is(19.2)))
+        .andExpect(jsonPath("$", is(22.008)))
         .andReturn();
   }
 
@@ -145,7 +145,7 @@ public class TaxCalculatorControllerTest {
     MvcResult result = mockMvc
         .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/VatPayable/" + COMPANY_WASBUD.getNip()))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", is(11.592)))
+        .andExpect(jsonPath("$", is(8.784)))
         .andReturn();
   }
 }

@@ -27,12 +27,11 @@ public class InvoiceEntry {
   public InvoiceEntry() {
   }
 
-  public InvoiceEntry(String description, BigDecimal netPrice,
-      VatRate vatRate, BigDecimal quantity) {
-    this.description = description;
-    this.netPrice = netPrice;
-    this.vatRate = vatRate;
-    this.quantity = quantity;
+  public InvoiceEntry(InvoiceEntryBuilder invoiceEntryBuilder) {
+    this.description = invoiceEntryBuilder.description;
+    this.netPrice = invoiceEntryBuilder.netPrice;
+    this.vatRate = invoiceEntryBuilder.vatRate;
+    this.quantity = invoiceEntryBuilder.quantity;
   }
 
   public String getDescription() {
@@ -85,7 +84,7 @@ public class InvoiceEntry {
   }
 
   @JsonIgnore
-  BigDecimal getNetValue() {
+  public BigDecimal getNetValue() {
     return getNetPrice().multiply(getQuantity());
   }
 
@@ -93,5 +92,37 @@ public class InvoiceEntry {
   public String toString() {
     return ReflectionToStringBuilder.toString(this,
         ToStringStyle.MULTI_LINE_STYLE, true, true);
+  }
+
+  public static class InvoiceEntryBuilder {
+
+    private String description;
+    private BigDecimal netPrice;
+    private VatRate vatRate;
+    private BigDecimal quantity;
+
+    public InvoiceEntryBuilder description(String description) {
+      this.description = description;
+      return this;
+    }
+
+    public InvoiceEntryBuilder netPrice(BigDecimal netPrice) {
+      this.netPrice = netPrice;
+      return this;
+    }
+
+    public InvoiceEntryBuilder vatRate(VatRate vatRate) {
+      this.vatRate = vatRate;
+      return this;
+    }
+
+    public InvoiceEntryBuilder quantity(BigDecimal quantity) {
+      this.quantity = quantity;
+      return this;
+    }
+
+    public InvoiceEntry build() {
+      return new InvoiceEntry(this);
+    }
   }
 }
