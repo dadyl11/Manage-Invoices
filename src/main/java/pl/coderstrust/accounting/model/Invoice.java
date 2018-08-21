@@ -14,7 +14,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 @ApiModel(value = "Invoice", description = "Sample model for the Invoice")
 public class Invoice {
 
-  @ApiModelProperty(value = "id assigned by database", example = "1")
+  @ApiModelProperty(value = "id assigned by database")
   private int id;
 
   @ApiModelProperty(value = "identifier provided by client", example = "6/2018")
@@ -37,6 +37,16 @@ public class Invoice {
   public Invoice() {
   }
 
+  public Invoice(Invoice invoice) {
+    this.identifier = invoice.identifier;
+    this.issueDate = invoice.issueDate;
+    this.saleDate = invoice.saleDate;
+    this.salePlace = invoice.salePlace;
+    this.buyer = new Company(invoice.getBuyer());
+    this.seller = new Company(invoice.getSeller());
+    this.entries = InvoiceEntry.deepCopyListOfEntries(invoice.entries);
+  }
+
   private Invoice(Invoicebuilder invoicebuilder) {
     this.id = invoicebuilder.id;
     this.identifier = invoicebuilder.identifier;
@@ -47,6 +57,7 @@ public class Invoice {
     this.seller = invoicebuilder.seller;
     this.entries = invoicebuilder.entries;
   }
+
 
   public String getIdentifier() {
     return identifier;

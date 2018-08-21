@@ -30,19 +30,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.coderstrust.accounting.helpers.InvoiceAssertion;
 import pl.coderstrust.accounting.helpers.RestHelper;
+import pl.coderstrust.accounting.helpers.TestBaseWithMockMvc;
 import pl.coderstrust.accounting.logic.InvoiceService;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureMockMvc
-public class InvoiceControllerTest {
+//@AutoConfigureMockMvc
+public class InvoiceControllerTest extends TestBaseWithMockMvc {
 
   private static final String INVOICE_SERVICE_PATH = "/invoices";
   private static final MediaType JSON_CONTENT_TYPE = MediaType.APPLICATION_JSON_UTF8;
 
-  @Autowired
-  private MockMvc mockMvc;
+//  @Autowired
+//  private MockMvc mockMvc;
 
   @Autowired
   private InvoiceController invoiceController;
@@ -50,11 +51,9 @@ public class InvoiceControllerTest {
   @Autowired
   private InvoiceService invoiceService;
 
-  @Autowired
-  private RestHelper restHelper;
+  private RestHelper restHelper = new RestHelper();
 
-  @Autowired
-  private InvoiceAssertion invoiceAssertion;
+  private InvoiceAssertion invoiceAssertion = new InvoiceAssertion();
 
   @Before
   public void beforeMethod() {

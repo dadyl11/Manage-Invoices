@@ -11,14 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.coderstrust.accounting.model.Invoice;
 
-@Service
-public class RestHelper {
+
+public class RestHelper extends TestBaseWithMockMvc {
 
   private static final String INVOICE_SERVICE_PATH = "/invoices";
   private static final MediaType JSON_CONTENT_TYPE = MediaType.APPLICATION_JSON_UTF8;
-
-  @Autowired
-  private MockMvc mockMvc;
 
   public int callRestServiceToAddInvoiceAndReturnId(Invoice invoice) throws Exception {
     String response =

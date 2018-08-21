@@ -10,13 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.coderstrust.accounting.model.Invoice;
 
-@Service
-public class InvoiceAssertion {
+public class InvoiceAssertion extends TestBaseWithMockMvc {
 
   private static final String INVOICE_SERVICE_PATH = "/invoices";
 
-  @Autowired
-  MockMvc mockMvc;
 
   public void assertSingleInvoice(int id, Invoice invoice) throws Exception {
     mockMvc

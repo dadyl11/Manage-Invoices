@@ -25,28 +25,27 @@ public class IndexHelper {
           id = scanner.nextInt();
         }
       } catch (FileNotFoundException exception) {
-        throw new RuntimeException("idFile not found"); // TODO - exception chaining
+        throw new RuntimeException("idFile not found", exception);
       }
     }
     return 1; // TODO shouldn't you create file in such case ?
   }
 
   public int getIdAndSaveToFile() {
-    id++;
     writeToFile(String.valueOf(id));
-    return id;
+    return id++;
   }
 
   public void clearIdFile() {
-    writeToFile(""); // TODO I would like it more if we write to file initial value instead of empty string - e.g. 1
+    writeToFile("1");
     id = 0;
   }
 
-  void writeToFile(String string) { // TODO why not private?
+  private void writeToFile(String string) {
     try (PrintWriter printWriter = new PrintWriter(currentIdFile.getName())) {
       printWriter.print(string);
     } catch (FileNotFoundException exception) {
-      throw new RuntimeException("idFile not found"); // TODO exception chaining
+      throw new RuntimeException("idFile not found", exception);
     }
 
   }

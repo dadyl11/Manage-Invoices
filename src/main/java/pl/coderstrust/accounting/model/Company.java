@@ -33,6 +33,15 @@ public class Company {
   public Company() {
   }
 
+  public Company(Company company) {
+    this.name = company.name;
+    this.nip = company.nip;
+    this.street = company.street;
+    this.postalCode = company.postalCode;
+    this.city = company.city;
+    this.discount = company.discount;
+  }
+
   private Company(CompanyBuilder companyBuilder) {
     this.name = companyBuilder.name;
     this.nip = companyBuilder.nip;

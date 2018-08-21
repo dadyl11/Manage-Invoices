@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
@@ -21,19 +22,8 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public int saveInvoice(Invoice invoice) {
-    invoice.setId(getNextId()); // TODO you cannot modify object you received - good example is Invoice provider -
-//    with each test you are changing the invoice so other tests are failing... There is also other aspect of that
-//    security - you keep in your collection the same object someone has reference too and he can manipulate this object :)
-//    Please correct workaround below to do deep copy (not shallow one as now) - best do copy constructor in class
-    Invoice internalInvoice = new Invoice.Invoicebuilder()
-        .identifier(invoice.getIdentifier())
-        .issueDate(invoice.getIssueDate())
-        .saleDate(invoice.getSaleDate())
-        .salePlace(invoice.getSalePlace())
-        .buyer(invoice.getBuyer())
-        .seller(invoice.getSeller())
-        .entries(invoice.getEntries())
-        .build();
+    invoice.setId(getNextId());
+    Invoice internalInvoice = new Invoice(invoice);
     internalInvoice.setId(getNextId());
     invoices.put(internalInvoice.getId(), internalInvoice);
     return internalInvoice.getId();
@@ -46,20 +36,7 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public void updateInvoiceById(int id, Invoice invoice) {
-    //invoice.setId(id); // TODO you cannot modify object you received - good example is Invoice provider -
-    // with each test you are changing the invoice so other tests are failing... There is also other aspect of that
-    // security - you keep in your collection the same object someone has reference too and he can manipulate this object :)
-    // Please correct workaround below to do deep copy (not shallow one as now) - best do copy constructor in class
-
-    Invoice internalInvoice = new Invoice.Invoicebuilder()
-        .identifier(invoice.getIdentifier())
-        .issueDate(invoice.getIssueDate())
-        .saleDate(invoice.getSaleDate())
-        .salePlace(invoice.getSalePlace())
-        .buyer(invoice.getBuyer())
-        .seller(invoice.getSeller())
-        .entries(invoice.getEntries())
-        .build();
+    Invoice internalInvoice = new Invoice(invoice);
     invoices.put(id, internalInvoice);
   }
 

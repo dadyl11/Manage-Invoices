@@ -32,8 +32,8 @@ public class InvoiceController implements InvoiceApi {
     if (!validationResult.isEmpty()) {
       return ResponseEntity.badRequest().body(validationResult);
     }
-    invoiceService.saveInvoice(invoice);
-    return ResponseEntity.ok(invoice.getId());
+    int id = invoiceService.saveInvoice(invoice);
+    return ResponseEntity.ok(id);
   }
 
 

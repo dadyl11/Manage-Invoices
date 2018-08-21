@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
@@ -32,6 +34,13 @@ public class InvoiceEntry {
     this.netPrice = invoiceEntryBuilder.netPrice;
     this.vatRate = invoiceEntryBuilder.vatRate;
     this.quantity = invoiceEntryBuilder.quantity;
+  }
+
+  public InvoiceEntry(InvoiceEntry invoiceEntry) {
+    this.description = invoiceEntry.description;
+    this.netPrice = invoiceEntry.netPrice;
+    this.vatRate = invoiceEntry.vatRate;
+    this.quantity = invoiceEntry.quantity;
   }
 
   public String getDescription() {
@@ -124,5 +133,11 @@ public class InvoiceEntry {
     public InvoiceEntry build() {
       return new InvoiceEntry(this);
     }
+  }
+
+  public static List<InvoiceEntry> deepCopyListOfEntries(List<InvoiceEntry> entries) {
+    return entries.stream()
+        .map(n -> new InvoiceEntry(n))
+        .collect(Collectors.toList());
   }
 }
