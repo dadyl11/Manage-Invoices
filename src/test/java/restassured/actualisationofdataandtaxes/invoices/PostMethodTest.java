@@ -63,6 +63,11 @@ public class PostMethodTest implements Data {
   }
 
   @Test
+  public void verifySizeOfInvoicesArray() {
+    given().when().get(invoicesUrl).then().body("$.size()", is(5));
+  }
+
+  @Test
   public void verifySalePlace() {
     given().when().get(invoicesUrl).then()
         .body("salePlace", hasItem(invoiceGudziadz.getSalePlace()));
