@@ -40,4 +40,12 @@ public class InvoiceConverter {
         .map(this::convertInvoiceToJson)
         .collect(Collectors.toList());
   }
+
+  public List<Invoice> convertListOfStringsToListOfInvoices(List<String> invoices) {
+    return invoices.stream()
+        .map(this::convertJsonToInvoice)
+        .collect(Collectors.toList());
+  }
+
+
 }

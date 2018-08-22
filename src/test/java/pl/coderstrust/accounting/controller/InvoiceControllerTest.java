@@ -13,10 +13,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_CITY;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_IDENTIFIER;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BYDGOSZCZ_2018;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_2016;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_RADOMSKO_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_LINK_2016;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_LINK_2018;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -78,10 +78,10 @@ public class InvoiceControllerTest {
 
   @Test
   public void shouldCheckSaveInvoiceRequest() throws Exception {
-    int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_LINK_2016);
     Invoice savedInvoice = restHelper.callRestServiceToReturnInvoiceById(idResponse);
 
-    invoiceAssertion.assertInvoices(idResponse, INVOICE_BYDGOSZCZ_2018, savedInvoice);
+    invoiceAssertion.assertInvoices(idResponse, INVOICE_DRUTEX_LINK_2016, savedInvoice);
   }
 
   @Test
@@ -97,9 +97,9 @@ public class InvoiceControllerTest {
 
   @Test
   public void getInvoices() throws Exception {
-    int firstResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
-    int secondResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
-    int thirdResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    int firstResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
+    int secondResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016);
+    int thirdResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_LINK_2016);
 
     Invoice firstSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(firstResponse);
     Invoice secondSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(secondResponse);
@@ -110,16 +110,16 @@ public class InvoiceControllerTest {
         .andDo(print()).andExpect(status()
         .isOk())
         .andExpect(jsonPath("$", hasSize(3)));
-    invoiceAssertion.assertInvoices(firstResponse, INVOICE_KRAKOW_2018, firstSavedInvoice);
-    invoiceAssertion.assertInvoices(secondResponse, INVOICE_CHELMNO_2016, secondSavedInvoice);
-    invoiceAssertion.assertInvoices(thirdResponse, INVOICE_BYDGOSZCZ_2018, thirdSavedInvoice);
+    invoiceAssertion.assertInvoices(firstResponse, INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018, firstSavedInvoice);
+    invoiceAssertion.assertInvoices(secondResponse, INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016, secondSavedInvoice);
+    invoiceAssertion.assertInvoices(thirdResponse, INVOICE_DRUTEX_LINK_2016, thirdSavedInvoice);
   }
 
   @Test
   public void getInvoicesByIssueDateRange() throws Exception {
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
-    int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
+    int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_LINK_2016);
 
     LocalDate startDate = LocalDate.of(2015, 4, 12);
     LocalDate endDate = LocalDate.of(2017, 4, 12);
@@ -136,15 +136,15 @@ public class InvoiceControllerTest {
         .getContentAsString();
     List<Invoice> invoices = mapper.readValue(jsonString, new TypeReference<List<Invoice>>() {
     });
-    invoiceAssertion.assertInvoices(idResponse, INVOICE_CHELMNO_2016, invoices.get(0));
+    invoiceAssertion.assertInvoices(idResponse, INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016, invoices.get(0));
   }
 
   @Test
   public void getSingleInvoice() throws Exception {
-    int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
     Invoice firstSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(idResponse);
 
-    invoiceAssertion.assertInvoices(idResponse, INVOICE_KRAKOW_2018, firstSavedInvoice);
+    invoiceAssertion.assertInvoices(idResponse, INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018, firstSavedInvoice);
   }
 
   @Test
@@ -156,30 +156,30 @@ public class InvoiceControllerTest {
 
   @Test
   public void updateInvoiceById() throws Exception {
-    int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_RADOMSKO_2018);
+    int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_WASBUD_LINK_2018);
 
     mockMvc
         .perform(put(INVOICE_SERVICE_PATH + "/" + idResponse)
             .contentType(JSON_CONTENT_TYPE)
-            .content(invoiceConverter.convertInvoiceToJson(INVOICE_BYDGOSZCZ_2018)))
+            .content(invoiceConverter.convertInvoiceToJson(INVOICE_DRUTEX_LINK_2016)))
         .andExpect(status().isOk());
     Invoice firstSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(idResponse);
 
-    invoiceAssertion.assertInvoices(idResponse, INVOICE_BYDGOSZCZ_2018, firstSavedInvoice);
+    invoiceAssertion.assertInvoices(idResponse, INVOICE_DRUTEX_LINK_2016, firstSavedInvoice);
   }
 
   @Test
   public void shouldReturnErrorCausedByNotExistingIdPassedToUpdate() throws Exception {
     mockMvc
         .perform(put(INVOICE_SERVICE_PATH + "/0")
-            .content(invoiceConverter.convertInvoiceToJson(INVOICE_CHELMNO_2016))
+            .content(invoiceConverter.convertInvoiceToJson(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016))
             .contentType(JSON_CONTENT_TYPE))
         .andExpect(status().isNotFound());
   }
 
   @Test
   public void shouldReturnErrorCausedByNotValidInvoiceIdentifier() throws Exception {
-    int invoiceId = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    int invoiceId = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
 
     mockMvc
         .perform(put(INVOICE_SERVICE_PATH + "/" + invoiceId)
@@ -191,9 +191,9 @@ public class InvoiceControllerTest {
 
   @Test
   public void removeInvoiceById() throws Exception {
-    int firstResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
-    int secondResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
-    int thirdResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    int firstResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
+    int secondResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016);
+    int thirdResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_LINK_2016);
 
     mockMvc
         .perform(delete(INVOICE_SERVICE_PATH + "/" + firstResponse))
@@ -206,8 +206,8 @@ public class InvoiceControllerTest {
     Invoice secondSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(secondResponse);
     Invoice thirdSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(thirdResponse);
 
-    invoiceAssertion.assertInvoices(secondResponse, INVOICE_CHELMNO_2016, secondSavedInvoice);
-    invoiceAssertion.assertInvoices(thirdResponse, INVOICE_BYDGOSZCZ_2018, thirdSavedInvoice);
+    invoiceAssertion.assertInvoices(secondResponse, INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016, secondSavedInvoice);
+    invoiceAssertion.assertInvoices(thirdResponse, INVOICE_DRUTEX_LINK_2016, thirdSavedInvoice);
   }
 
   @Test

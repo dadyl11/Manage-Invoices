@@ -5,11 +5,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.CLAMP;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.EMPTY;
-import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.ONE_LINK;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SUPPORT;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_2016;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_SPAN_CLAMP_2017;
 import static pl.pojo.tester.api.assertion.Assertions.assertPojoMethodsFor;
 
 import java.math.BigDecimal;
@@ -24,7 +23,7 @@ public class InvoiceTest {
   @Test
   public void shouldCalculateNetValue() {
     //when
-    BigDecimal actual = INVOICE_GRUDZIADZ_2017.getTotalNetValue();
+    BigDecimal actual = INVOICE_WASBUD_SPAN_CLAMP_2017.getTotalNetValue();
     BigDecimal expected = BigDecimal.valueOf(50.4);
 
     //then
@@ -35,7 +34,7 @@ public class InvoiceTest {
   public void returnsListOfEntries() {
 
     //when
-    List<InvoiceEntry> actual = INVOICE_CHELMNO_2016.getEntries();
+    List<InvoiceEntry> actual = INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016.getEntries();
 
     //then
     assertThat(actual.size(), is(3));

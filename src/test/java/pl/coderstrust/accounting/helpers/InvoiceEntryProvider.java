@@ -21,7 +21,7 @@ public class InvoiceEntryProvider {
   public static final InvoiceEntry CLAMP = new InvoiceEntry.InvoiceEntryBuilder()
       .description("clamp")
       .netPrice(BigDecimal.valueOf(6))
-      .vatRate(VatRate.NORMAL)
+      .vatRate(VatRate.REDUCED_8)
       .quantity(BigDecimal.valueOf(2))
       .build();
 
@@ -37,7 +37,7 @@ public class InvoiceEntryProvider {
   public static final InvoiceEntry LINK = new InvoiceEntry.InvoiceEntryBuilder()
       .description("link")
       .netPrice(BigDecimal.valueOf(13))
-      .vatRate(VatRate.REDUCED_4)
+      .vatRate(VatRate.REDUCED_7)
       .quantity(BigDecimal.valueOf(6))
       .build();
 

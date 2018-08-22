@@ -33,15 +33,11 @@ public class InFileDatabase implements Database {
 
   @Override
   public List<Invoice> getInvoices() {
-    return fileHelper.lines() // TODO this method convert stream to list and then you convert back - can you optimize?
-        .stream()
-        .map(invoiceConverter::convertJsonToInvoice)
-        .collect(Collectors.toList()); // TODO invoice converter can convert list of invoices to strings, why cannot opposite?
+    return invoiceConverter.convertListOfStringsToListOfInvoices(fileHelper.lines());
   }
 
   @Override
   public void updateInvoiceById(int id, Invoice invoice) {
-
     List<Invoice> invoiceList = getAllInvoicesExceptInvoiceWithSpecifiedId(id);
     Invoice internalInvoice = new Invoice(invoice);
     internalInvoice.setId(id);
@@ -51,9 +47,8 @@ public class InFileDatabase implements Database {
 
   @Override
   public void removeInvoiceById(int id) {
-    // TODO this method and this above are almist identical but organised different way e.g. invoiceList should be variable here
-    List<String> jsonList = invoiceConverter.convertListOfInvoicesToListOfStrings(getAllInvoicesExceptInvoiceWithSpecifiedId(id));
-    fileHelper.replaceFileContent(jsonList);
+    List<Invoice> invoiceList = getAllInvoicesExceptInvoiceWithSpecifiedId(id);
+    fileHelper.replaceFileContent(invoiceConverter.convertListOfInvoicesToListOfStrings(invoiceList));
   }
 
   private List<Invoice> getAllInvoicesExceptInvoiceWithSpecifiedId(int id) {

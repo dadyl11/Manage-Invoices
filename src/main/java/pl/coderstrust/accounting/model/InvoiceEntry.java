@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 
 @ApiModel(value = "InvoiceEntryModel", description = "Sample model for the Invoice Entry")
 public class InvoiceEntry {
@@ -76,15 +77,23 @@ public class InvoiceEntry {
   }
 
   @Override
-  public boolean equals(Object object) {
-    if (this == object) {
-      return true; // TODO only description matters? are 2 invoice entries with same desc and diffrent price equal???
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-    if (object == null || getClass() != object.getClass()) {
+
+    if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    InvoiceEntry that = (InvoiceEntry) object;
-    return Objects.equals(getDescription(), that.getDescription());
+
+    InvoiceEntry that = (InvoiceEntry) o;
+
+    return new EqualsBuilder()
+        .append(description, that.description)
+        .append(netPrice, that.netPrice)
+        .append(vatRate, that.vatRate)
+        .append(quantity, that.quantity)
+        .isEquals();
   }
 
   @Override

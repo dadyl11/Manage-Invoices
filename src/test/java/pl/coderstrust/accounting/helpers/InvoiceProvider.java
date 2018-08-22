@@ -14,7 +14,7 @@ import pl.coderstrust.accounting.model.Invoice;
 
 public class InvoiceProvider {
 
-  public static final Invoice INVOICE_KRAKOW_2018 = new Invoice.Invoicebuilder()
+  public static final Invoice INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018 = new Invoice.Invoicebuilder()
       .identifier("1/2018")
       .issueDate(LocalDate.of(2018, 5, 12))
       .saleDate(LocalDate.of(2018, 5, 12))
@@ -24,9 +24,7 @@ public class InvoiceProvider {
       .entries(SPAN_CLAMP_SUPPORT)
       .build();
 
-
-  // TODO I don't like your naming convention - is the city the most important aspect of each invoice? Do you know by sale place what is inside?
-  public static final Invoice INVOICE_GRUDZIADZ_2017 = new Invoice.Invoicebuilder()
+  public static final Invoice INVOICE_WASBUD_SPAN_CLAMP_2017 = new Invoice.Invoicebuilder()
       .identifier("2/2018")
       .issueDate(LocalDate.of(2017, 3, 3))
       .saleDate(LocalDate.of(2017, 3, 2))
@@ -36,27 +34,27 @@ public class InvoiceProvider {
       .entries(SPAN_CLAMP)
       .build();
 
-  public static final Invoice INVOICE_CHELMNO_2016 = new Invoice.Invoicebuilder()
+  public static final Invoice INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016 = new Invoice.Invoicebuilder()
       .identifier("3/2018")
-      .issueDate(LocalDate.of(2016, 3, 5))// TODO please use more various dates
-      .saleDate(LocalDate.of(2017, 3, 2))
+      .issueDate(LocalDate.of(2016, 7, 31))//
+      .saleDate(LocalDate.of(2016, 7, 31))
       .salePlace("Grudziadz")
       .buyer(CompanyProvider.COMPANY_DRUKPOL)
       .seller(CompanyProvider.COMPANY_TRANSPOL)
       .entries(SPAN_CLAMP_SUPPORT)
       .build();
 
-  public static final Invoice INVOICE_BYDGOSZCZ_2018 = new Invoice.Invoicebuilder()
+  public static final Invoice INVOICE_DRUTEX_LINK_2016 = new Invoice.Invoicebuilder()
       .identifier("4/2018")
-      .issueDate(LocalDate.of(2018, 06, 13))// TODO please use more various dates
-      .saleDate(LocalDate.of(2018, 05, 12))
+      .issueDate(LocalDate.of(2016, 02, 29))
+      .saleDate(LocalDate.of(2016, 02, 29))
       .salePlace("Bydgoszcz")
       .buyer(CompanyProvider.COMPANY_WASBUD)
       .seller(CompanyProvider.COMPANY_DRUTEX)
       .entries(ONE_LINK)
       .build();
 
-  public static final Invoice INVOICE_RADOMSKO_2018 = new Invoice.Invoicebuilder()
+  public static final Invoice INVOICE_WASBUD_LINK_2018 = new Invoice.Invoicebuilder()
       .identifier("ss999")
       .issueDate(LocalDate.of(2018, 06, 13))
       .saleDate(LocalDate.of(2018, 05, 12))
@@ -68,8 +66,8 @@ public class InvoiceProvider {
 
   public static final Invoice INVOICE_EMPTY_ENTRIES = new Invoice.Invoicebuilder()
       .identifier("555/mm")
-      .issueDate(LocalDate.of(2018, 02, 12))// TODO please use more various dates
-      .saleDate(LocalDate.of(2018, 05, 12))
+      .issueDate(LocalDate.of(2018, 11, 30))//
+      .saleDate(LocalDate.of(2018, 11, 30))
       .salePlace("LODZ")
       .buyer(CompanyProvider.COMPANY_WASBUD)
       .seller(CompanyProvider.COMPANY_DRUTEX)

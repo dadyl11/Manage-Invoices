@@ -9,12 +9,12 @@ import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BYDGOSZCZ_2018;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_2016;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_LINK_2016;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_LINK_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_SPAN_CLAMP_2017;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,23 +44,23 @@ public class InvoiceServiceTest {
   @Test
   public void shouldSaveInvoice() {
     //given
-    when(databaseMock.saveInvoice(INVOICE_KRAKOW_2018)).thenReturn(INVOICE_KRAKOW_2018.getId());
+    when(databaseMock.saveInvoice(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018)).thenReturn(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018.getId());
 
     //when
-    int id = invoiceService.saveInvoice(INVOICE_KRAKOW_2018);
+    int id = invoiceService.saveInvoice(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
 
     //then
-    assertThat(id, is(equalTo(INVOICE_KRAKOW_2018.getId())));
-    verify(databaseMock).saveInvoice(INVOICE_KRAKOW_2018);
+    assertThat(id, is(equalTo(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018.getId())));
+    verify(databaseMock).saveInvoice(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
   }
 
   @Test
   public void shouldGetCollectionOfInvoices() {
     //given
     List<Invoice> invoices = new ArrayList<>();
-    invoices.add(INVOICE_BYDGOSZCZ_2018);
-    invoices.add(INVOICE_CHELMNO_2016);
-    invoices.add(INVOICE_GRUDZIADZ_2017);
+    invoices.add(INVOICE_DRUTEX_LINK_2016);
+    invoices.add(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016);
+    invoices.add(INVOICE_WASBUD_SPAN_CLAMP_2017);
 
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
@@ -70,36 +70,36 @@ public class InvoiceServiceTest {
     //then
     verify(databaseMock).getInvoices();
     assertThat(actual, is(invoices));
-    assertThat(actual, hasItem(INVOICE_BYDGOSZCZ_2018));
-    assertThat(actual, hasItem(INVOICE_CHELMNO_2016));
-    assertThat(actual, hasItem(INVOICE_GRUDZIADZ_2017));
+    assertThat(actual, hasItem(INVOICE_DRUTEX_LINK_2016));
+    assertThat(actual, hasItem(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016));
+    assertThat(actual, hasItem(INVOICE_WASBUD_SPAN_CLAMP_2017));
   }
 
   @Test
   public void shouldUpdateInvoice() {
     //given
     List<Invoice> invoices = new ArrayList<>();
-    invoices.add(INVOICE_CHELMNO_2016);
-    invoices.add(INVOICE_GRUDZIADZ_2017);
+    invoices.add(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016);
+    invoices.add(INVOICE_WASBUD_SPAN_CLAMP_2017);
 
-    int id = INVOICE_CHELMNO_2016.getId();
+    int id = INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016.getId();
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
-    invoiceService.updateInvoice(id, INVOICE_KRAKOW_2018);
+    invoiceService.updateInvoice(id, INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
 
     //then
-    verify(databaseMock).updateInvoiceById(id, INVOICE_KRAKOW_2018);
+    verify(databaseMock).updateInvoiceById(id, INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
   }
 
   @Test
   public void shouldRemoveInvoiceById() {
     //given
     List<Invoice> invoices = new ArrayList<>();
-    invoices.add(INVOICE_KRAKOW_2018);
-    invoices.add(INVOICE_GRUDZIADZ_2017);
+    invoices.add(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
+    invoices.add(INVOICE_WASBUD_SPAN_CLAMP_2017);
 
-    int id = INVOICE_GRUDZIADZ_2017.getId();
+    int id = INVOICE_WASBUD_SPAN_CLAMP_2017.getId();
 
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
@@ -114,17 +114,17 @@ public class InvoiceServiceTest {
   public void shouldReturnInvoiceById() {
     //given
     List<Invoice> invoices = new ArrayList<>();
-    invoices.add(INVOICE_BYDGOSZCZ_2018);
-    invoices.add(INVOICE_CHELMNO_2016);
-    invoices.add(INVOICE_GRUDZIADZ_2017);
+    invoices.add(INVOICE_DRUTEX_LINK_2016);
+    invoices.add(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016);
+    invoices.add(INVOICE_WASBUD_SPAN_CLAMP_2017);
 
-    int id = INVOICE_BYDGOSZCZ_2018.getId();
+    int id = INVOICE_DRUTEX_LINK_2016.getId();
 
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
     Optional<Invoice> actual = invoiceService.getInvoiceById(id);
-    Invoice expected = INVOICE_BYDGOSZCZ_2018;
+    Invoice expected = INVOICE_DRUTEX_LINK_2016;
 
     //then
     assertTrue(actual.isPresent());
@@ -135,10 +135,9 @@ public class InvoiceServiceTest {
   public void shouldReturnInvoicesByIssueDate() {
     //given
     List<Invoice> invoices = new ArrayList<>();
-    invoices.add(INVOICE_KRAKOW_2018);
-    invoices.add(INVOICE_BYDGOSZCZ_2018);
-    invoices.add(INVOICE_GRUDZIADZ_2017);
-
+    invoices.add(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
+    invoices.add(INVOICE_WASBUD_LINK_2018);
+    invoices.add(INVOICE_WASBUD_SPAN_CLAMP_2017);
     when(databaseMock.getInvoices()).thenReturn(invoices);
 
     //when
@@ -147,8 +146,8 @@ public class InvoiceServiceTest {
     List<Invoice> actual = invoiceService.getInvoicesByIssueDate(fromDate, toDate);
 
     //then
-    assertThat(actual, hasItems(INVOICE_KRAKOW_2018, INVOICE_BYDGOSZCZ_2018));
-    assertThat(actual, not(hasItem(INVOICE_GRUDZIADZ_2017)));
+    assertThat(actual.size(), is(2));
+    assertThat(actual, hasItems(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018, INVOICE_WASBUD_LINK_2018));
   }
 
   @Test
@@ -159,7 +158,7 @@ public class InvoiceServiceTest {
     expectedEx.expectMessage("Invoice with id: " + id + " does not exist");
 
     //when
-    invoiceService.updateInvoice(0, INVOICE_GRUDZIADZ_2017);
+    invoiceService.updateInvoice(0, INVOICE_WASBUD_SPAN_CLAMP_2017);
   }
 
   @Test

@@ -29,9 +29,13 @@ public class Invoice {
   @ApiModelProperty(value = "Location where sale was made", example = "Krakow")
   private String salePlace;
 
-  // TODO no need for description? :)
+  @ApiModelProperty(value = "Company - buyer")
   private Company buyer;
+
+  @ApiModelProperty(value = "Company - seller")
   private Company seller;
+
+  @ApiModelProperty(value = "List of invoice entries")
   private List<InvoiceEntry> entries = new ArrayList<>();
 
   public Invoice() {
@@ -149,7 +153,7 @@ public class Invoice {
   public BigDecimal getTotalNetValue() {
     BigDecimal netValue = BigDecimal.ZERO;
     for (InvoiceEntry entry : entries) {
-      netValue = netValue.add(entry.getNetValue().multiply(BigDecimal.ONE.subtract(getBuyer().getDiscount())));
+      netValue = netValue.add(getGrossValueOfInvoiceEntry(entry));
     }
     return netValue;
   }
@@ -158,11 +162,14 @@ public class Invoice {
   public BigDecimal getVatValue() {
     BigDecimal vatValue = BigDecimal.ZERO;
     for (InvoiceEntry entry : entries) {
-      vatValue = vatValue.add((entry.getNetValue())
-          .multiply(BigDecimal.ONE.subtract(getBuyer().getDiscount())) // TODO extract final price calculation to method
+      vatValue = vatValue.add(getGrossValueOfInvoiceEntry(entry)
           .multiply(entry.getVatRate().getVatRateValue()));
     }
     return vatValue;
+  }
+
+  private BigDecimal getGrossValueOfInvoiceEntry(InvoiceEntry entry) {
+    return entry.getNetValue().multiply(BigDecimal.ONE.subtract(getBuyer().getDiscount()));
   }
 
   @Override
