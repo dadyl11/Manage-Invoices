@@ -61,8 +61,8 @@ public class InvoiceControllerTest {
   @Autowired
   private InvoiceConverter invoiceConverter;
 
-  @Autowired
-  private RestHelper restHelper;
+  //  @Autowired
+  private RestHelper restHelper = new RestHelper();
 
   private InvoiceAssertion invoiceAssertion = new InvoiceAssertion();
 

@@ -13,11 +13,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 import pl.coderstrust.accounting.model.Invoice;
 
-@Service
-public class RestHelper {
+//@Service
+public class RestHelper extends TestBaseWithMockMvc {
 
-  @Autowired
-  MockMvc mockMvc;
+//  @Autowired
+//  MockMvc mockMvc;
 
   private static final String INVOICE_SERVICE_PATH = "/invoices";
   private static final MediaType JSON_CONTENT_TYPE = MediaType.APPLICATION_JSON_UTF8;
