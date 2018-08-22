@@ -7,6 +7,7 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIAD
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
 
 import java.util.List;
+import java.util.Optional;
 import org.junit.Test;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
@@ -23,16 +24,13 @@ public abstract class DatabaseTest {
     Database database = getDatabase();
 
     //when
-    database.saveInvoice(INVOICE_KRAKOW_2018);
+    int actualId = database.saveInvoice(INVOICE_KRAKOW_2018);
     List<Invoice> invoices = database.getInvoices();
+    Invoice savedInvoice = getInvoiceById(actualId, invoices);
 
     //then
     assertThat(invoices.size(), is(1));
-    // assertThat(invoices.get(0), is(INVOICE_KRAKOW_2018));
-    // TODO assertion not passing because of id - you need to rethink how it's handled - you cannot modify objects in provider
-    // alternatively you can modify it but than fields cannot be static and you need to replace it with methods returning
-    // new object each time.
-    // you can also verify each fields separately here  - then you can easily assert id correctly (using id returned by save method)
+    assertInvoices(actualId, INVOICE_KRAKOW_2018, savedInvoice);
   }
 
   @Test
@@ -41,37 +39,33 @@ public abstract class DatabaseTest {
     Database database = getDatabase();
 
     //when
-    database.saveInvoice(INVOICE_KRAKOW_2018);
-    database.saveInvoice(INVOICE_GRUDZIADZ_2017);
+    int actualIdA = database.saveInvoice(INVOICE_KRAKOW_2018);
+    int actualIdB = database.saveInvoice(INVOICE_GRUDZIADZ_2017);
     List<Invoice> invoices = database.getInvoices();
+    Invoice savedInvoiceA = getInvoiceById(actualIdA, invoices);
+    Invoice savedInvoiceB = getInvoiceById(actualIdB, invoices);
 
     //then
     assertThat(database.getInvoices().size(), is(2));
-    //    assertThat(invoices, hasItem(INVOICE_KRAKOW_2018));
-    //    assertThat(invoices, hasItem(INVOICE_GRUDZIADZ_2017));
-    // TODO assertion not passing because of id - you need to rethink how it's handled - you cannot modify objects in provider
-    // alternatively you can modify it but than fields cannot be static and you need to replace it with methods returning
-    // new object each time.
-    // you can also verify each fields separately here  - then you can easily assert id correctly (using id returned by save method)
+    assertInvoices(actualIdA, INVOICE_KRAKOW_2018, savedInvoiceA);
+    assertInvoices(actualIdB, INVOICE_GRUDZIADZ_2017, savedInvoiceB);
   }
 
   @Test
   public void shouldRemoveInvoices() throws Exception {
     //given
     Database database = getDatabase();
-    int firsrId = database.saveInvoice(INVOICE_KRAKOW_2018);
-    database.saveInvoice(INVOICE_GRUDZIADZ_2017);
+    int idA = database.saveInvoice(INVOICE_KRAKOW_2018);
+    int idB = database.saveInvoice(INVOICE_GRUDZIADZ_2017);
 
     //when
-    database.removeInvoiceById(firsrId);
+    database.removeInvoiceById(idA);
+    List<Invoice> invoices = database.getInvoices();
+    Invoice savedInvoiceB = getInvoiceById(idB, invoices);
 
     //then
     assertThat(database.getInvoices().size(), is(1));
-    assertThat(database.getInvoices().get(0), is(INVOICE_GRUDZIADZ_2017));
-    // TODO assertion not passing because of id - you need to rethink how it's handled - you cannot modify objects in provider
-    // alternatively you can modify it but than fields cannot be static and you need to replace it with methods returning
-    // new object each time.
-    // you can also verify each fields separately here  - then you can easily assert id correctly (using id returned by save method);
+    assertInvoices(idB, INVOICE_GRUDZIADZ_2017, savedInvoiceB);
   }
 
   @Test
@@ -82,18 +76,12 @@ public abstract class DatabaseTest {
 
     //when
     database.updateInvoiceById(returnedId, INVOICE_BYDGOSZCZ_2018);
-    Invoice savedInvoice = database.getInvoices().get(0);
+    List<Invoice> invoices = database.getInvoices();
+    Invoice savedInvoice = getInvoiceById(returnedId, invoices);
 
     //then
     assertThat(database.getInvoices().size(), is(1));
-
     assertInvoices(returnedId, INVOICE_BYDGOSZCZ_2018, savedInvoice);
-
-    //assertThat(database.getInvoices().get(0), is(INVOICE_BYDGOSZCZ_2018));
-    // TODO assertion not passing because of id - you need to rethink how it's handled - you cannot modify objects in provider
-    // alternatively you can modify it but than fields cannot be static and you need to replace it with methods returning
-    // new object each time.
-    // you can also verify each fields separately here  - then you can easily assert id correctly (using id returned by save method)
   }
 
   public void assertInvoices(int returnedId, Invoice invoice, Invoice savedInvoice) {
@@ -116,4 +104,14 @@ public abstract class DatabaseTest {
     assertThat(savedInvoice.getEntries().get(0).getVatRate().toString(), is(invoice.getEntries().get(0).getVatRate().toString()));
     assertThat(savedInvoice.getEntries().get(0).getQuantity().intValue(), is(invoice.getEntries().get(0).getQuantity().intValue()));
   }
+
+  public Invoice getInvoiceById(int id, List<Invoice> invoices) {
+    return invoices
+        .stream()
+        .filter(invoice -> invoice.getId() == id)
+        .findAny()
+        .get();
+  }
+
+
 }

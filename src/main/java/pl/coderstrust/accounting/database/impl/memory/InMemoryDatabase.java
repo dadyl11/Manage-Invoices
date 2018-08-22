@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
 
+@Primary
 @Repository
 public class InMemoryDatabase implements Database {
 
@@ -22,9 +23,8 @@ public class InMemoryDatabase implements Database {
 
   @Override
   public int saveInvoice(Invoice invoice) {
-    invoice.setId(getNextId());
     Invoice internalInvoice = new Invoice(invoice);
-    internalInvoice.setId(id);
+    internalInvoice.setId(getNextId());
     invoices.put(internalInvoice.getId(), internalInvoice);
     return internalInvoice.getId();
   }

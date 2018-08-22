@@ -10,7 +10,6 @@ import pl.coderstrust.accounting.database.impl.file.helpers.IndexHelper;
 import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 import pl.coderstrust.accounting.model.Invoice;
 
-@Primary
 @Repository
 public class InFileDatabase implements Database {
 
