@@ -6,10 +6,10 @@ import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_DRUKPOL;
 import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_DRUTEX;
 import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_TRANSPOL;
 import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_WASBUD;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_SPAN_CLAMP_2017;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_LINK_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_SPAN_CLAMP_2017;
 
 import java.math.BigDecimal;
 import org.junit.Test;

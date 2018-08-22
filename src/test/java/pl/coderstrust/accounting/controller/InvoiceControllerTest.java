@@ -105,16 +105,14 @@ public class InvoiceControllerTest {
     int firstResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
     int secondResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016);
     int thirdResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_LINK_2016);
-
-    Invoice firstSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(firstResponse);
-    Invoice secondSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(secondResponse);
-    Invoice thirdSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(thirdResponse);
-
     mockMvc
         .perform(get(INVOICE_SERVICE_PATH))
         .andDo(print()).andExpect(status()
         .isOk())
         .andExpect(jsonPath("$", hasSize(3)));
+    Invoice firstSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(firstResponse);
+    Invoice secondSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(secondResponse);
+    Invoice thirdSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(thirdResponse);
     invoiceAssertion.assertInvoices(firstResponse, INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018, firstSavedInvoice);
     invoiceAssertion.assertInvoices(secondResponse, INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016, secondSavedInvoice);
     invoiceAssertion.assertInvoices(thirdResponse, INVOICE_DRUTEX_LINK_2016, thirdSavedInvoice);

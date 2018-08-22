@@ -10,8 +10,8 @@ import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_DRUKPOL;
 import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_DRUTEX;
 import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_WASBUD;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_LINK_2016;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_SPAN_CLAMP_2017;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_SPAN_CLAMP_2017;
 
 import javax.annotation.PostConstruct;
 import org.junit.Before;
