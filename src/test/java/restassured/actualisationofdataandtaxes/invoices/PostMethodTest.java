@@ -8,35 +8,27 @@ import static org.hamcrest.core.Is.is;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.jayway.restassured.http.ContentType;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import pl.coderstrust.accounting.configuration.JacksonProvider;
+import pl.coderstrust.accounting.model.Invoice;
 import restassured.Data;
 
 public class PostMethodTest implements Data {
 
   @BeforeClass
   public static void prepareInvoicesToTest() throws JsonProcessingException {
+    List<Invoice> invoices = Arrays.asList(invoiceRadomsko, invoiceBydgoszcz, invoiceKrakow
+        , invoiceGudziadz, invoiceChelmno);
 
-    given().contentType(ContentType.JSON)
-        .body(JacksonProvider.getObjectMapper().writeValueAsString(
-            invoiceRadomsko)).post(invoicesUrl);
-
-    given().contentType(ContentType.JSON)
-        .body(JacksonProvider.getObjectMapper().writeValueAsString(
-            invoiceBydgoszcz)).post(invoicesUrl);
-
-    given().contentType(ContentType.JSON)
-        .body(JacksonProvider.getObjectMapper().writeValueAsString(
-            invoiceKrakow)).post(invoicesUrl);
-
-    given().contentType(ContentType.JSON)
-        .body(JacksonProvider.getObjectMapper().writeValueAsString(
-            invoiceGudziadz)).post(invoicesUrl);
-
-    given().contentType(ContentType.JSON)
-        .body(JacksonProvider.getObjectMapper().writeValueAsString(
-            invoiceChelmno)).post(invoicesUrl);
+    for (int i = 0; i < invoices.size(); i++) {
+      given()
+          .contentType(ContentType.JSON)
+          .body(JacksonProvider.getObjectMapper().writeValueAsString(invoices.get(i)))
+          .post(invoicesUrl);
+    }
   }
 
   @Test
@@ -122,7 +114,6 @@ public class PostMethodTest implements Data {
     String quantity2 = invoiceKrakow.getEntries().get(2).getQuantity().toString();
 
     given().when().get(invoicesUrl).then()
-
         .body("[2].id", is(2))
         .body("[2].identifier", is(identifier))
         .body("[2].issueDate", is(issueDate))
