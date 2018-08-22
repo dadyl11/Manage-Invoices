@@ -24,7 +24,7 @@ public class InMemoryDatabase implements Database {
   public int saveInvoice(Invoice invoice) {
     invoice.setId(getNextId());
     Invoice internalInvoice = new Invoice(invoice);
-    internalInvoice.setId(getNextId());
+    internalInvoice.setId(id);
     invoices.put(internalInvoice.getId(), internalInvoice);
     return internalInvoice.getId();
   }
