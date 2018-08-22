@@ -2,7 +2,6 @@ package pl.coderstrust.accounting.database.impl.file;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.database.impl.file.helpers.FileHelper;
@@ -47,13 +46,13 @@ public class InFileDatabase implements Database {
     Invoice internalInvoice = new Invoice(invoice);
     internalInvoice.setId(id);
     invoiceList.add(internalInvoice);
-    fileHelper.replaceFileContent(invoiceConverter.convertListOfInvoicesToJsons(invoiceList));
+    fileHelper.replaceFileContent(invoiceConverter.convertListOfInvoicesToListOfStrings(invoiceList));
   }
 
   @Override
   public void removeInvoiceById(int id) {
     // TODO this method and this above are almist identical but organised different way e.g. invoiceList should be variable here
-    List<String> jsonList = invoiceConverter.convertListOfInvoicesToJsons(getAllInvoicesExceptInvoiceWithSpecifiedId(id));
+    List<String> jsonList = invoiceConverter.convertListOfInvoicesToListOfStrings(getAllInvoicesExceptInvoiceWithSpecifiedId(id));
     fileHelper.replaceFileContent(jsonList);
   }
 

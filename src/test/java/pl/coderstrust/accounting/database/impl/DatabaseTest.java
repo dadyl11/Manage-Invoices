@@ -10,10 +10,12 @@ import java.util.List;
 import java.util.Optional;
 import org.junit.Test;
 import pl.coderstrust.accounting.database.Database;
+import pl.coderstrust.accounting.helpers.InvoiceAssertion;
 import pl.coderstrust.accounting.model.Invoice;
 
 public abstract class DatabaseTest {
 
+  private InvoiceAssertion invoiceAssertion = new InvoiceAssertion();
 
   protected abstract Database getDatabase();
 
@@ -30,7 +32,7 @@ public abstract class DatabaseTest {
 
     //then
     assertThat(invoices.size(), is(1));
-    assertInvoices(actualId, INVOICE_KRAKOW_2018, savedInvoice);
+    invoiceAssertion.assertInvoices(actualId, INVOICE_KRAKOW_2018, savedInvoice);
   }
 
   @Test
@@ -47,8 +49,8 @@ public abstract class DatabaseTest {
 
     //then
     assertThat(database.getInvoices().size(), is(2));
-    assertInvoices(actualIdA, INVOICE_KRAKOW_2018, savedInvoiceA);
-    assertInvoices(actualIdB, INVOICE_GRUDZIADZ_2017, savedInvoiceB);
+    invoiceAssertion.assertInvoices(actualIdA, INVOICE_KRAKOW_2018, savedInvoiceA);
+    invoiceAssertion.assertInvoices(actualIdB, INVOICE_GRUDZIADZ_2017, savedInvoiceB);
   }
 
   @Test
@@ -65,7 +67,7 @@ public abstract class DatabaseTest {
 
     //then
     assertThat(database.getInvoices().size(), is(1));
-    assertInvoices(idB, INVOICE_GRUDZIADZ_2017, savedInvoiceB);
+    invoiceAssertion.assertInvoices(idB, INVOICE_GRUDZIADZ_2017, savedInvoiceB);
   }
 
   @Test
@@ -81,28 +83,7 @@ public abstract class DatabaseTest {
 
     //then
     assertThat(database.getInvoices().size(), is(1));
-    assertInvoices(returnedId, INVOICE_BYDGOSZCZ_2018, savedInvoice);
-  }
-
-  public void assertInvoices(int returnedId, Invoice invoice, Invoice savedInvoice) {
-
-    assertThat(savedInvoice.getId(), is(returnedId));
-    assertThat(savedInvoice.getIdentifier(), is(invoice.getIdentifier()));
-    assertThat(savedInvoice.getSalePlace(), is(invoice.getSalePlace()));
-    assertThat(savedInvoice.getBuyer().getName(), is(invoice.getBuyer().getName()));
-    assertThat(savedInvoice.getBuyer().getNip(), is(invoice.getBuyer().getNip()));
-    assertThat(savedInvoice.getBuyer().getStreet(), is(invoice.getBuyer().getStreet()));
-    assertThat(savedInvoice.getBuyer().getPostalCode(), is(invoice.getBuyer().getPostalCode()));
-    assertThat(savedInvoice.getBuyer().getDiscount().doubleValue(), is(invoice.getBuyer().getDiscount().doubleValue()));
-    assertThat(savedInvoice.getSeller().getName(), is(invoice.getSeller().getName()));
-    assertThat(savedInvoice.getSeller().getNip(), is(invoice.getSeller().getNip()));
-    assertThat(savedInvoice.getSeller().getStreet(), is(invoice.getSeller().getStreet()));
-    assertThat(savedInvoice.getSeller().getPostalCode(), is(invoice.getSeller().getPostalCode()));
-    assertThat(savedInvoice.getSeller().getDiscount().doubleValue(), is(invoice.getSeller().getDiscount().doubleValue()));
-    assertThat(savedInvoice.getEntries().get(0).getDescription(), is(invoice.getEntries().get(0).getDescription()));
-    assertThat(savedInvoice.getEntries().get(0).getNetPrice().intValue(), is(invoice.getEntries().get(0).getNetPrice().intValue()));
-    assertThat(savedInvoice.getEntries().get(0).getVatRate().toString(), is(invoice.getEntries().get(0).getVatRate().toString()));
-    assertThat(savedInvoice.getEntries().get(0).getQuantity().intValue(), is(invoice.getEntries().get(0).getQuantity().intValue()));
+    invoiceAssertion.assertInvoices(returnedId, INVOICE_BYDGOSZCZ_2018, savedInvoice);
   }
 
   public Invoice getInvoiceById(int id, List<Invoice> invoices) {
@@ -112,6 +93,4 @@ public abstract class DatabaseTest {
         .findAny()
         .get();
   }
-
-
 }

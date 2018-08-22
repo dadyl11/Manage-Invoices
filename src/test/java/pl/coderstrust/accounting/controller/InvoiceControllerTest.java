@@ -18,7 +18,10 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_RADOMSKO_2018;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,22 +31,26 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 import pl.coderstrust.accounting.helpers.InvoiceAssertion;
 import pl.coderstrust.accounting.helpers.RestHelper;
-import pl.coderstrust.accounting.helpers.TestBaseWithMockMvc;
 import pl.coderstrust.accounting.logic.InvoiceService;
+import pl.coderstrust.accounting.model.Invoice;
 
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-//@AutoConfigureMockMvc
-public class InvoiceControllerTest extends TestBaseWithMockMvc {
+@AutoConfigureMockMvc
+public class InvoiceControllerTest {
 
   private static final String INVOICE_SERVICE_PATH = "/invoices";
   private static final MediaType JSON_CONTENT_TYPE = MediaType.APPLICATION_JSON_UTF8;
 
-//  @Autowired
-//  private MockMvc mockMvc;
+  @Autowired
+  private ObjectMapper mapper;
+
+  @Autowired
+  private MockMvc mockMvc;
 
   @Autowired
   private InvoiceController invoiceController;
@@ -51,7 +58,11 @@ public class InvoiceControllerTest extends TestBaseWithMockMvc {
   @Autowired
   private InvoiceService invoiceService;
 
-  private RestHelper restHelper = new RestHelper();
+  @Autowired
+  private InvoiceConverter invoiceConverter;
+
+  @Autowired
+  private RestHelper restHelper;
 
   private InvoiceAssertion invoiceAssertion = new InvoiceAssertion();
 
@@ -68,15 +79,16 @@ public class InvoiceControllerTest extends TestBaseWithMockMvc {
   @Test
   public void shouldCheckSaveInvoiceRequest() throws Exception {
     int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    Invoice savedInvoice = restHelper.callRestServiceToReturnInvoiceById(idResponse);
 
-    invoiceAssertion.assertSingleInvoice(idResponse, INVOICE_BYDGOSZCZ_2018);
+    invoiceAssertion.assertInvoices(idResponse, INVOICE_BYDGOSZCZ_2018, savedInvoice);
   }
 
   @Test
   public void shouldReturnErrorMessageCorrespondingToIncorrectInvoiceField() throws Exception {
     mockMvc.perform(
         post(INVOICE_SERVICE_PATH)
-            .content(restHelper.convertToJson(INVOICE_BLANK_BUYER_CITY))
+            .content(invoiceConverter.convertInvoiceToJson(INVOICE_BLANK_BUYER_CITY))
             .contentType(JSON_CONTENT_TYPE)
     )
         .andExpect(status().isBadRequest())
@@ -89,12 +101,18 @@ public class InvoiceControllerTest extends TestBaseWithMockMvc {
     int secondResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_CHELMNO_2016);
     int thirdResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
 
-    mockMvc
-        .perform(get(INVOICE_SERVICE_PATH)).andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(3)));
+    Invoice firstSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(firstResponse);
+    Invoice secondSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(secondResponse);
+    Invoice thirdSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(thirdResponse);
 
-    invoiceAssertion.assertInvoiceFromList(firstResponse, INVOICE_KRAKOW_2018, "0");
-    invoiceAssertion.assertInvoiceFromList(secondResponse, INVOICE_CHELMNO_2016, "1");
-    invoiceAssertion.assertInvoiceFromList(thirdResponse, INVOICE_BYDGOSZCZ_2018, "2");
+    mockMvc
+        .perform(get(INVOICE_SERVICE_PATH))
+        .andDo(print()).andExpect(status()
+        .isOk())
+        .andExpect(jsonPath("$", hasSize(3)));
+    invoiceAssertion.assertInvoices(firstResponse, INVOICE_KRAKOW_2018, firstSavedInvoice);
+    invoiceAssertion.assertInvoices(secondResponse, INVOICE_CHELMNO_2016, secondSavedInvoice);
+    invoiceAssertion.assertInvoices(thirdResponse, INVOICE_BYDGOSZCZ_2018, thirdSavedInvoice);
   }
 
   @Test
@@ -109,17 +127,24 @@ public class InvoiceControllerTest extends TestBaseWithMockMvc {
     String url = String
         .format("/dates?startDate=%1$s&endDate=%2$s", startDate, endDate); // TODO what is "$s" doing?
 
-    mockMvc
-        .perform(get(INVOICE_SERVICE_PATH + url)).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(1)));
-    invoiceAssertion.assertSingleInvoice(idResponse, INVOICE_CHELMNO_2016);
+    String jsonString = mockMvc
+        .perform(get(INVOICE_SERVICE_PATH + url))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(1)))
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+    List<Invoice> invoices = mapper.readValue(jsonString, new TypeReference<List<Invoice>>() {
+    });
+    invoiceAssertion.assertInvoices(idResponse, INVOICE_CHELMNO_2016, invoices.get(0));
   }
 
   @Test
   public void getSingleInvoice() throws Exception {
     int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    Invoice firstSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(idResponse);
 
-    invoiceAssertion.assertSingleInvoice(idResponse, INVOICE_KRAKOW_2018);
-
+    invoiceAssertion.assertInvoices(idResponse, INVOICE_KRAKOW_2018, firstSavedInvoice);
   }
 
   @Test
@@ -136,18 +161,18 @@ public class InvoiceControllerTest extends TestBaseWithMockMvc {
     mockMvc
         .perform(put(INVOICE_SERVICE_PATH + "/" + idResponse)
             .contentType(JSON_CONTENT_TYPE)
-            .content(restHelper.convertToJson(INVOICE_BYDGOSZCZ_2018)))
+            .content(invoiceConverter.convertInvoiceToJson(INVOICE_BYDGOSZCZ_2018)))
         .andExpect(status().isOk());
+    Invoice firstSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(idResponse);
 
-    invoiceAssertion.assertSingleInvoice(idResponse, INVOICE_BYDGOSZCZ_2018);
-
+    invoiceAssertion.assertInvoices(idResponse, INVOICE_BYDGOSZCZ_2018, firstSavedInvoice);
   }
 
   @Test
   public void shouldReturnErrorCausedByNotExistingIdPassedToUpdate() throws Exception {
     mockMvc
         .perform(put(INVOICE_SERVICE_PATH + "/0")
-            .content(restHelper.convertToJson(INVOICE_CHELMNO_2016))
+            .content(invoiceConverter.convertInvoiceToJson(INVOICE_CHELMNO_2016))
             .contentType(JSON_CONTENT_TYPE))
         .andExpect(status().isNotFound());
   }
@@ -159,7 +184,7 @@ public class InvoiceControllerTest extends TestBaseWithMockMvc {
     mockMvc
         .perform(put(INVOICE_SERVICE_PATH + "/" + invoiceId)
             .contentType(JSON_CONTENT_TYPE)
-            .content(restHelper.convertToJson(INVOICE_BLANK_IDENTIFIER)))
+            .content(invoiceConverter.convertInvoiceToJson(INVOICE_BLANK_IDENTIFIER)))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$[0]", is("Identifier not found")));
   }
@@ -178,8 +203,11 @@ public class InvoiceControllerTest extends TestBaseWithMockMvc {
         .perform(get(INVOICE_SERVICE_PATH))
         .andExpect(jsonPath("$", hasSize(2)));
 
-    invoiceAssertion.assertSingleInvoice(secondResponse, INVOICE_CHELMNO_2016);
-    invoiceAssertion.assertSingleInvoice(thirdResponse, INVOICE_BYDGOSZCZ_2018);
+    Invoice secondSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(secondResponse);
+    Invoice thirdSavedInvoice = restHelper.callRestServiceToReturnInvoiceById(thirdResponse);
+
+    invoiceAssertion.assertInvoices(secondResponse, INVOICE_CHELMNO_2016, secondSavedInvoice);
+    invoiceAssertion.assertInvoices(thirdResponse, INVOICE_BYDGOSZCZ_2018, thirdSavedInvoice);
   }
 
   @Test

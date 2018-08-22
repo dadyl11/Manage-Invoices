@@ -20,17 +20,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import pl.coderstrust.accounting.helpers.RestHelper;
-import pl.coderstrust.accounting.helpers.TestBaseWithMockMvc;
 import pl.coderstrust.accounting.logic.InvoiceService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-//@AutoConfigureMockMvc
-public class TaxCalculatorControllerTest extends TestBaseWithMockMvc {
+@AutoConfigureMockMvc
+public class TaxCalculatorControllerTest {
 
   private static final String TAX_CALCULATOR_SERVICE_PATH = "/taxcalculator";
+
+  @Autowired
+  private MockMvc mockMvc;
 
   @Autowired
   private InvoiceService invoiceService;
