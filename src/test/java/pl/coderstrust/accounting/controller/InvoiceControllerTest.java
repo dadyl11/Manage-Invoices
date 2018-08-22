@@ -123,8 +123,8 @@ public class InvoiceControllerTest {
   @Test
   public void getInvoicesByIssueDateRange() throws Exception {
     restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
-    int idResponse = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016);
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_LINK_2016);
+    int idResponseA = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016);
+    int idResponseB = restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_LINK_2016);
 
     LocalDate startDate = LocalDate.of(2015, 4, 12);
     LocalDate endDate = LocalDate.of(2017, 4, 12);
@@ -135,13 +135,15 @@ public class InvoiceControllerTest {
     String jsonString = mockMvc
         .perform(get(INVOICE_SERVICE_PATH + url))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", hasSize(1)))
+        .andExpect(jsonPath("$", hasSize(2)))
         .andReturn()
         .getResponse()
         .getContentAsString();
     List<Invoice> invoices = mapper.readValue(jsonString, new TypeReference<List<Invoice>>() {
     });
-    invoiceAssertion.assertInvoices(idResponse, INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016, invoices.get(0));
+    invoiceAssertion
+        .assertInvoices(idResponseA, INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016, restHelper.callRestServiceToReturnInvoiceById(idResponseA));
+    invoiceAssertion.assertInvoices(idResponseB, INVOICE_DRUTEX_LINK_2016, restHelper.callRestServiceToReturnInvoiceById(idResponseB));
   }
 
   @Test
