@@ -5,19 +5,19 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static pl.coderstrust.accounting.configuration.JacksonProvider.getObjectMapper;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 import pl.coderstrust.accounting.model.Invoice;
 
 //@Service
-public class RestHelper extends TestBaseWithMockMvc {
+public class RestHelper {
 
-//  @Autowired
-//  MockMvc mockMvc;
+  protected MockMvc mockMvc;
+
+  public RestHelper(MockMvc mockMvc) {
+    this.mockMvc = mockMvc;
+  }
 
   private static final String INVOICE_SERVICE_PATH = "/invoices";
   private static final MediaType JSON_CONTENT_TYPE = MediaType.APPLICATION_JSON_UTF8;

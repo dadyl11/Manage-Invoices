@@ -13,6 +13,7 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_L
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_SPAN_CLAMP_2017;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018;
 
+import javax.annotation.PostConstruct;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +42,12 @@ public class TaxCalculatorControllerTest {
   @Autowired
   private TaxCalculatorController taxCalculatorController;
 
-  private RestHelper restHelper = new RestHelper();
+  private RestHelper restHelper;
+
+  @PostConstruct
+  public void postConstruct() {
+    restHelper = new RestHelper(mockMvc);
+  }
 
   @Before
   public void beforeMethod() {

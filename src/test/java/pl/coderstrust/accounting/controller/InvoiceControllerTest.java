@@ -14,14 +14,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_CITY;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_IDENTIFIER;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_LINK_2016;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_LINK_2018;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,10 +62,14 @@ public class InvoiceControllerTest {
   @Autowired
   private InvoiceConverter invoiceConverter;
 
-  //  @Autowired
-  private RestHelper restHelper = new RestHelper();
+  private RestHelper restHelper;
 
   private InvoiceAssertion invoiceAssertion = new InvoiceAssertion();
+
+  @PostConstruct
+  public void postConstruct() {
+    restHelper = new RestHelper(mockMvc);
+  }
 
   @Before
   public void beforeMethod() {
