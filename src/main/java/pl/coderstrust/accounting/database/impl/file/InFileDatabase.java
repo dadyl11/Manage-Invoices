@@ -33,7 +33,7 @@ public class InFileDatabase implements Database {
 
   @Override
   public List<Invoice> getInvoices() {
-    return invoiceConverter.convertListOfStringsToListOfInvoices(fileHelper.lines());
+    return invoiceConverter.convertListOfStringsToListOfInvoices(fileHelper.readLines());
   }
 
   @Override

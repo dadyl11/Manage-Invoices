@@ -41,11 +41,6 @@ public class InvoiceValidatorTest {
   @InjectMocks
   private InvoiceValidator invoiceValidator;
 
-  @Mock
-  private Invoice invoice; // TODO not used
-
-  private Company company; // TODO not used
-
   @Before
   public void setup() {
     initMocks(this);
