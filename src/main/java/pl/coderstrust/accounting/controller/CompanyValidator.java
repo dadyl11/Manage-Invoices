@@ -12,7 +12,6 @@ public class CompanyValidator {
 
   private NipValidator nipValidator;
 
-  @Autowired
   public CompanyValidator(NipValidator nipValidator) {
     this.nipValidator = nipValidator;
   }

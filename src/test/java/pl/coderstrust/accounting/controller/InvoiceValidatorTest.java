@@ -38,7 +38,6 @@ import pl.coderstrust.accounting.model.Invoice;
 @RunWith(JUnitParamsRunner.class)
 public class InvoiceValidatorTest {
 
-  @InjectMocks
   private InvoiceValidator invoiceValidator;
 
   @Before
