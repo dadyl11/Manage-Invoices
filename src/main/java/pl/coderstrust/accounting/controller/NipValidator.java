@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class NipValidator {
 
   private static final int[] CHECKS_ARRAY = {6, 5, 7, 2, 3, 4, 5, 6, 7};
-  private static final Pattern PATTERN = Pattern.compile("[1-9]{1}\\d{9}"); // TODO {1} is not needed
+  private static final Pattern PATTERN = Pattern.compile("[1-9]\\d{9}");
 
   public boolean isValid(String nip) {
     if (nip == null) {

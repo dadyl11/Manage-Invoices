@@ -17,42 +17,42 @@ public interface InvoiceApi {
       response = ResponseEntity.class,
       responseContainer = "")
   @PostMapping
-  public ResponseEntity<?> saveInvoice(Invoice invoice);
+  ResponseEntity<?> saveInvoice(Invoice invoice);
 
   @ApiOperation(value = "Gets all invoices",
       notes = "Returns list of all saved invoices",
       response = Invoice.class,
       responseContainer = "List")
   @GetMapping
-  public List<Invoice> getInvoices();
+  List<Invoice> getInvoices();
 
   @ApiOperation(value = "Gets all invoices from date range",
       notes = "Returns list of all saved invoices within specified date range",
       response = Invoice.class,
       responseContainer = "List")
   @GetMapping("/dates")
-  public List<Invoice> getInvoicesByIssueDateRange(LocalDate startDate, LocalDate endDate);
+  List<Invoice> getInvoicesByIssueDateRange(LocalDate startDate, LocalDate endDate);
 
   @ApiOperation(value = "Gets single invoice",
       notes = "Returns Invoice with ID specified",
       response = ResponseEntity.class,
       responseContainer = "")
   @GetMapping("/{id}")
-  public ResponseEntity<Invoice> getSingleInvoice(int id);
+  ResponseEntity<Invoice> getSingleInvoice(int id);
 
   @ApiOperation(value = "updates invoice",
       notes = "Replaces invoice with specified id by invoice provided ",
       response = ResponseEntity.class,
       responseContainer = "")
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateInvoice(int id, Invoice invoice);
+  ResponseEntity<?> updateInvoice(int id, Invoice invoice);
 
   @ApiOperation(value = "removes invoice",
       notes = "Deletes invoice with specified id",
       response = ResponseEntity.class,
       responseContainer = "")
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> removeInvoiceById(int id);
+  ResponseEntity<?> removeInvoiceById(int id);
 
 
 }

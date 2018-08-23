@@ -36,11 +36,9 @@ public class InvoiceController implements InvoiceApi {
     return ResponseEntity.ok(id);
   }
 
-
   public List<Invoice> getInvoices() {
     return invoiceService.getInvoices();
   }
-
 
   public List<Invoice> getInvoicesByIssueDateRange(
       @RequestParam(name = "startDate", required = true)
@@ -53,10 +51,7 @@ public class InvoiceController implements InvoiceApi {
 
   public ResponseEntity<Invoice> getSingleInvoice(@PathVariable(name = "id", required = true) int id) {
     Optional<Invoice> invoiceById = invoiceService.getInvoiceById(id);
-    if (!invoiceById.isPresent()) {
-      return ResponseEntity.notFound().build();
-    }
-    return ResponseEntity.ok(invoiceById.get());
+    return invoiceById.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
 
 
