@@ -2,8 +2,8 @@
 Project Title
 Invoices
 
-Applioation for invoice handling - basic operations on invoices (save, delete, update, get list of all invoices/within the specified time period).
-Handling of different database type - simple map, .json file, PostgreSql, noSql - Mongo.
+Application for invoice handling - basic operations on invoices (save, delete, update, get list of all invoices/within the specified time period).
+Handling of different database type - inMemory database (simple map), inFile database (.json file), PostgreSQL, NoSQL - MongoDB.
 
 Getting Started
 Clone git repository https://github.com/CodersTrustPL/project-6-kamil-mietek-mateusz-monika.git into created maven project.
@@ -14,7 +14,7 @@ Prerequisites
 - Maven wrapper takes care of maven installation.
 
 Installing
-A step by step series of examples that tell you how to get a development env running:
+A step by step series of examples that tell you how to get a development environment running:
 First, create an empty maven project (no archetype).
 - in order to clone repository, on win cmd/git bash/IDE terminal write:
 "git clone https://github.com/CodersTrustPL/project-6-kamil-mietek-mateusz-monika.git"
