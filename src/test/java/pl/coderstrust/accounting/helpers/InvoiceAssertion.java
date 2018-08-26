@@ -13,7 +13,6 @@ import pl.coderstrust.accounting.model.Invoice;
 
 public class InvoiceAssertion extends TestBaseWithMockMvc {
 
-  //TODO make all entries check
   public void assertInvoices(int returnedId, Invoice invoice, Invoice savedInvoice) {
     assertThat(savedInvoice.getId(), is(returnedId));
     assertThat(savedInvoice.getIdentifier(), is(invoice.getIdentifier()));
@@ -28,9 +27,16 @@ public class InvoiceAssertion extends TestBaseWithMockMvc {
     assertThat(savedInvoice.getSeller().getStreet(), is(invoice.getSeller().getStreet()));
     assertThat(savedInvoice.getSeller().getPostalCode(), is(invoice.getSeller().getPostalCode()));
     assertThat(savedInvoice.getSeller().getDiscount().doubleValue(), is(invoice.getSeller().getDiscount().doubleValue()));
-    assertThat(savedInvoice.getEntries().get(0).getDescription(), is(invoice.getEntries().get(0).getDescription()));
-    assertThat(savedInvoice.getEntries().get(0).getNetPrice().intValue(), is(invoice.getEntries().get(0).getNetPrice().intValue()));
-    assertThat(savedInvoice.getEntries().get(0).getVatRate().toString(), is(invoice.getEntries().get(0).getVatRate().toString()));
-    assertThat(savedInvoice.getEntries().get(0).getQuantity().intValue(), is(invoice.getEntries().get(0).getQuantity().intValue()));
+    checkEntries(invoice, savedInvoice);
+  }
+
+  private void checkEntries(Invoice invoice, Invoice savedInvoice) {
+    int size = savedInvoice.getEntries().size();
+    for(int i = 0; i < size; i++){
+      assertThat(savedInvoice.getEntries().get(i).getDescription(), is(invoice.getEntries().get(i).getDescription()));
+      assertThat(savedInvoice.getEntries().get(i).getNetPrice().intValue(), is(invoice.getEntries().get(i).getNetPrice().intValue()));
+      assertThat(savedInvoice.getEntries().get(i).getVatRate().toString(), is(invoice.getEntries().get(i).getVatRate().toString()));
+      assertThat(savedInvoice.getEntries().get(i).getQuantity().intValue(), is(invoice.getEntries().get(i).getQuantity().intValue()));
+    }
   }
 }
