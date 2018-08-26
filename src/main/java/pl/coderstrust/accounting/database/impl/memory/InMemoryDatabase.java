@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.model.Invoice;
 
-@Primary
+
 @Repository
 public class InMemoryDatabase implements Database {
 

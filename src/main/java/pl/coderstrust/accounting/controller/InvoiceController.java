@@ -48,12 +48,10 @@ public class InvoiceController implements InvoiceApi {
     return invoiceService.getInvoicesByIssueDate(startDate, endDate);
   }
 
-
   public ResponseEntity<Invoice> getSingleInvoice(@PathVariable(name = "id", required = true) int id) {
     Optional<Invoice> invoiceById = invoiceService.getInvoiceById(id);
     return invoiceById.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
-
 
   public ResponseEntity<?> updateInvoice(@PathVariable(name = "id", required = true) int id, @RequestBody Invoice invoice) {
     if (!invoiceService.getInvoiceById(id).isPresent()) {
@@ -66,7 +64,6 @@ public class InvoiceController implements InvoiceApi {
     invoiceService.updateInvoice(id, invoice);
     return ResponseEntity.ok().build();
   }
-
 
   public ResponseEntity<?> removeInvoiceById(@PathVariable(name = "id", required = true) int id) {
     if (!invoiceService.getInvoiceById(id).isPresent()) {

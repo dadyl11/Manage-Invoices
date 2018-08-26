@@ -1,8 +1,8 @@
 package pl.coderstrust.accounting.model;
 
-import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasItem;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.CLAMP;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.EMPTY;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN;

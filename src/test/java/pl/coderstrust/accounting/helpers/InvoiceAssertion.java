@@ -32,7 +32,7 @@ public class InvoiceAssertion extends TestBaseWithMockMvc {
 
   private void checkEntries(Invoice invoice, Invoice savedInvoice) {
     int size = savedInvoice.getEntries().size();
-    for(int i = 0; i < size; i++){
+    for (int i = 0; i < size; i++) {
       assertThat(savedInvoice.getEntries().get(i).getDescription(), is(invoice.getEntries().get(i).getDescription()));
       assertThat(savedInvoice.getEntries().get(i).getNetPrice().intValue(), is(invoice.getEntries().get(i).getNetPrice().intValue()));
       assertThat(savedInvoice.getEntries().get(i).getVatRate().toString(), is(invoice.getEntries().get(i).getVatRate().toString()));

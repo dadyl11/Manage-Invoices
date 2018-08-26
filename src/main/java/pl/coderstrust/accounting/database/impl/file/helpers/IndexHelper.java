@@ -13,7 +13,7 @@ public class IndexHelper {
   private File currentIdFile;
   private int id;
 
-  public IndexHelper(@Value("${idFilePath}") String path) { // TODO you don't inject from property file - ${} missing :)
+  public IndexHelper(@Value("${idFilePath}") String path) {
     currentIdFile = new File(path);
     id = generateId();
   }
@@ -28,10 +28,15 @@ public class IndexHelper {
         throw new RuntimeException("idFile not found", exception);
       }
     }
-    return 1; // TODO shouldn't you create file in such case ?
+    return getIdAndSaveToFile(1);
   }
 
   public int getIdAndSaveToFile() {
+    writeToFile(String.valueOf(id));
+    return id++;
+  }
+
+  public int getIdAndSaveToFile(int id) {
     writeToFile(String.valueOf(id));
     return id++;
   }

@@ -2,6 +2,7 @@ package pl.coderstrust.accounting.database.impl.file;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import pl.coderstrust.accounting.database.Database;
 import pl.coderstrust.accounting.database.impl.file.helpers.FileHelper;
@@ -9,6 +10,7 @@ import pl.coderstrust.accounting.database.impl.file.helpers.IndexHelper;
 import pl.coderstrust.accounting.database.impl.file.helpers.InvoiceConverter;
 import pl.coderstrust.accounting.model.Invoice;
 
+@Primary
 @Repository
 public class InFileDatabase implements Database {
 

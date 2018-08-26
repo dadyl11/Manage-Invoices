@@ -163,7 +163,7 @@ public class Invoice {
     BigDecimal vatValue = BigDecimal.ZERO;
     for (InvoiceEntry entry : entries) {
       vatValue = vatValue.add(getGrossValueOfInvoiceEntry(entry)
-          .multiply(entry.getVatRate().getVatRateValue()));
+          .multiply(entry.getVatRate()));
     }
     return vatValue;
   }

@@ -1,11 +1,13 @@
 package pl.coderstrust.accounting.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import pl.coderstrust.accounting.model.Company;
 import pl.coderstrust.accounting.model.InvoiceEntry;
+import pl.coderstrust.accounting.model.VatRate;
 
 @Service
 public class InvoiceEntryValidator {
@@ -19,6 +21,7 @@ public class InvoiceEntryValidator {
       if (entry.getDescription() == null || entry.getDescription().equals("")) {
         validationErrors.add("Entry description not found");
       }
+
       if (entry.getNetPrice() == null) {
         validationErrors.add("Net price for entry not found");
       }
@@ -27,6 +30,12 @@ public class InvoiceEntryValidator {
       }
       if (entry.getVatRate() == null) {
         validationErrors.add("Vat rate for entry not found");
+      }
+
+      boolean isVatRateAccordingToVatRateEnum = Arrays.stream(VatRate.values())
+          .anyMatch(vatRate -> vatRate.getVatRateValue().equals(entry.getVatRate()));
+      if (!isVatRateAccordingToVatRateEnum) {
+        validationErrors.add("Vat rate is not in accordance to current tariffs");
       }
     }
     return validationErrors;

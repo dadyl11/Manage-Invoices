@@ -4,6 +4,7 @@ import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.EMPTY_DESCR
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.EMPTY_NET_PRICE;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.EMPTY_QUANTITY;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.EMPTY_VAT_RATE;
+import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.INCORRECT_VAT_RATE;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.ONE_LINK;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN_CLAMP;
 import static pl.coderstrust.accounting.helpers.InvoiceEntryProvider.SPAN_CLAMP_SUPPORT;
@@ -164,16 +165,6 @@ public class InvoiceProvider {
       .entries(ONE_LINK)
       .build();
 
-  public static final Invoice INVOICE_BLANK_BUYER_DISCOUNT = new Invoice.Invoicebuilder()
-      .identifier("ss999")
-      .issueDate(LocalDate.of(2018, 06, 13))
-      .saleDate(LocalDate.of(2018, 05, 12))
-      .salePlace("Lodz")
-      .buyer(CompanyProvider.COMPANY_BLANK_DISCOUNT)
-      .seller(CompanyProvider.COMPANY_DRUTEX)
-      .entries(ONE_LINK)
-      .build();
-
   public static final Invoice INVOICE_BLANK_SELLER_NAME = new Invoice.Invoicebuilder()
       .identifier("ss999")
       .issueDate(LocalDate.of(2018, 06, 13))
@@ -281,8 +272,19 @@ public class InvoiceProvider {
       .issueDate(LocalDate.of(2018, 06, 13))
       .saleDate(LocalDate.of(2018, 05, 12))
       .salePlace("Radomsko")
-      .buyer(CompanyProvider.COMPANY_DRUTEX)
-      .seller(CompanyProvider.COMPANY_DISCOUNT_BIGGER_THAN_1)
+      .buyer(CompanyProvider.COMPANY_DISCOUNT_BIGGER_THAN_1)
+      .seller(CompanyProvider.COMPANY_DRUTEX)
       .entries(ONE_LINK)
       .build();
+
+  public static final Invoice INVOICE_INCORRECT_VAT_RATE = new Invoice.Invoicebuilder()
+      .identifier("ss999")
+      .issueDate(LocalDate.of(2018, 06, 13))
+      .saleDate(LocalDate.of(2018, 05, 12))
+      .salePlace("Radomsko")
+      .buyer(CompanyProvider.COMPANY_TRANSPOL)
+      .seller(CompanyProvider.COMPANY_DRUTEX)
+      .entries(INCORRECT_VAT_RATE)
+      .build();
+
 }

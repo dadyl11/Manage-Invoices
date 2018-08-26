@@ -18,7 +18,7 @@ public class FileHelper {
 
   private File databaseFile;
 
-  public FileHelper(@Value("${filePath}") String path) { // TODO you don't inject from property file - ${} missing :)
+  public FileHelper(@Value("${filePath}") String path) {
     this.databaseFile = new File(path);
   }
 

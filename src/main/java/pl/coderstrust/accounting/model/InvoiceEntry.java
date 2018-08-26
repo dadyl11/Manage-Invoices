@@ -20,9 +20,8 @@ public class InvoiceEntry {
   @ApiModelProperty(value = "Bigdecimal, net price", example = "10.86")
   private BigDecimal netPrice;
 
-  @ApiModelProperty(value = "Vat rate enum", example = "REDUCED_8") // TODO would be good to change code so user specify 7, 23 etc - enum values are
-  // private to application
-  private VatRate vatRate;
+  @ApiModelProperty(value = "Vat rate enum", example = "0.23")
+  private BigDecimal vatRate;
 
   @ApiModelProperty(value = "quantity", example = "10")
   private BigDecimal quantity;
@@ -60,11 +59,11 @@ public class InvoiceEntry {
     this.netPrice = netPrice;
   }
 
-  public VatRate getVatRate() {
+  public BigDecimal getVatRate() {
     return vatRate;
   }
 
-  public void setVatRate(VatRate vatRate) {
+  public void setVatRate(BigDecimal vatRate) {
     this.vatRate = vatRate;
   }
 
@@ -116,7 +115,7 @@ public class InvoiceEntry {
 
     private String description;
     private BigDecimal netPrice;
-    private VatRate vatRate;
+    private BigDecimal vatRate;
     private BigDecimal quantity;
 
     public InvoiceEntryBuilder description(String description) {
@@ -129,7 +128,7 @@ public class InvoiceEntry {
       return this;
     }
 
-    public InvoiceEntryBuilder vatRate(VatRate vatRate) {
+    public InvoiceEntryBuilder vatRate(BigDecimal vatRate) {
       this.vatRate = vatRate;
       return this;
     }

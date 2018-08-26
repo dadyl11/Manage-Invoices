@@ -46,8 +46,8 @@ public class CompanyValidator {
       validationErrors.add(buyerOrSeller + " city not found");
     }
 
-    if (company.getDiscount().compareTo(BigDecimal.ONE) > 0) {
-      validationErrors.add(buyerOrSeller + " - Bad value of discount");
+    if (company.getDiscount().compareTo(BigDecimal.ONE) >= 0) {
+      validationErrors.add("Bad value of discount");
     }
     return validationErrors;
   }

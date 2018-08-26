@@ -128,7 +128,7 @@ public class InvoiceControllerTest {
     LocalDate endDate = LocalDate.of(2017, 4, 12);
 
     String url = String
-        .format("/dates?startDate=%1$s&endDate=%2$s", startDate, endDate); // TODO what is "$s" doing?
+        .format("/dates?startDate=%1$s&endDate=%2$s", startDate, endDate);
 
     String jsonString = mockMvc
         .perform(get(INVOICE_SERVICE_PATH + url))
