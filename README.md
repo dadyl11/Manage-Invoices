@@ -6,11 +6,11 @@ Application for invoice handling - basic operations on invoices (save, delete, u
 Handling of different database type - inMemory database (simple map), inFile database (.json file), PostgreSQL, NoSQL - MongoDB.
 
 # Getting Started
-Clone git repository https://github.com/CodersTrustPL/project-6-kamil-mietek-mateusz-monika.git into created maven project.
+Clone git repository https://github.com/CodersTrustPL/project-6-kamil-mietek-mateusz-monika.git into new empty maven project.
 
 ## Prerequisites
 - GIT installed
-- Checkstyle plugin helps with working on code.
+- Checkstyle plugin helps working with code.
 - Maven wrapper takes care of maven installation.
 
 ## Installing
@@ -21,11 +21,11 @@ First, create an empty maven project (no archetype).
 The, pull project content with "git pull"
 
 ## Built With
-Spring Boot - The web framework used
+Spring Boot - The web framework
 Maven - Dependency Management
 
 ## Versioning
-We use SemVer for versioning. For the versions available, see the tags on this repository.
+We used GIT & GitHUB for versioning. F
 
 # Authors
 Kamil Miśko - Mieczysław Lis - Mateusz Górski
