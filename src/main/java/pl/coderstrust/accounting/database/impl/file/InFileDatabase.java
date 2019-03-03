@@ -1,6 +1,5 @@
 package pl.coderstrust.accounting.database.impl.file;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.context.annotation.Primary;
@@ -27,38 +26,34 @@ public class InFileDatabase implements Database {
 
   @Override
   public int saveInvoice(Invoice invoice) {
-
     int id = indexHelper.getIdAndSaveToFile();
-    invoice.setId(id); // TODO you should not modify objects you receive
-    fileHelper.writeInvoice(invoiceConverter.convertInvoiceToJson(invoice));
+    Invoice internalInvoice = new Invoice(invoice);
+    internalInvoice.setId(id);
+    fileHelper.writeInvoice(invoiceConverter.convertInvoiceToJson(internalInvoice));
     return id;
   }
 
   @Override
   public List<Invoice> getInvoices() {
-    return fileHelper.lines() // TODO this method convert stream to list and then you convert back - can you optimize?
-        .stream()
-        .map(invoiceConverter::convertJsonToInvoice)
-        .collect(Collectors.toList()); // TODO invoice converter can convert list of invoices to strings, why cannot opposite?
+    return invoiceConverter.convertListOfStringsToListOfInvoices(fileHelper.readLines());
   }
 
   @Override
   public void updateInvoiceById(int id, Invoice invoice) {
-
-    List<Invoice> invoiceList = getAllInvoicesExceptWithSpecifiedId(id);
-    invoice.setId(id); // TODO you should not modify received object
-    invoiceList.add(invoice);
-    fileHelper.replaceFileContent(invoiceConverter.convertListOfInvoicesToJsons(invoiceList));
+    List<Invoice> invoiceList = getAllInvoicesExceptInvoiceWithSpecifiedId(id);
+    Invoice internalInvoice = new Invoice(invoice);
+    internalInvoice.setId(id);
+    invoiceList.add(internalInvoice);
+    fileHelper.replaceFileContent(invoiceConverter.convertListOfInvoicesToListOfStrings(invoiceList));
   }
 
   @Override
   public void removeInvoiceById(int id) {
-    // TODO this method and this above are almist identical but organised different way e.g. invoiceList should be variable here
-    List<String> jsonList = invoiceConverter.convertListOfInvoicesToJsons(getAllInvoicesExceptWithSpecifiedId(id));
-    fileHelper.replaceFileContent(jsonList);
+    List<Invoice> invoiceList = getAllInvoicesExceptInvoiceWithSpecifiedId(id);
+    fileHelper.replaceFileContent(invoiceConverter.convertListOfInvoicesToListOfStrings(invoiceList));
   }
 
-  private List<Invoice> getAllInvoicesExceptWithSpecifiedId(int id) { // TODO except invoice with ...
+  private List<Invoice> getAllInvoicesExceptInvoiceWithSpecifiedId(int id) {
     return getInvoices()
         .stream()
         .filter(n -> n.getId() != id)

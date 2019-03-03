@@ -32,15 +32,13 @@ public class InvoiceController implements InvoiceApi {
     if (!validationResult.isEmpty()) {
       return ResponseEntity.badRequest().body(validationResult);
     }
-    invoiceService.saveInvoice(invoice);
-    return ResponseEntity.ok(invoice.getId());
+    int id = invoiceService.saveInvoice(invoice);
+    return ResponseEntity.ok(id);
   }
-
 
   public List<Invoice> getInvoices() {
     return invoiceService.getInvoices();
   }
-
 
   public List<Invoice> getInvoicesByIssueDateRange(
       @RequestParam(name = "startDate", required = true)
@@ -50,15 +48,10 @@ public class InvoiceController implements InvoiceApi {
     return invoiceService.getInvoicesByIssueDate(startDate, endDate);
   }
 
-
   public ResponseEntity<Invoice> getSingleInvoice(@PathVariable(name = "id", required = true) int id) {
     Optional<Invoice> invoiceById = invoiceService.getInvoiceById(id);
-    if (!invoiceById.isPresent()) {
-      return ResponseEntity.notFound().build();
-    }
-    return ResponseEntity.ok(invoiceById.get());
+    return invoiceById.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
   }
-
 
   public ResponseEntity<?> updateInvoice(@PathVariable(name = "id", required = true) int id, @RequestBody Invoice invoice) {
     if (!invoiceService.getInvoiceById(id).isPresent()) {
@@ -71,7 +64,6 @@ public class InvoiceController implements InvoiceApi {
     invoiceService.updateInvoice(id, invoice);
     return ResponseEntity.ok().build();
   }
-
 
   public ResponseEntity<?> removeInvoiceById(@PathVariable(name = "id", required = true) int id) {
     if (!invoiceService.getInvoiceById(id).isPresent()) {

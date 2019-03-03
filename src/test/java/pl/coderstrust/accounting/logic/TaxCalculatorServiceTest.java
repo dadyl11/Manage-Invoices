@@ -6,10 +6,10 @@ import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_DRUKPOL;
 import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_DRUTEX;
 import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_TRANSPOL;
 import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_WASBUD;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_CHELMNO_2016;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_RADOMSKO_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_LINK_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_SPAN_CLAMP_2017;
 
 import java.math.BigDecimal;
 import org.junit.Test;
@@ -36,8 +36,8 @@ public class TaxCalculatorServiceTest {
   @Test
   public void shouldReturnIncome() {
     //given
-    invoiceService.saveInvoice(INVOICE_KRAKOW_2018);
-    invoiceService.saveInvoice(INVOICE_RADOMSKO_2018);
+    invoiceService.saveInvoice(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
+    invoiceService.saveInvoice(INVOICE_WASBUD_LINK_2018);
 
     //when
     BigDecimal actual = taxCalculatorService.getIncome(COMPANY_DRUTEX.getNip());
@@ -49,8 +49,8 @@ public class TaxCalculatorServiceTest {
   @Test
   public void shouldReturnCosts() {
     //given
-    invoiceService.saveInvoice(INVOICE_KRAKOW_2018);
-    invoiceService.saveInvoice(INVOICE_CHELMNO_2016);
+    invoiceService.saveInvoice(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
+    invoiceService.saveInvoice(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016);
 
     //when
     BigDecimal actual = taxCalculatorService.getCosts(COMPANY_TRANSPOL.getNip());
@@ -62,28 +62,28 @@ public class TaxCalculatorServiceTest {
   @Test
   public void shouldReturnVatDue() {
     //given
-    invoiceService.saveInvoice(INVOICE_RADOMSKO_2018);
-    invoiceService.saveInvoice(INVOICE_GRUDZIADZ_2017);
+    invoiceService.saveInvoice(INVOICE_WASBUD_LINK_2018);
+    invoiceService.saveInvoice(INVOICE_WASBUD_SPAN_CLAMP_2017);
 
     //when
-    BigDecimal actual = taxCalculatorService.getTaxDue(COMPANY_WASBUD.getNip());
+    BigDecimal actual = taxCalculatorService.getTaxDue(COMPANY_WASBUD.getNip()).setScale(2);
 
     //then
-    assertThat(actual, is(BigDecimal.valueOf(11.592)));
+    assertThat(actual, is(BigDecimal.valueOf(14.70).setScale(2)));
   }
 
   @Test
   public void shouldReturnVatIncluded() {
     //given
-    invoiceService.saveInvoice(INVOICE_RADOMSKO_2018);
-    invoiceService.saveInvoice(INVOICE_GRUDZIADZ_2017);
-    invoiceService.saveInvoice(INVOICE_CHELMNO_2016);
+    invoiceService.saveInvoice(INVOICE_WASBUD_LINK_2018);
+    invoiceService.saveInvoice(INVOICE_WASBUD_SPAN_CLAMP_2017);
+    invoiceService.saveInvoice(INVOICE_TRANSPOL_SPAN_CLAMP_SUPPORT_2016);
 
     // when
     BigDecimal actual = taxCalculatorService
         .getTaxIncluded(COMPANY_DRUKPOL.getNip());
 
     // then
-    assertThat(actual, is(BigDecimal.valueOf(25.032)));
+    assertThat(actual, is(BigDecimal.valueOf(22.512)));
   }
 }

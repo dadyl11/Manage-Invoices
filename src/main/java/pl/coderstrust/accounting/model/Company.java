@@ -9,7 +9,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.stereotype.Repository;
 
-@Repository // TODO what?? Why do you mark POJO as repository?
 @ApiModel(value = "Company", description = "Model for the Company")
 public class Company {
 
@@ -34,14 +33,22 @@ public class Company {
   public Company() {
   }
 
-  public Company(String name, String nip, String street, String postalCode, String city,
-      BigDecimal discount) {
-    this.name = name;
-    this.nip = nip;
-    this.street = street;
-    this.postalCode = postalCode;
-    this.city = city;
-    this.discount = discount;
+  public Company(Company company) {
+    this.name = company.name;
+    this.nip = company.nip;
+    this.street = company.street;
+    this.postalCode = company.postalCode;
+    this.city = company.city;
+    this.discount = company.discount;
+  }
+
+  private Company(CompanyBuilder companyBuilder) {
+    this.name = companyBuilder.name;
+    this.nip = companyBuilder.nip;
+    this.street = companyBuilder.street;
+    this.postalCode = companyBuilder.postalCode;
+    this.city = companyBuilder.city;
+    this.discount = companyBuilder.discount;
   }
 
   public String getName() {
@@ -130,5 +137,52 @@ public class Company {
   public String toString() {
     return ReflectionToStringBuilder.toString(this,
         ToStringStyle.MULTI_LINE_STYLE, true, true);
+  }
+
+  public static class CompanyBuilder {
+
+    private String name;
+    private String nip;
+    private String street;
+    private String postalCode;
+    private String city;
+    private BigDecimal discount;
+
+    public CompanyBuilder() {
+    }
+
+    public CompanyBuilder name(String name) {
+      this.name = name;
+      return this;
+    }
+
+    public CompanyBuilder nip(String nip) {
+      this.nip = nip;
+      return this;
+    }
+
+    public CompanyBuilder street(String street) {
+      this.street = street;
+      return this;
+    }
+
+    public CompanyBuilder postalCode(String postalCode) {
+      this.postalCode = postalCode;
+      return this;
+    }
+
+    public CompanyBuilder city(String city) {
+      this.city = city;
+      return this;
+    }
+
+    public CompanyBuilder discount(BigDecimal discount) {
+      this.discount = discount;
+      return this;
+    }
+
+    public Company build() {
+      return new Company(this);
+    }
   }
 }

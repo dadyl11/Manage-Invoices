@@ -9,10 +9,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_DRUKPOL;
 import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_DRUTEX;
 import static pl.coderstrust.accounting.helpers.CompanyProvider.COMPANY_WASBUD;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BYDGOSZCZ_2018;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_GRUDZIADZ_2017;
-import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_KRAKOW_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_LINK_2016;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_WASBUD_SPAN_CLAMP_2017;
 
+import javax.annotation.PostConstruct;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,16 +34,20 @@ public class TaxCalculatorControllerTest {
   private static final String TAX_CALCULATOR_SERVICE_PATH = "/taxcalculator";
 
   @Autowired
-  private InvoiceService invoiceService;
+  private MockMvc mockMvc;
 
   @Autowired
-  private MockMvc mockMvc;
+  private InvoiceService invoiceService;
 
   @Autowired
   private TaxCalculatorController taxCalculatorController;
 
-  @Autowired
   private RestHelper restHelper;
+
+  @PostConstruct
+  public void postConstruct() {
+    restHelper = new RestHelper(mockMvc);
+  }
 
   @Before
   public void beforeMethod() {
@@ -57,7 +62,7 @@ public class TaxCalculatorControllerTest {
   @Test
   public void shouldGetIncome() throws Exception {
     //given
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
 
     //when
 
@@ -72,8 +77,8 @@ public class TaxCalculatorControllerTest {
   @Test
   public void shouldGetTaxDue() throws Exception {
     //given
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_KRAKOW_2018);
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_SPAN_CLAMP_SUPPORT_2018);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_LINK_2016);
 
     //when
 
@@ -81,15 +86,15 @@ public class TaxCalculatorControllerTest {
     MvcResult result = mockMvc
         .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/TaxDue/" + COMPANY_DRUTEX.getNip()))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", is(19.2)))
+        .andExpect(jsonPath("$", is(22.314)))
         .andReturn();
   }
 
   @Test
   public void shouldGetTaxIncluded() throws Exception {
     //given
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_GRUDZIADZ_2017);
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_WASBUD_SPAN_CLAMP_2017);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_LINK_2016);
 
     //when
 
@@ -97,15 +102,15 @@ public class TaxCalculatorControllerTest {
     MvcResult result = mockMvc
         .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/TaxIncluded/" + COMPANY_DRUKPOL.getNip()))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", is(11.592)))
+        .andExpect(jsonPath("$", is(10.332)))
         .andReturn();
   }
 
   @Test
   public void shouldGetCosts() throws Exception {
     //given
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_GRUDZIADZ_2017);
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_WASBUD_SPAN_CLAMP_2017);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_LINK_2016);
 
     //when
 
@@ -120,8 +125,8 @@ public class TaxCalculatorControllerTest {
   @Test
   public void shouldGetProfit() throws Exception {
     //given
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_GRUDZIADZ_2017);
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_WASBUD_SPAN_CLAMP_2017);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_LINK_2016);
 
     //when
 
@@ -136,8 +141,8 @@ public class TaxCalculatorControllerTest {
   @Test
   public void shouldGetVatPayable() throws Exception {
     //given
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_GRUDZIADZ_2017);
-    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_BYDGOSZCZ_2018);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_WASBUD_SPAN_CLAMP_2017);
+    restHelper.callRestServiceToAddInvoiceAndReturnId(INVOICE_DRUTEX_LINK_2016);
 
     //when
 
@@ -145,7 +150,7 @@ public class TaxCalculatorControllerTest {
     MvcResult result = mockMvc
         .perform(get(TAX_CALCULATOR_SERVICE_PATH + "/VatPayable/" + COMPANY_WASBUD.getNip()))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$", is(11.592)))
+        .andExpect(jsonPath("$", is(5.418)))
         .andReturn();
   }
 }

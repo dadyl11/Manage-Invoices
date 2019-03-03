@@ -2,7 +2,6 @@ package pl.coderstrust.accounting.controller;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.MockitoAnnotations.initMocks;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BAD_DISCOUNT_VALUE;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_CITY;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_BUYER_NAME;
@@ -23,35 +22,24 @@ import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_SE
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_SELLER_POSTAL_CODE;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_BLANK_SELLER_STREET;
 import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_EMPTY_ENTRIES;
+import static pl.coderstrust.accounting.helpers.InvoiceProvider.INVOICE_INCORRECT_VAT_RATE;
 
 import java.util.List;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import pl.coderstrust.accounting.model.Company;
 import pl.coderstrust.accounting.model.Invoice;
 
 @RunWith(JUnitParamsRunner.class)
 public class InvoiceValidatorTest {
+  
+  private NipValidator nipValidator = new NipValidator();
+  private CompanyValidator companyValidator = new CompanyValidator(nipValidator);
+  private InvoiceEntryValidator invoiceEntryValidator = new InvoiceEntryValidator();
+  private InvoiceValidator invoiceValidator = new InvoiceValidator(companyValidator, invoiceEntryValidator);
 
-  @InjectMocks
-  private InvoiceValidator invoiceValidator;
-
-  @Mock
-  private Invoice invoice; // TODO not used
-
-  private Company company; // TODO not used
-
-  @Before
-  public void setup() {
-    initMocks(this);
-  }
-
-  @Parameters(method = "param")
+  @Parameters(method = "invoicesWithEmptyFields")
   @Test
   public void shouldCheckIfReturnedValidationMessageCorrespondsToIncompleteInvoices(Invoice invoice, String message) {
     //when
@@ -61,7 +49,7 @@ public class InvoiceValidatorTest {
     assertThat(actualTest, hasItem(message));
   }
 
-  private Object[] param() {
+  private Object[] invoicesWithEmptyFields() {
     return new Object[]{
         new Object[]{INVOICE_BLANK_SALE_PLACE, "Sale place not found"},
         new Object[]{INVOICE_BLANK_IDENTIFIER, "Identifier not found"},
@@ -83,6 +71,7 @@ public class InvoiceValidatorTest {
         new Object[]{INVOICE_BLANK_ENTRY_VAT_RATE, "Vat rate for entry not found"},
         new Object[]{INVOICE_BLANK_ENTRY_QUNTITY, "Quantity for entry not found"},
         new Object[]{INVOICE_BAD_DISCOUNT_VALUE, "Bad value of discount"},
+        new Object[]{INVOICE_INCORRECT_VAT_RATE, "Vat rate is not in accordance to current tariffs"},
     };
   }
 }

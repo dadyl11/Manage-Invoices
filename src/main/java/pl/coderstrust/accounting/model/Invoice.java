@@ -11,11 +11,10 @@ import java.util.Objects;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 
-// TODO why do you add "Model" to name? I wouldn't change it - please check what is generated from it.
-@ApiModel(value = "InvoiceModel", description = "Sample model for the Invoice")
+@ApiModel(value = "Invoice", description = "Sample model for the Invoice")
 public class Invoice {
 
-  @ApiModelProperty(value = "id assigned by database", example = "1")
+  @ApiModelProperty(value = "id assigned by database")
   private int id;
 
   @ApiModelProperty(value = "identifier provided by client", example = "6/2018")
@@ -30,25 +29,39 @@ public class Invoice {
   @ApiModelProperty(value = "Location where sale was made", example = "Krakow")
   private String salePlace;
 
-  // TODO no need for description? :)
+  @ApiModelProperty(value = "Company - buyer")
   private Company buyer;
+
+  @ApiModelProperty(value = "Company - seller")
   private Company seller;
+
+  @ApiModelProperty(value = "List of invoice entries")
   private List<InvoiceEntry> entries = new ArrayList<>();
 
   public Invoice() {
   }
 
-  public Invoice(int id, String identifier, LocalDate issueDate, LocalDate saleDate,
-      String salePlace, Company buyer, Company seller, List<InvoiceEntry> entries) {
-    this.id = id;
-    this.identifier = identifier;
-    this.issueDate = issueDate;
-    this.saleDate = saleDate;
-    this.salePlace = salePlace;
-    this.buyer = buyer;
-    this.seller = seller;
-    this.entries = entries;
+  public Invoice(Invoice invoice) {
+    this.identifier = invoice.identifier;
+    this.issueDate = invoice.issueDate;
+    this.saleDate = invoice.saleDate;
+    this.salePlace = invoice.salePlace;
+    this.buyer = new Company(invoice.getBuyer());
+    this.seller = new Company(invoice.getSeller());
+    this.entries = InvoiceEntry.deepCopyListOfEntries(invoice.entries);
   }
+
+  private Invoice(Invoicebuilder invoicebuilder) {
+    this.id = invoicebuilder.id;
+    this.identifier = invoicebuilder.identifier;
+    this.issueDate = invoicebuilder.issueDate;
+    this.saleDate = invoicebuilder.saleDate;
+    this.salePlace = invoicebuilder.salePlace;
+    this.buyer = invoicebuilder.buyer;
+    this.seller = invoicebuilder.seller;
+    this.entries = invoicebuilder.entries;
+  }
+
 
   public String getIdentifier() {
     return identifier;
@@ -114,7 +127,7 @@ public class Invoice {
     return entries;
   }
 
-  void addInvoiceEntry(InvoiceEntry invoiceEntry) {
+  public void addInvoiceEntry(InvoiceEntry invoiceEntry) {
     entries.add(invoiceEntry);
   }
 
@@ -140,7 +153,7 @@ public class Invoice {
   public BigDecimal getTotalNetValue() {
     BigDecimal netValue = BigDecimal.ZERO;
     for (InvoiceEntry entry : entries) {
-      netValue = netValue.add(entry.getNetValue().multiply(BigDecimal.ONE.subtract(getBuyer().getDiscount())));
+      netValue = netValue.add(getGrossValueOfInvoiceEntry(entry));
     }
     return netValue;
   }
@@ -149,16 +162,74 @@ public class Invoice {
   public BigDecimal getVatValue() {
     BigDecimal vatValue = BigDecimal.ZERO;
     for (InvoiceEntry entry : entries) {
-      vatValue = vatValue.add((entry.getNetValue())
-          .multiply(BigDecimal.ONE.subtract(getBuyer().getDiscount())) // TODO extract final price calculation to method
-          .multiply(entry.getVatRate().getVatRateValue()));
+      vatValue = vatValue.add(getGrossValueOfInvoiceEntry(entry)
+          .multiply(entry.getVatRate()));
     }
     return vatValue;
+  }
+
+  private BigDecimal getGrossValueOfInvoiceEntry(InvoiceEntry entry) {
+    return entry.getNetValue().multiply(BigDecimal.ONE.subtract(getBuyer().getDiscount()));
   }
 
   @Override
   public String toString() {
     return ReflectionToStringBuilder.toString(this,
         ToStringStyle.MULTI_LINE_STYLE, true, true);
+  }
+
+  public static class Invoicebuilder {
+
+    private int id;
+    private String identifier;
+    private LocalDate issueDate;
+    private LocalDate saleDate;
+    private String salePlace;
+    private Company buyer;
+    private Company seller;
+    private List<InvoiceEntry> entries = new ArrayList<>();
+
+
+    public Invoicebuilder identifier(String identifier) {
+      this.identifier = identifier;
+      return this;
+    }
+
+    public Invoicebuilder issueDate(LocalDate issueDate) {
+      this.issueDate = issueDate;
+      return this;
+    }
+
+    public Invoicebuilder saleDate(LocalDate saleDate) {
+      this.saleDate = saleDate;
+      return this;
+    }
+
+    public Invoicebuilder salePlace(String salePlace) {
+      this.salePlace = salePlace;
+      return this;
+    }
+
+    public Invoicebuilder buyer(Company buyer) {
+      this.buyer = buyer;
+      return this;
+    }
+
+    public Invoicebuilder seller(Company seller) {
+      this.seller = seller;
+      return this;
+    }
+
+    public Invoicebuilder entries(List<InvoiceEntry> entries) {
+      if (this.entries == null) {
+        this.entries = new ArrayList<InvoiceEntry>();
+      }
+      this.entries.addAll(entries);
+      return this;
+    }
+
+    public Invoice build() {
+      return new Invoice(this);
+    }
   }
 }
