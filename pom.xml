@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>pl.coderstrust</groupId>
-  <artifactId>invoices-Mietek-Mateusz-Kamil-Monika</artifactId>
+  <artifactId>maaging-invoices</artifactId>
   <version>1.0-SNAPSHOT</version>
 
   <parent>
